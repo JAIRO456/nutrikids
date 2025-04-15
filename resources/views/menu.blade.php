@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/menu.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>NUTRIKIDS</title>
+</head>
+<body>
+    <header class="container-header">
+        <div class="container-div-menu">
+            <div class="container-logo-header">
+                <a href="index.php"><img class="logo" src="img/logo-nutrikids.png" alt=""></a>
+            </div>
+        
+            <div class="menu-icon" onclick="Menu()">
+                <i class="menu-icons bi bi-list"></i>
+            </div>
+            
+            <nav class="container-opciones-header" id="menu"> 
+                <a href="{{ url('/') }}">INICIO</a>
+                <a href="{{ url('/productos') }}">PRODUCTOS</a>
+                <a href="{{ url('/contacto') }}">CONTACTO</a>
+            </nav>
+
+            <div class="container-login-header">
+                <a href="{{ url('/login') }}"><button class="login">INICIAR SESION</button></a>
+            </div>
+        </div>  
+    </header>
+    <script>
+        function Menu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+</body>
+</html>
