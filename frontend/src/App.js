@@ -1,4 +1,4 @@
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -13,9 +13,9 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
+        <Menu />
           <Routes>
-              <Route path="/" element={<Inicio />} />
+              <Route path="/" element={<Index />} />
               <Route path="/Productos" element={<Productos />} />
               <Route path="/Contacto" element={<Contacto />} />
               <Route path="/Login" element={<Login />} />

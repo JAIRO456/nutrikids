@@ -5,7 +5,7 @@ const Productos = () => {
     const [categorias, setCategorias] = useState([]);
 
     useEffect(() => {
-        fetch('./././backend/ajax/get_categorias.php')
+        fetch('http://localhost/nutrikids-react/nutrikids/backend/ajax/get_categories.php')
             .then(response => response.json())
             .then(data => setCategorias(data))
             .catch(error => console.error('Error al obtener categorías:', error));
