@@ -1,0 +1,88 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0%;
+    padding: 0%;
+    background-color: white;
+}
+
+main {
+    /* padding-top: 5%; */
+    text-align: center;
+    align-content: center;
+    padding-left: 14%;
+}
+
+.container-img {
+    background: #147a1b;
+    color: white;
+    width: 1000px;
+    text-align: center;
+    
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.container-img .imagen {
+    width: 50%;
+    height: 80%;
+    position: relative;
+    top: 10%;
+    justify-self: center;
+
+}
+
+.container-img .container-name {
+    width: 700px;
+    align-self: center;
+}
+
+
+.container-info {
+    background: #e7e9eb;
+    width: 1000px;
+}
+
+.container-info h2 {
+    font-weight: bold;
+}
+
+.container-info .container-datas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.container-update {
+    background: #e7e9eb;
+    width: 1000px;
+}
+
+.container-update .container-datas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.container-datas {
+    background: #e7e9eb;
+    width: 1000px;
+}
+
+.container-info-estudiantes {
+    background: #e7e9eb;
+    width: 1000px;
+}
+
+.container-info-estudiantes .container-estudiantes {
+    width: 500px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.container-estudiantes .container-img-logo {
+    width: 200px;
+    height: 200px;
+}
+
+.container-img-logo .logo-schools {
+    width: 90%;
+    height: 90%;
+}

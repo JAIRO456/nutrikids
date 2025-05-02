@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0%;
+    padding: 0%;
+    background-color: white;
+}
+
+.container-main-crear_menu {
+    text-align: center;
+    position: fixed;
+    z-index: 2;
+    /* display: flex; */
+    background: burlywood;
+    width: 800px;
+    height: 450px;
+    top: 25%;
+    left: 20%;
+}
+
+.container-main-crear_menu form .container-students {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-top: 2%;
+}
+
+form .container-students select {
+    width: 350px;
+    height: 40px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.container-main-crear_menu form .container-day {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-top: 2%;
+}
+
+form .container-day select {
+    width: 350px;
+    height: 40px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.container-main-crear_menu form .container-name-menu {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-top: 2%;
+}
+
+form .container-name-menu input {
+    width: 350px;
+    height: 40px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.container-main-crear_menu form .div-button {
+    padding-top: 2%;
+}
+
+form .div-button .enviar {
+    background: #9d2142;
+    color: white;
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+}
+
+.container-main-crear_menu form .productos_seleccionados {
+    padding-top: 2%;
+    height: 250px;
+    overflow: auto;
+}
