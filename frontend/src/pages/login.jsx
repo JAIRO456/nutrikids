@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-// import './Login.css';
-// import logo from '../img/logo-nutrikids.png';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [documento, setDocumento] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
     
         const data = { documento, password };
-        fetch("./././backend/include/validate_login.php", {
+        fetch("http://localhost/react/nutrikids/backend/include/validate_login.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -21,8 +20,28 @@ function Login() {
         })
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             if (data.success) {
-          // Redirigir o mostrar mensaje de éxito :V
+                // Guardar el rol del usuario en localStorage, es como una "caja" del navegador .-.
+                localStorage.setItem('userRole', data.rol);
+            // Redirigir o mostrar mensaje de éxito :V
+                switch (data.rol) {
+                    case 1:
+                        navigate('/admin/inicio');
+                        let userRole = data.rol;
+                        break;
+                    case 2:
+                        navigate('/coordinador/inicio');
+                        break;
+                    case 3:
+                        navigate('/vendedor/inicio');
+                        break;
+                    case 4:
+                        navigate('/acudiente/inicio');
+                        break;
+                    default:
+                        navigate('/');
+                }
             } 
             else {
                 setError(data.message || "Error en el login.");
@@ -47,7 +66,8 @@ function Login() {
                     <div className="x_grupo" id="x_documento">
                         <label htmlFor="documento">Documento</label>
                         <div className="x_input">
-                            <input type="number"
+                            <input 
+                                type="number"
                                 id="documento"
                                 name="documento"
                                 placeholder="Ingrese sus documentos"
