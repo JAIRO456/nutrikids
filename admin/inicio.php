@@ -1,18 +1,10 @@
 <?php
+    session_start();
+    require_once('../conex/conex.php');
+    $conex =new Database;
+    $con = $conex->conectar();
 
-session_start();
-require_once('../conex/conex.php');
-// require_once('../include/validate_login.php');
-include 'adm_menu.html';
-$conex =new Database;
-$con = $conex->conectar();
-
-?>
-
-<?php
-    $sqlMensajes = $con -> prepare("SELECT * FROM mensajes INNER JOIN escuelas ON mensajes.id_escuela = escuelas.id_escuela WHERE respondido = 0 ORDER BY fecha_men DESC");
-    $sqlMensajes->execute();
-    $mensajes = $sqlMensajes->fetchAll(PDO::FETCH_ASSOC);
+    include 'menu.php';
 ?>
 
 <!DOCTYPE html>
@@ -26,9 +18,7 @@ $con = $conex->conectar();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <?php include "header_user.php"; ?>
-
-    <main class="container-main">
+    <main class="container-main container mt-2">
         <div class="container1">
             <h3>Cantidad de registros:</h3>
             <section class="container-section">
@@ -100,34 +90,6 @@ $con = $conex->conectar();
                 
                 </tbody>
             </table>
-        </div>
-
-        <div class="container4">
-            <h3>Notificaciones Recientes</h3>
-            <table>
-                <tr>
-                    <th>Nombres</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Escuela</th>
-                    <th>Mensaje</th>
-                    <th>Fecha</th>
-                </tr>
-
-                <?php foreach ($mensajes as $m){ ?>
-                    <tr>
-                        <td><?php echo $m['nombre_men']; ?></td>
-                        <td><?php echo $m['email_men']; ?></td>
-                        <td><?php echo $m['telefono_men']; ?></td>
-                        <td><?php echo $m['nombre_escuela']; ?></td>
-                        <td><?php echo $m['mensaje']; ?></td>
-                        <td><?php echo $m['fecha_men']; ?></td>
-                        <td><a href="" onclick="window.open ('responder.php?id2=<?php echo $m['id'];?> ',' ', 'width=600. heigth=500, toolbar=No')"><button type="submit">Responder</button></a></td>
-                <?php
-                    }
-                ?>
-            </table>
-
         </div>
     </main>
 </body>
