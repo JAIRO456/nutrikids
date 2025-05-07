@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUTRIKIDS</title>
+    <link rel="stylesheet" href="../styles/adm_menu.css">
+</head>
+<body>
+    <div class="contenedor">
+        <div class="menu">
+            <img class="nutrikids-logo" src="../img/logo-nutrikids.png" alt="">
+        </div>
+
+        <div class="menu-icon" onclick="Menu()">
+            <i class="menu-icons bi bi-list"></i>
+        </div>
+        
+        <ul class="opciones" id="menu">
+            <li><a class="opcion" href="inicio.php">INICIO</a></li>
+            <li><a class="opcion" href="roles.php">ROLES</a></li>
+            <li><a class="opcion" href="menus.php">MENUS</a></li>
+            <li><a class="opcion" href="productos.php">PRODUCTOS</a></li>
+            <li><a class="opcion" href="agregar.php">AGREGAR</a></li>
+            <li><a class="opcion" href="ventas.php">VENTAS</a></li>
+        </ul>
+    </div>
+    <script>
+        function Menu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
+

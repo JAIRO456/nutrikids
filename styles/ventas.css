@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0%;
+    padding: 0%;
+    background-color: white;
+}
+
+.container-main {
+    padding-top: 5%;
+    text-align: center;
+    align-content: center;
+    padding-left: 20%;
+}
+
+.container-main .container-section {
+    width: 1000px;
+}
+
+.container-main .container-section .container-nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+}
+
+.container-section .container-nav a {
+    width: 300px;
+    height: 150px;
+    background: #9d2142;
+    color: white;
+    text-decoration: none;
+    align-content: center;
+    margin-left: 25%;
+    margin-top: 5%;
+}
+
+.container-nav a i {
+    font-size: 40px;
+}

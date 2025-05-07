@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0%;
+    padding: 0%;
+    background-color: white;
+}
+
+.container-main {
+    padding-top: 5%;
+    text-align: center;
+    align-content: center;
+    padding-left: 20%;
+}
+
+.container-main form {
+    width: 1000px;
+    text-align: center;
+}
+
+.container-main form .pedidos {
+    width: 200px;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    
+}
+
+.container-main form .container-table {
+    align-items: center;
+    width: 1000px;
+}
+
+.container-table tr th {
+    background: burlywood;
+    width: 30%;
+}
+
+.container-main tr td {
+    background: beige;
+    width: 30%;
+}
+
+.container-main form .entregado {
+    border: none;
+    border-radius: 10px;
+    width: 150px;
+    height: 30px;
+    background-color: #6ab16d;
+    color: white;
+    cursor: pointer;
+}
+
+.container-main form .no_entregado {
+    border: none;
+    border-radius: 10px;
+    width: 150px;
+    height: 30px;
+    background: #9d2142;
+    color: white;
+    cursor: pointer;
+}
