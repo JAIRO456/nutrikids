@@ -10,7 +10,7 @@
     $sqlRoles = $con->prepare("SELECT COUNT(*) AS TotalUser FROM usuarios");
     $sqlRoles->execute();
     $u = $sqlRoles->fetch();
-    $response['TotalUsers2'] = $u['TotalUsers2'];
+    $response['TotalUsers'] = $u['TotalUsers'];
 
     // Obtener el conteo de licencias
     $sqlProducts = $con->prepare("SELECT COUNT(*) AS TotalProducts FROM licencias");

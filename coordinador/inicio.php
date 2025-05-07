@@ -24,7 +24,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card text-white bg-danger">
                         <div class="card-body">
-                            <h5 class="card-title">Directores</h5>
+                            <h5 class="card-title">Usuarios</h5>
                             <p class="card-text display-4" id='TotalUsers'>
                                 <i class="bi bi-person-fill"></i> 
                             </p>
@@ -34,9 +34,9 @@
                 <div class="col-md-4 mb-4">
                     <div class="card text-white bg-danger">
                         <div class="card-body">
-                            <h5 class="card-title">Licencias Activas</h5>
-                            <p class="card-text display-4" id='TotalLicencias'>
-                                <i class="bi bi-file-earmark-check-fill"></i> 
+                            <h5 class="card-title">Estudiantes</h5>
+                            <p class="card-text display-4" id='TotalEstudiantes'>
+                                <i class="bi bi-person-fill"></i> 
                             </p>
                         </div>
                     </div>
@@ -44,60 +44,23 @@
                 <div class="col-md-4 mb-4">
                     <div class="card text-white bg-danger">
                         <div class="card-body">
-                            <h5 class="card-title">Escuelas</h5>
-                            <p class="card-text display-4" id='TotalSchools'>
-                                <i class="bi bi-house-fill"></i> 
+                            <h5 class="card-title">Productos</h5>
+                            <p class="card-text display-4" id='TotalProducts'>
+                                <i class="bi bi-basket"></i>
                             </p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h4>Licencias por expirar (próximos 30 días)</h4>
-            </div>
-            <div class="card-body">
-                <?php
-                $hoy = date('Y-m-d');
-                $treinta_dias = date('Y-m-d', strtotime('+30 days'));
-
-                $sqlDias = $con->query("SELECT licencias.id_licencia, licencias.fecha_fin, escuelas.nombre_escuela FROM licencias
-                INNER JOIN escuelas ON licencias.id_escuela = escuelas.id_escuela
-                INNER JOIN estados ON licencias.id_estado = estados.id_estado
-                WHERE estados.id_estado = 1 
-                AND licencias.fecha_fin BETWEEN '$hoy' AND '$treinta_dias'
-                ORDER BY licencias.fecha_fin ASC");
-                $licencias = $sqlDias->fetchAll(PDO::FETCH_ASSOC);
-
-                if (count($licencias) > 0): ?>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Escuela</th>
-                                <th>Fecha Expiración</th>
-                                <th>Días Restantes</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($licencias as $licencia): 
-                                $dias_restantes = (new DateTime($licencia['fecha_fin']))->diff(new DateTime($hoy))->days;
-                            ?>
-                            <tr>
-                                <td><?= $licencia['nombre_emp']; ?></td>
-                                <td><?= date('d/m/Y', strtotime($licencia['fecha_fin'])) ?></td>
-                                <td><?= $dias_restantes ?></td>
-                                <td>
-                                    <a href="licencias/editar.php?id=<?= $licencia['licencia_id'] ?>" class="btn btn-sm btn-warning">Renovar</a>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php else: ?>
-                    <div class="alert alert-success">No hay licencias por expirar en los próximos 30 días.</div>
-                <?php endif; ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card text-white bg-danger">
+                        <div class="card-body">
+                            <h5 class="card-title">Ventas</h5>
+                            <p class="card-text display-4" id='TotalVentas'>
+                                <i class="bi bi-bar-chart"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="container mt-4">
@@ -112,7 +75,7 @@
                                 <th>Email</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body">
+                        <tbody>
 
                         </tbody>
                     </table>
@@ -131,7 +94,7 @@
                                 <th>Precio</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body">
+                        <tbody>
 
                         </tbody>
                     </table>
@@ -142,18 +105,18 @@
 </body>
     <script>
         function updateCounts() {
-            fetch('../ajax/get_counts.php')
+            fetch('../ajax/get_counts2.php')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('TotalUsers').innerHTML = `<i class="bi bi-person-fill"></i> ${data.TotalUsers}`;
-                    document.getElementById('TotalLicencias').innerHTML = `<i class="bi bi-file-earmark-check-fill"></i> ${data.TotalLicencias}`;
-                    document.getElementById('TotalSchools').innerHTML = `<i class="bi bi-house-fill"></i> ${data.TotalSchools}`;
+                    document.getElementById('TotalProducts').innerHTML = `<i class="bi bi-file-earmark-check-fill"></i> ${data.TotalProducts}`;
+                    document.getElementById('TotalEstudiantes').innerHTML = `<i class="bi bi-house-fill"></i> ${data.TotalEstudiantes}`;
                 })
                 .catch(error => console.error('Error al obtener datos:', error));
         }
 
         function getUsers() {
-            fetch('../ajax/get_users.php')
+            fetch('../ajax/get_users2.php')
                 .then(response => response.json())
                 .then(users => {
                     const tbody = document.querySelector('#table-users tbody')

@@ -1,13 +1,10 @@
 <?php
+    session_start();
+    require_once('../conex/conex.php');
+    $conex =new Database;
+    $con = $conex->conectar();
 
-session_start();
-require_once('../conex/conex.php');
-// include "adm_menu.html";
-// include "header_user.php";
-include "../time.php";
-$conex =new Database;
-$con = $conex->conectar();
-
+    include 'menu.php';
 ?>
 
 <!DOCTYPE html>

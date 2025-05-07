@@ -24,7 +24,7 @@
                     <div class="card text-white bg-danger">
                         <div class="card-body">
                             <h5 class="card-title">Directores</h5>
-                            <p class="card-text display-4" id='TotalUsers2'>
+                            <p class="card-text display-4" id='TotalUsers'>
                                 <i class="bi bi-person-fill"></i> 
                             </p>
                         </div>
@@ -61,19 +61,19 @@
                 $hoy = date('Y-m-d');
                 $treinta_dias = date('Y-m-d', strtotime('+30 days'));
 
-                $sqlDias = $con->query("SELECT licencias.licencia_id, licencias.fecha_fin, empresas.nombre_escuela FROM licencias
-                    INNER JOIN escuelas ON licencias.escuelas_id = escuelas.escuelas_id
-                    INNER JOIN estados ON licencias.estado_id = estados.estado_id
-                    WHERE estados.estado_id = 1 
-                    AND licencias.fecha_fin BETWEEN '$hoy' AND '$treinta_dias'
-                    ORDER BY licencias.fecha_fin ASC");
+                $sqlDias = $con->query("SELECT licencias.id_licencia, licencias.fecha_fin, escuelas.nombre_escuela FROM licencias
+                INNER JOIN escuelas ON licencias.id_escuela = escuelas.id_escuela
+                INNER JOIN estados ON licencias.id_estado = estados.id_estado
+                WHERE estados.id_estado = 1 
+                AND licencias.fecha_fin BETWEEN '$hoy' AND '$treinta_dias'
+                ORDER BY licencias.fecha_fin ASC");
                 $licencias = $sqlDias->fetchAll(PDO::FETCH_ASSOC);
 
                 if (count($licencias) > 0): ?>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Empresa</th>
+                                <th>Escuela</th>
                                 <th>Fecha Expiración</th>
                                 <th>Días Restantes</th>
                                 <th>Acción</th>
@@ -101,36 +101,40 @@
         </div>
         <div class="container mt-4">
             <div class="row">
-                <h2>Usuarios Recientes</h2>
-                <table class="table-users table-striped table-hover table-dark">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody >
-                        
-                    </tbody>
-                </table>
+                <div class="col-md-12">
+                    <h2 class="text-center">Usuarios Recientes</h2>
+                    <table class="table table-bordered table-striped" id="table-users">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="container mt-4">
             <div class="row">
-                <h2>Productos Recientes</h2>
-                <table class="table-products table-striped table-hover table-dark">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Categoria</th>
-                            <th>Precio</th>
-                        </tr>
-                    </thead>
-                    <tbody >
-                        
-                    </tbody>
-                </table>
+                <div class="col-md-12">
+                    <h2 class="text-center">Productos Recientes</h2>
+                    <table class="table table-bordered table-striped" id="table-products">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoria</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
@@ -140,9 +144,9 @@
             fetch('../ajax/get_counts.php')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('TotalUsers2').textContent = data.TotalUsers2;
-                    document.getElementById('TotalLicencias').textContent = data.TotalLicencias;
-                    document.getElementById('TotalSchools').textContent = data.TotalSchools;
+                    document.getElementById('TotalUsers').innerHTML = `<i class="bi bi-person-fill"></i> ${data.TotalUsers}`;
+                    document.getElementById('TotalLicencias').innerHTML = `<i class="bi bi-file-earmark-check-fill"></i> ${data.TotalLicencias}`;
+                    document.getElementById('TotalSchools').innerHTML = `<i class="bi bi-house-fill"></i> ${data.TotalSchools}`;
                 })
                 .catch(error => console.error('Error al obtener datos:', error));
         }

@@ -1,11 +1,10 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
-    // include "adm_menu.html";
-    // include "header_user.php";
-    include "../time.php";
     $conex =new Database;
     $con = $conex->conectar();
+
+    include 'menu.php';
 ?>
 
 <!DOCTYPE html>
@@ -74,6 +73,9 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        document.addEventListener('DOMContentLoaded', getLicencias);
+        // document.addEventListener('DOMContentLoaded', getLicencias);
+        setInterval(function () {
+            getLicencias();
+        }, 3000);
     </script>
 </html>

@@ -29,11 +29,11 @@
                         exit();
                     }
                     if($_SESSION['rol'] == 2 && $_SESSION['estate'] == 1){
-                        header("Location: coordinador/inicio.php");
+                        header("Location: ../coordinador/inicio.php");
                         exit();
                     }
                     if($_SESSION['rol'] == 3 && $_SESSION['estate'] == 1){
-                        header("Location: vendedor/inicio.php");
+                        header("Location: ../vendedor/inicio.php");
                         exit();
                     }
                     if($_SESSION['rol'] == 4 && $_SESSION['estate'] == 1){

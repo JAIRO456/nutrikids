@@ -92,7 +92,6 @@ $con = $conex->conectar();
 
             <?php 
                 $total = 0;
-            // Si se han encontrado productos, los mostramos
                 if (!empty($p)) {
                     foreach ($p as $products) {
             ?>
