@@ -35,7 +35,7 @@
                         <a class="nav-link" href="horarios.php"><i class="bi bi-clock"></i> Horarios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-person-plus"></i> Agregar</a>
+                        <a class="nav-link" href="agregar.php"><i class="bi bi-person-plus"></i> Agregar</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-bar-chart"></i> Ventas</a>
