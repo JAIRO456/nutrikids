@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 <!-- filepath: c:\xampp\htdocs\nutrikids\vendedor\productos\productos.php -->
+=======
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Productos</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -105,5 +109,11 @@
         $conn->close();
         ?>
     </div>
+=======
+    <title>Document</title>
+</head>
+<body>
+    
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 </body>
 </html>

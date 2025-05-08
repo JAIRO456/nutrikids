@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
+<<<<<<< HEAD
 -- Tiempo de generación: 08-05-2025 a las 13:56:25
+=======
+-- Tiempo de generación: 07-05-2025 a las 00:30:34
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,6 +37,7 @@ CREATE TABLE `categorias` (
   `imagen` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 --
 -- Volcado de datos para la tabla `categorias`
 --
@@ -46,6 +51,8 @@ INSERT INTO `categorias` (`id_categoria`, `categoria`, `imagen`) VALUES
 (6, 'PANADERIA', 'panaderia.jpg'),
 (7, 'SNACKS', 'snacks.jpg');
 
+=======
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 -- --------------------------------------------------------
 
 --
@@ -84,7 +91,11 @@ CREATE TABLE `detalles_pedidos_producto` (
   `id_pedido` int(11) NOT NULL,
   `documento_est` int(11) NOT NULL,
   `id_menu` smallint(4) NOT NULL,
+<<<<<<< HEAD
   `id_producto` bigint(20) NOT NULL,
+=======
+  `id_producto` bigint(10) NOT NULL,
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
   `cantidad` int(3) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -217,6 +228,7 @@ INSERT INTO `licencia` (`id_licencia`, `nombre`, `precio`, `fecha_inicio`, `fech
 
 CREATE TABLE `marcas` (
   `id_marca` smallint(6) NOT NULL,
+<<<<<<< HEAD
   `marca` set('Colombina','Alpina','Zenú','Quala','Noel','Postobón','Nestlé') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -233,6 +245,11 @@ INSERT INTO `marcas` (`id_marca`, `marca`) VALUES
 (6, 'Postobón'),
 (7, 'Nestlé');
 
+=======
+  `marca` set('Colombina','Alpina','Zenú','Quala','Noel') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 -- --------------------------------------------------------
 
 --
@@ -290,7 +307,11 @@ CREATE TABLE `pedidos` (
 --
 
 CREATE TABLE `producto` (
+<<<<<<< HEAD
   `id_producto` bigint(20) NOT NULL,
+=======
+  `id_producto` bigint(10) NOT NULL,
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
   `nombre_prod` varchar(25) NOT NULL,
   `descripcion` varchar(50) NOT NULL,
   `precio` decimal(10,0) NOT NULL,
@@ -300,6 +321,7 @@ CREATE TABLE `producto` (
   `id_marca` smallint(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 --
 -- Volcado de datos para la tabla `producto`
 --
@@ -325,6 +347,8 @@ INSERT INTO `producto` (`id_producto`, `nombre_prod`, `descripcion`, `precio`, `
 (18, 'Frutos Secos', 'Mezcla de frutos secos naturales', 3500, 'frutos_secos.jpg', 60, 7, 1),
 (19, 'Chips de Plátano', 'Chips horneados de plátano', 2500, 'chips_platano.jpg', 100, 7, 1);
 
+=======
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 -- --------------------------------------------------------
 
 --
@@ -391,8 +415,12 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`documento`, `nombre`, `apellido`, `email`, `telefono`, `password`, `imagen`, `id_rol`, `id_estado`) VALUES
+<<<<<<< HEAD
 (1073155246, 'fabian', 'martinez', 'edwinfabian.2006tmpg@gmai', 2147483647, '$2y$10$jfe.veAVOAxduyJ1HE/2zeaSzyRzw3/b1xzPxNh4Uc9uigYBsFqVS', 'WIN_20240829_09_04_28_Pro.jpg', 3, 1),
 (1234567890, 'Kant', 'Arboles', 'kant@example.com', 1122334455, '$2y$10$pgTzplGU2AjQ./sHIImuyurpM9xXXlPH/EZmjqusAzpNbQlBkfq/.', NULL, 1, 1);
+=======
+(1073155246, 'fabian', 'martinez', 'edwinfabian.2006tmpg@gmai', 2147483647, '$2y$10$jfe.veAVOAxduyJ1HE/2zeaSzyRzw3/b1xzPxNh4Uc9uigYBsFqVS', 'WIN_20240829_09_04_28_Pro.jpg', 3, 1);
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 
 --
 -- Índices para tablas volcadas
@@ -536,7 +564,11 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
+<<<<<<< HEAD
   MODIFY `id_categoria` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+=======
+  MODIFY `id_categoria` smallint(4) NOT NULL AUTO_INCREMENT;
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_estudiantes_escuela`
@@ -590,7 +622,11 @@ ALTER TABLE `licencia`
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
+<<<<<<< HEAD
   MODIFY `id_marca` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+=======
+  MODIFY `id_marca` smallint(6) NOT NULL AUTO_INCREMENT;
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 
 --
 -- AUTO_INCREMENT de la tabla `menus`
@@ -614,13 +650,21 @@ ALTER TABLE `pedidos`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
+<<<<<<< HEAD
   MODIFY `id_producto` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+=======
+  MODIFY `id_producto` bigint(10) NOT NULL AUTO_INCREMENT;
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
+<<<<<<< HEAD
   MODIFY `id_rol` smallint(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+=======
+  MODIFY `id_rol` smallint(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_licencia`
