@@ -21,44 +21,43 @@
 <body>
     <main class="container mt-4">
         <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card text-white bg-danger">
-                        <div class="card-body">
-                            <h5 class="card-title">Usuarios</h5>
-                            <p class="card-text display-4" id='TotalUsers'>
-                                <i class="bi bi-person-fill"></i> 
-                            </p>
-                        </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Usuarios</h5>
+                        <p class="card-text display-4" id='TotalUsers'>
+                            <i class="bi bi-person-fill"></i> 
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card text-white bg-danger">
-                        <div class="card-body">
-                            <h5 class="card-title">Estudiantes</h5>
-                            <p class="card-text display-4" id='TotalEstudiantes'>
-                                <i class="bi bi-person-fill"></i> 
-                            </p>
-                        </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Estudiantes</h5>
+                        <p class="card-text display-4" id='TotalEstudiantes'>
+                            <i class="bi bi-person-fill"></i> 
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card text-white bg-danger">
-                        <div class="card-body">
-                            <h5 class="card-title">Productos</h5>
-                            <p class="card-text display-4" id='TotalProducts'>
-                                <i class="bi bi-basket"></i>
-                            </p>
-                        </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Productos</h5>
+                        <p class="card-text display-4" id='TotalProducts'>
+                            <i class="bi bi-basket"></i>
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card text-white bg-danger">
-                        <div class="card-body">
-                            <h5 class="card-title">Ventas</h5>
-                            <p class="card-text display-4" id='TotalVentas'>
-                                <i class="bi bi-bar-chart"></i>
-                            </p>
-                        </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Ventas</h5>
+                        <p class="card-text display-4" id='TotalVentas'>
+                            <i class="bi bi-bar-chart"></i>
+                        </p>
                     </div>
                 </div>
             </div>

@@ -1,33 +1,41 @@
 <?php
     session_start();
-    require_once('../../conex/conex.php');
+    require_once('../conex/conex.php');
     $conex =new Database;
     $con = $conex->conectar();
 
+    $documento = $_SESSION['documento'];
+    $sql = $con->prepare("SELECT * FROM usuarios 
+    INNER JOIN detalles_usuarios_escuela 
+    INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela
+    WHERE usuarios.documento = ?");
+    $sql->execute([$documento]);
+    $u = $sql->fetch(PDO::FETCH_ASSOC);
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $documento = $_POST['documento'];
-        $nombre = $_POST['nombre'];
+        $nombre = $_POST['nombre']; 
         $apellido = $_POST['apellido'];
         $email = $_POST['email'];
         $telefono = $_POST['telefono'];
         $password = password_hash(rand(1000, 9999), PASSWORD_DEFAULT);
-        $id_escuela = $_POST['escuela'];
+        $id_escuela = $u['id_escuela'];
         $imagen = $_FILES['imagen']['name'];
         $temp = $_FILES['imagen']['tmp_name'];
 
         if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/users/" . $imagen);
+            move_uploaded_file($_FILES['imagen']['tmp_name'], "../img/users/" . $imagen);
         } 
         else {
             $imagen = null;
         }
 
         $sqlInsertDirector = $con->prepare("INSERT INTO usuarios (documento, nombre, apellido, email, telefono, password, imagen, id_rol, id_estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $imagen, 2, 2])) {
+        if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $imagen, 3, 2])) {
             $sqlInsertDetails = $con->prepare("INSERT INTO detalles_usuarios_escuela (documento, id_escuela) VALUES (?, ?)");
             if ($sqlInsertDetails->execute([$documento, $id_escuela])) {
-                echo '<script>alert("Director creado exitosamente")</script>';
-                echo '<script>window.location = "../directores.php"</script>';
+                echo '<script>alert("Vendedor creado exitosamente")</script>';
+                echo '<script>window.location = "agregar.php"</script>';
             } 
             else {
                 echo '<script>alert("Error al asignar la escuela al administrador")</script>';
@@ -54,7 +62,7 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">Crear Director</h2>
+                    <h2 class="text-center">Crear Vendedor</h2>
                     <form id="formCreateAdmin" method="POST" action="" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="documento" class="form-label">Documento</label>
@@ -77,24 +85,11 @@
                             <input type="number" class="form-control" id="telefono" name="telefono" required>
                         </div>
                         <div class="mb-3">
-                            <label for="escuela" class="form-label">Escuela</label>
-                            <select class="form-select" id="escuela" name="escuela" required>
-                                <option value="">Seleccione una escuela</option>
-                                <?php
-                                    $sqlEscuelas = $con->prepare("SELECT * FROM escuelas");
-                                    $sqlEscuelas->execute();
-                                    while ($row = $sqlEscuelas->fetch(PDO::FETCH_ASSOC)) {
-                                        echo "<option value='{$row['id_escuela']}'>{$row['nombre_escuela']}</option>";
-                                    }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="mb-3">
                             <label for="imagen" class="form-label">Imagen</label>
                             <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
                         </div>
-                        <button type="submit" class="btn btn-danger">Registrar Director</button>
-                        <a href="../directores.php" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">Registrar Vendedor</button>
+                        <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>
             </div>

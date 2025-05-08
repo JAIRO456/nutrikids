@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
+    require_once('../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
@@ -36,25 +37,46 @@
 <body>
     <main class="container mt-4">
         <div class="row">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h4>CREAR CUENTA PARA:</h4>
-                    <div class="card-body">
-                    <div class="col-md-3">
-                        <div class="card text-white bg-success">
-                            <div class="card-body">
-                                <li class="nav-item">
-                                    <a href="vendedores.php" class="nav-link text-white">
-                                        <i class="bi bi-person-circle"></i>
-                                        <h5 class="card-title">Vendedores</h5>
-                                    </a>
-                                </li>
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body text-center">
+                        <a class="nav-link" href="vendedor.php" class="text-white">
+                            <h5 class="card-title">Vendedor</h5> 
+                            <i class="bi bi-person-fill"></i>
+                        </a>
                     </div>
                 </div>
             </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body text-center">
+                        <a class="nav-link" href="acudientes.php" class="text-white">
+                            <h5 class="card-title">Acudientes</h5> 
+                            <i class="bi bi-person-fill"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body text-center">
+                        <a class="nav-link" href="estudiantes.php" class="text-white">
+                            <h5 class="card-title">Estudiantes</h5>
+                            <i class="bi bi-person-fill"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body text-center">
+                        <a class="nav-link" href="productos.php" class="text-white">
+                            <h5 class="card-title">Productos</h5>
+                            <i class="bi bi-basket"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>         
         </div>
     </main>
 </body>

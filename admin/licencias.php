@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
+    require_once('../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
@@ -17,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
-<body>
+<body onload="form.documento.focus()">
     <main class="container-main">
         <div class="container mt-4">
             <div class="row">
