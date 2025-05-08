@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0%;
+    padding: 0%;
+    background-color: white;
+}
+
+main {
+    padding-top: 5%;
+    text-align: center;
+    align-content: center;
+    padding-left: 20%;
+}
+
+.options {
+    column-count: 3;
+    padding-top: 5%;
+    cursor: pointer;
+}
+
+.create-account {
+    width: 1000px;
+}
+
+.create-account h1 {
+    color: #9d2142;
+}
+
+.options a {
+    font-size: 40px;
+    color: #9d2142;
+    text-decoration: none;
+}
+
+
+.options i {
+    font-size: 200px;
+}
+
+/* Media Queries */
+
+/* Para dispositivos móviles */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .sidebar nav a {
+        margin: 5px;
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    .main-content {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .create-account h2 {
+        font-size: 1.2em;
+    }
+
+    .option img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .option span {
+        font-size: 1em;
+    }
+}
+
+/* Para tabletas */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar {
+        width: 25%;
+    }
+
+    .main-content {
+        width: 75%;
+    }
+
+    .option img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .option span {
+        font-size: 1.3em;
+    }
+}
+
+@media (min-width: 1025px) {
+    .sidebar {
+        width: 20%;
+    }
+
+    .main-content {
+        width: 80%;
+    }
+
+    .option img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .option span {
+        font-size: 1.5em;
+    }
+}

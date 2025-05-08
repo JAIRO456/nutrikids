@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0%;
+    padding: 0%;
+    
+}
+
+main {
+    background-color: white ;
+    padding-top: 5%;
+    text-align: center;
+    align-content: center;
+    padding-left: 20%;
+}
+
+.container-main .container1 .container-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    place-items: center;
+}
+
+.container-main .container-div1 {
+    width: 300px;
+    margin-top: 5%;
+    background: #9d2142;
+    color: white;
+    /* font-weight: bold; */
+}
+
+.container1 h1 {
+    font-size: 24px;
+}
+
+.container1 h2 {
+    font-size: 24px;
+}
+
+.container1 i {
+    font-size: 36px;
+}
+
+.container-main .container2 {
+    margin-top: 5%;
+}
+
+.container-main .container3 {
+    margin-top: 5%;
+}
+
+.container3 .table {
+    width: 1000px;
+}
+
+.container3 table th {
+    background-color: #4a4f53;
+    color: white;
+    text-align: center;
+    padding-right: 30px;
+}
+
+.container4 table {
+    width: 900px;
+}
+
+.container4 table th {
+    background-color: #4a4f53;
+    color: white;
+    text-align: center;
+    padding-right: 30px;
+}
+
+.container4 table button {
+    background-color: #2168a1;
+    border: none;
+    border-radius: 5px;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .contenedor {
+        width: 100%;
+        height: auto;
+    }
+
+    main {
+        padding-left: 0%;
+    }
+
+    .container-main .container1 {
+        width: 100%;
+    }
+
+    .container-main .container1 .container-section {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+        align-content: center;
+    }
+
+    .container-main .container-div1 {
+        width: 150px;
+        margin-top: 3%;
+    }
+
+    .container-main .container2 {
+        width: 100%;
+    }
+
+    .container-main .container2 canvas {
+        width: 400px;
+        height: 200px;
+    }
+
+    .container-main .container3 {
+        width: 100%;
+    }
+
+    .container3 .table {
+        width: 100%;
+    }
+
+    .container-main .container4 {
+        width: 100%;
+    }
+
+    .container4 table {
+        width: 100%;
+    }
+
+    .container3 table th {
+        padding-right: 0%;
+    }
+}
