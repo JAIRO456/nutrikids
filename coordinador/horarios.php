@@ -55,7 +55,7 @@
                     data.forEach(menu => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${menu.id_det_ped_prod}</td>
+                            <td>${menu.id_menu}</td>
                             <td>${menu.nombre}</td>
                             <td>${menu.nombre_menu}</td>
                             <td>${menu.estado}</td>

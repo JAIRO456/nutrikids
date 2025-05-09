@@ -3,7 +3,7 @@ class database {
     private $hostname = "localhost";
     private $username = "root";
     private $password = "";
-    private $database = "nutrikids3";
+    private $database = "nutrikids2";
     private $charset = "utf8mb4";
 
     function conectar()         

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-05-2025 a las 02:42:09
+-- Tiempo de generación: 09-05-2025 a las 03:26:20
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,17 +33,16 @@ CREATE TABLE `categorias` (
   `imagen` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `detalles_estudiantes_escuela`
+-- Volcado de datos para la tabla `categorias`
 --
 
-CREATE TABLE `detalles_estudiantes_escuela` (
-  `id_det_students_esc` int(11) NOT NULL,
-  `documento` int(11) NOT NULL,
-  `id_escuela` smallint(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `categorias` (`id_categoria`, `categoria`, `imagen`) VALUES
+(1, 'BEBIDAS FRIAS', ''),
+(2, 'BEBIDAS CALIENTES', ''),
+(3, 'POSTRES', ''),
+(4, 'FRUTAS', ''),
+(5, 'PANES', '');
 
 -- --------------------------------------------------------
 
@@ -60,41 +59,13 @@ CREATE TABLE `detalles_menu` (
   `subtotal` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `detalles_pedidos_producto`
+-- Volcado de datos para la tabla `detalles_menu`
 --
 
-CREATE TABLE `detalles_pedidos_producto` (
-  `id_det_ped_prod` int(11) NOT NULL,
-  `id_pedido` int(11) NOT NULL,
-  `documento_est` int(11) NOT NULL,
-  `id_menu` smallint(4) NOT NULL,
-  `id_producto` bigint(10) NOT NULL,
-  `cantidad` int(3) NOT NULL,
-  `subtotal` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `detalles_usuarios_escuela`
---
-
-CREATE TABLE `detalles_usuarios_escuela` (
-  `id_det_users_esc` int(11) NOT NULL,
-  `documento` int(11) NOT NULL,
-  `id_escuela` smallint(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `detalles_usuarios_escuela`
---
-
-INSERT INTO `detalles_usuarios_escuela` (`id_det_users_esc`, `documento`, `id_escuela`) VALUES
-(1, 1234567891, 1),
-(2, 1234567892, 2);
+INSERT INTO `detalles_menu` (`id_det_menu`, `cantidad`, `id_menu`, `id_producto`, `id_estado`, `subtotal`) VALUES
+(1, 3, 2, 1, 1, 15000.00),
+(2, 5, 2, 2, 1, 12500.00);
 
 -- --------------------------------------------------------
 
@@ -142,85 +113,6 @@ INSERT INTO `estados` (`id_estado`, `estado`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `estado_licencia`
---
-
-CREATE TABLE `estado_licencia` (
-  `id_estado_licencia` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `id_licencia` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `estado_licencia`
---
-
-INSERT INTO `estado_licencia` (`id_estado_licencia`, `nombre`, `id_licencia`) VALUES
-(1, 'Activa', 1),
-(2, 'Activa', 2),
-(3, 'Activa', 3);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `estudiantes`
---
-
-CREATE TABLE `estudiantes` (
-  `documento_est` int(11) NOT NULL,
-  `nombre` varchar(25) NOT NULL,
-  `apellido` varchar(25) NOT NULL,
-  `email` varchar(25) NOT NULL,
-  `telefono` int(12) NOT NULL,
-  `imagen` varchar(500) NOT NULL,
-  `documento` int(11) NOT NULL,
-  `id_estado` smallint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `informacion_nutricional`
---
-
-CREATE TABLE `informacion_nutricional` (
-  `id_nutricion` int(11) NOT NULL,
-  `id_producto` bigint(10) NOT NULL,
-  `calorias` decimal(6,2) NOT NULL,
-  `proteinas` decimal(6,2) DEFAULT 0.00,
-  `carbohidratos` decimal(6,2) DEFAULT 0.00,
-  `grasas` decimal(6,2) DEFAULT 0.00,
-  `azucares` decimal(6,2) DEFAULT 0.00,
-  `sodio` decimal(6,2) DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `licencias`
---
-
-CREATE TABLE `licencias` (
-  `id_licencia` int(11) NOT NULL,
-  `fecha_inicio` date NOT NULL,
-  `fecha_fin` date NOT NULL,
-  `id_tipo` int(11) NOT NULL,
-  `id_escuela` smallint(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `licencias`
---
-
-INSERT INTO `licencias` (`id_licencia`, `fecha_inicio`, `fecha_fin`, `id_tipo`, `id_escuela`) VALUES
-(1, '2025-01-01', '2025-06-30', 1, 1),
-(2, '2025-01-01', '2025-12-11', 2, 2),
-(3, '2025-01-01', '2026-12-31', 3, 3),
-(4, '2025-05-08', '2025-06-07', 1, 4);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `marcas`
 --
 
@@ -228,6 +120,17 @@ CREATE TABLE `marcas` (
   `id_marca` smallint(6) NOT NULL,
   `marca` set('Colombina','Alpina','Zenú','Quala','Noel') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `marcas`
+--
+
+INSERT INTO `marcas` (`id_marca`, `marca`) VALUES
+(1, 'Colombina'),
+(2, 'Alpina'),
+(3, 'Zenú'),
+(4, 'Quala'),
+(5, 'Noel');
 
 -- --------------------------------------------------------
 
@@ -242,25 +145,13 @@ CREATE TABLE `menus` (
   `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `metodos_pago`
+-- Volcado de datos para la tabla `menus`
 --
 
-CREATE TABLE `metodos_pago` (
-  `id_met_pago` smallint(4) NOT NULL,
-  `metodo` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `metodos_pago`
---
-
-INSERT INTO `metodos_pago` (`id_met_pago`, `metodo`) VALUES
-(1, 'Tarjeta de crédito'),
-(2, 'Transacción'),
-(3, 'Tarjeta de debito');
+INSERT INTO `menus` (`id_menu`, `nombre_menu`, `imagen`, `precio`) VALUES
+(1, 'Nose', '', 15000.00),
+(2, 'Menu de Aleja', '', 10000.00);
 
 -- --------------------------------------------------------
 
@@ -279,6 +170,13 @@ CREATE TABLE `pedidos` (
   `id_estado` smallint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `pedidos`
+--
+
+INSERT INTO `pedidos` (`id_pedidos`, `dia`, `documento`, `total_pedido`, `id_met_pago`, `fecha_ini`, `fecha_fin`, `id_estado`) VALUES
+(1, 'lunes', 1073155246, 15000.00, 2, '2025-05-08 22:30:06', '2025-05-31 22:29:18', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -295,6 +193,14 @@ CREATE TABLE `producto` (
   `id_categoria` smallint(4) NOT NULL,
   `id_marca` smallint(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`id_producto`, `nombre_prod`, `descripcion`, `precio`, `imagen_prod`, `cantidad_alm`, `id_categoria`, `id_marca`) VALUES
+(1, 'Capuchino', 'Hola mundo...', 5000, '', 20, 2, 2),
+(2, 'Pan Croissant', 'Pan con jamón y queso', 2500, '', 50, 5, 5);
 
 -- --------------------------------------------------------
 
@@ -316,27 +222,6 @@ INSERT INTO `roles` (`id_rol`, `rol`) VALUES
 (2, 'director'),
 (3, 'vendedor'),
 (4, 'acudiente');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tipo_licencia`
---
-
-CREATE TABLE `tipo_licencia` (
-  `id_tipo` int(11) NOT NULL,
-  `tipo` varchar(50) NOT NULL,
-  `precio` decimal(10,2) NOT NULL DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tipo_licencia`
---
-
-INSERT INTO `tipo_licencia` (`id_tipo`, `tipo`, `precio`) VALUES
-(1, 'Básica', 100.00),
-(2, 'Estándar', 200.00),
-(3, 'Premium', 300.00);
 
 -- --------------------------------------------------------
 
@@ -377,14 +262,6 @@ ALTER TABLE `categorias`
   ADD PRIMARY KEY (`id_categoria`);
 
 --
--- Indices de la tabla `detalles_estudiantes_escuela`
---
-ALTER TABLE `detalles_estudiantes_escuela`
-  ADD PRIMARY KEY (`id_det_students_esc`),
-  ADD KEY `documento` (`documento`),
-  ADD KEY `id_escuela` (`id_escuela`);
-
---
 -- Indices de la tabla `detalles_menu`
 --
 ALTER TABLE `detalles_menu`
@@ -392,24 +269,6 @@ ALTER TABLE `detalles_menu`
   ADD KEY `id_menu` (`id_menu`),
   ADD KEY `id_producto` (`id_producto`),
   ADD KEY `id_estado` (`id_estado`);
-
---
--- Indices de la tabla `detalles_pedidos_producto`
---
-ALTER TABLE `detalles_pedidos_producto`
-  ADD PRIMARY KEY (`id_det_ped_prod`),
-  ADD KEY `id_pedido` (`id_pedido`),
-  ADD KEY `documento_est` (`documento_est`),
-  ADD KEY `id_menu` (`id_menu`),
-  ADD KEY `id_producto` (`id_producto`);
-
---
--- Indices de la tabla `detalles_usuarios_escuela`
---
-ALTER TABLE `detalles_usuarios_escuela`
-  ADD PRIMARY KEY (`id_det_users_esc`),
-  ADD KEY `documento` (`documento`),
-  ADD KEY `id_escuela` (`id_escuela`);
 
 --
 -- Indices de la tabla `escuelas`
@@ -424,36 +283,6 @@ ALTER TABLE `estados`
   ADD PRIMARY KEY (`id_estado`);
 
 --
--- Indices de la tabla `estado_licencia`
---
-ALTER TABLE `estado_licencia`
-  ADD PRIMARY KEY (`id_estado_licencia`),
-  ADD KEY `id_licencia` (`id_licencia`);
-
---
--- Indices de la tabla `estudiantes`
---
-ALTER TABLE `estudiantes`
-  ADD PRIMARY KEY (`documento_est`),
-  ADD KEY `documento` (`documento`),
-  ADD KEY `id_estado` (`id_estado`);
-
---
--- Indices de la tabla `informacion_nutricional`
---
-ALTER TABLE `informacion_nutricional`
-  ADD PRIMARY KEY (`id_nutricion`),
-  ADD KEY `id_producto` (`id_producto`);
-
---
--- Indices de la tabla `licencias`
---
-ALTER TABLE `licencias`
-  ADD PRIMARY KEY (`id_licencia`),
-  ADD KEY `id_tipo` (`id_tipo`),
-  ADD KEY `id_escuela` (`id_escuela`);
-
---
 -- Indices de la tabla `marcas`
 --
 ALTER TABLE `marcas`
@@ -464,12 +293,6 @@ ALTER TABLE `marcas`
 --
 ALTER TABLE `menus`
   ADD PRIMARY KEY (`id_menu`);
-
---
--- Indices de la tabla `metodos_pago`
---
-ALTER TABLE `metodos_pago`
-  ADD PRIMARY KEY (`id_met_pago`);
 
 --
 -- Indices de la tabla `pedidos`
@@ -495,12 +318,6 @@ ALTER TABLE `roles`
   ADD PRIMARY KEY (`id_rol`);
 
 --
--- Indices de la tabla `tipo_licencia`
---
-ALTER TABLE `tipo_licencia`
-  ADD PRIMARY KEY (`id_tipo`);
-
---
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -516,31 +333,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id_categoria` smallint(4) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `detalles_estudiantes_escuela`
---
-ALTER TABLE `detalles_estudiantes_escuela`
-  MODIFY `id_det_students_esc` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_categoria` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_menu`
 --
 ALTER TABLE `detalles_menu`
-  MODIFY `id_det_menu` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `detalles_pedidos_producto`
---
-ALTER TABLE `detalles_pedidos_producto`
-  MODIFY `id_det_ped_prod` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `detalles_usuarios_escuela`
---
-ALTER TABLE `detalles_usuarios_escuela`
-  MODIFY `id_det_users_esc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_det_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `escuelas`
@@ -555,52 +354,28 @@ ALTER TABLE `estados`
   MODIFY `id_estado` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `estado_licencia`
---
-ALTER TABLE `estado_licencia`
-  MODIFY `id_estado_licencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de la tabla `informacion_nutricional`
---
-ALTER TABLE `informacion_nutricional`
-  MODIFY `id_nutricion` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `licencias`
---
-ALTER TABLE `licencias`
-  MODIFY `id_licencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id_marca` smallint(6) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_marca` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id_menu` smallint(4) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `metodos_pago`
---
-ALTER TABLE `metodos_pago`
-  MODIFY `id_met_pago` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_menu` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id_pedidos` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pedidos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` bigint(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_producto` bigint(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -609,21 +384,8 @@ ALTER TABLE `roles`
   MODIFY `id_rol` smallint(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `tipo_licencia`
---
-ALTER TABLE `tipo_licencia`
-  MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `detalles_estudiantes_escuela`
---
-ALTER TABLE `detalles_estudiantes_escuela`
-  ADD CONSTRAINT `detalles_estudiantes_escuela_ibfk_1` FOREIGN KEY (`documento`) REFERENCES `usuarios` (`documento`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `detalles_estudiantes_escuela_ibfk_2` FOREIGN KEY (`id_escuela`) REFERENCES `escuelas` (`id_escuela`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `detalles_menu`
@@ -632,48 +394,6 @@ ALTER TABLE `detalles_menu`
   ADD CONSTRAINT `detalles_menu_ibfk_1` FOREIGN KEY (`id_menu`) REFERENCES `menus` (`id_menu`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `detalles_menu_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `detalles_menu_ibfk_3` FOREIGN KEY (`id_estado`) REFERENCES `estados` (`id_estado`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `detalles_pedidos_producto`
---
-ALTER TABLE `detalles_pedidos_producto`
-  ADD CONSTRAINT `detalles_pedidos_producto_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id_pedidos`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `detalles_pedidos_producto_ibfk_2` FOREIGN KEY (`documento_est`) REFERENCES `estudiantes` (`documento_est`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `detalles_pedidos_producto_ibfk_3` FOREIGN KEY (`id_menu`) REFERENCES `menus` (`id_menu`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `detalles_pedidos_producto_ibfk_4` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `detalles_usuarios_escuela`
---
-ALTER TABLE `detalles_usuarios_escuela`
-  ADD CONSTRAINT `detalles_usuarios_escuela_ibfk_1` FOREIGN KEY (`documento`) REFERENCES `usuarios` (`documento`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `detalles_usuarios_escuela_ibfk_2` FOREIGN KEY (`id_escuela`) REFERENCES `escuelas` (`id_escuela`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `estado_licencia`
---
-ALTER TABLE `estado_licencia`
-  ADD CONSTRAINT `estado_licencia_ibfk_1` FOREIGN KEY (`id_licencia`) REFERENCES `licencias` (`id_licencia`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `estudiantes`
---
-ALTER TABLE `estudiantes`
-  ADD CONSTRAINT `estudiantes_ibfk_1` FOREIGN KEY (`documento`) REFERENCES `usuarios` (`documento`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `estudiantes_ibfk_2` FOREIGN KEY (`id_estado`) REFERENCES `estados` (`id_estado`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `informacion_nutricional`
---
-ALTER TABLE `informacion_nutricional`
-  ADD CONSTRAINT `informacion_nutricional_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `licencias`
---
-ALTER TABLE `licencias`
-  ADD CONSTRAINT `licencias_ibfk_1` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_licencia` (`id_tipo`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `licencias_ibfk_2` FOREIGN KEY (`id_escuela`) REFERENCES `escuelas` (`id_escuela`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `pedidos`
