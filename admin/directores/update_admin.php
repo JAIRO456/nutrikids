@@ -36,34 +36,17 @@
             $sqlUpdateDetails = $con->prepare("UPDATE detalles_usuarios_escuela SET id_escuela = ? WHERE documento = ?");
             if ($sqlUpdateDetails->execute([$id_escuela, $usuario_id])) {
                 if ($estado_old != $id_estado && $id_estado == 1) {
-                    $email = $usuarios['email'];
-                    $nombre = $usuarios['nombre'];
-                    $apellido = $usuarios['apellido'];
+                    $sqlEmail = $con->prepare("SELECT email, nombre, apellido FROM usuarios WHERE documento = ?");
+                    $sqlEmail->execute([$usuario_id]);
+                    $email = $sqlEmail->fetch(PDO::FETCH_ASSOC);
 
-                    if (isset($_POST['email_estado'])) {
-                        function email_estado($email, $nombre, $apellido) {
-                            // Example implementation of email sending
-                            $url = 'http://localhost/nutrikids/PHPMailer-master/config/email_estado.php';
-                            $data = json_encode(['email' => $email, 'nombre' => $nombre, 'apellido' => $apellido]);
-
-                            $options = [
-                                'http' => [
-                                    'header'  => "Content-Type: application/json\r\n",
-                                    'method'  => 'POST',
-                                    'content' => $data,
-                                ],
-                            ];
-                            $context  = stream_context_create($options);
-                            $result = file_get_contents($url, false, $context);
-
-                            if ($result === FALSE) {
-                                throw new Exception('Error sending email');
-                            }
-                        }
-
-                        email_estado($email, $nombre, $apellido);
+                    require_once '../../PHPMailer-master/config/email_estado.php';
+                    if (email_estado($email['email'], $email['nombre'], $email['apellido'])) {
+                        echo '<script>alert("El director ha sido activado y se le ha enviado un correo de notificación");</script>';
+                    } 
+                    else {
+                        echo '<script>alert("El director ha sido activado, pero hubo un error al enviar el correo");</script>';
                     }
-                    echo '<script>alert("El director ha sido activado y se le ha enviado un correo de notificación")</script>';
                 }
                 echo '<script>alert("Director actualizado correctamente")</script>';
                 echo '<script>window.location.href="../directores.php"</script>';
@@ -168,22 +151,23 @@
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
-<script>
-    function email_estado(email, nombre, apellido) {
-        fetch('http://localhost/juego/PHPMailer-master/config/email_estado.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, nombre, apellido })
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Error en la solicitud');
-            }
-        })
-    }
-</script>
+    <script>
+        function email_estado(email, nombre, apellido) {
+            fetch('../../PHPMailer-master/config/email_estado.php', {
+                method: 'POST',
+                headers: {
+                     'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, nombre, apellido })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } 
+                else {
+                    throw new Error('Error en la solicitud');
+                }
+            })
+        }
+     </script>
 </html>
