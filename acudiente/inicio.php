@@ -1,20 +1,11 @@
 <?php
-session_start(); // Asegúrate de iniciar la sesión
-require_once('../conex/conex.php');
+    session_start();
+    require_once('../conex/conex.php');
+    require_once('../include/validate_sesion.php');
+    $conex =new Database;
+    $con = $conex->conectar();
 
-$conex = new database;
-$con = $conex->conectar();
-
-if (!isset($_SESSION['documento'])) {
-    echo '<script>alert("No has iniciado sesión")</script>';
-    echo '<script>window.location = "../login.html"</script>';
-    exit();
-}
-
-    $sqlUser = $con->prepare("SELECT * FROM usuarios INNER JOIN roles ON usuarios.id_rol = roles.id_rol
-    INNER JOIN estados ON usuarios.id_estado = estados.id_estado INNER JOIN escuelas ON usuarios.id_escuela = escuelas.id_escuela WHERE usuarios.documento = ?");
-    $sqlUser->execute([$_SESSION['documento']]);
-    $u = $sqlUser->fetch();
+    include 'menu.php';
 ?>
 
 <!DOCTYPE html>
@@ -23,14 +14,9 @@ if (!isset($_SESSION['documento'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../styles/inicio.css">
+    <!-- <link rel="stylesheet" href="../styles/inicio.css"> -->
 </head>
 <body>
-    <header class="container-header">
-        <label for="" class="user"><?php echo $u['nombre']; ?> <?php echo $u['apellido']; ?>, <?php echo $u['rol']; ?>.</label>
-        <a href="cuenta.php"><i class="icono bi bi-person-circle"></i></a>
-    </header>
-
     <main clase="container-main">
         <h2>Información de tus hijos</h2>
 

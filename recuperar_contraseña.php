@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/login.css">
-    <title>Login</title>
+    <!-- <title></title> -->
 </head>
 <body>
     <header class="container-header">
@@ -20,32 +20,15 @@
         </section>
 
         <section class="container-section2">
-            <h1 class="title2">INICIO SESION</h1>
-            <form action="include/validate_login.php" method="post" name="form1" id="form1" class="form1">
-                <div class="x_grupo" id="x_documento">
-                    <label for="documento">Documento</label>
-                    <div class="x_input">
-                        <input type="number" id="documento" name="documento" placeholder="Ingrese sus nombres">
-                        <i class="form_estado bi bi-exclamation-circle-fill"></i>
-                    </div>
-                    <p class="x_typerror">Documento inválido</p>
-                </div>
-
-                <div class="x_grupo" id="x_password">
-                    <label for="password">Contraseña</label>
-                    <div class="x_input">
-                        <input type="password" id="password" name="password" placeholder="Ingrese tu contraseña">
-                        <i class="form_estado bi bi-exclamation-circle-fill"></i>
-                    </div>
-                    <p class="x_typerror">Contraseña inválido</p>
-                </div>
-
-                <div class="x_grupo" id="x_olvidar_contraseña">
-                    <a href="recuperar_contraseña.php">¿Olvidaste tu contraseña?</a>
+            <h1 class="title2">Recuperar Contraseña</h1>
+            <form action="PHPMailer-master/config/email_update_password.php" method="post" name="form1" id="form1" class="form1">
+                <div class="container-input">
+                    <label for="email" class="label">CORREO</label>
+                    <input type="email" name="email" id="email" class="email" placeholder="Ingrese su correo" required>
                 </div>
 
                 <button type="submit" name="enviar" id="botton">ENVIAR</button>
-                <button type="button" href="index.php" class="btn red">REGRESAR</button>
+                <button type="button" href="login.html" class="btn red">REGRESAR</button>
             </form>
         </section>
     </main>

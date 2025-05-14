@@ -10,7 +10,8 @@
         $apellido = $_POST['apellido'];
         $email = $_POST['email'];
         $telefono = $_POST['telefono'];
-        $password = password_hash(rand(1000, 9999), PASSWORD_DEFAULT);
+        $password_code = rand(1000, 9999);
+        $password = password_hash($password_code, PASSWORD_DEFAULT);
         $id_escuela = $_POST['escuela'];
         $imagen = $_FILES['imagen']['name'];
         $temp = $_FILES['imagen']['tmp_name'];
@@ -26,15 +27,23 @@
         if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $imagen, 2, 2])) {
             $sqlInsertDetails = $con->prepare("INSERT INTO detalles_usuarios_escuela (documento, id_escuela) VALUES (?, ?)");
             if ($sqlInsertDetails->execute([$documento, $id_escuela])) {
-                echo '<script>alert("Director creado exitosamente")</script>';
-                echo '<script>window.location = "../directores.php"</script>';
-            } 
-            else {
-                echo '<script>alert("Error al asignar la escuela al administrador")</script>';
+                $sqlEmailPassword = $con->prepare("SELECT email, nombre, apellido, documento, password FROM usuarios WHERE documento = ?");
+                $sqlEmailPassword->execute([$documento]);
+                $email = $sqlEmailPassword->fetch(PDO::FETCH_ASSOC);
+
+                require_once '../../PHPMailer-master/config/email_password.php';
+                if (email_password($email['email'], $email['nombre'], $email['apellido'], $email['documento'], $password_code)) {
+                    echo '<script>alert("El director ha sido activado y se le ha enviado un correo de notificación");</script>';
+                } 
+                else {
+                    echo '<script>alert("El director ha sido activado, pero hubo un error al enviar el correo");</script>';
+                }
+                echo '<script>alert("Director registrado correctamente")</script>';
+                echo '<script>window.location.href="../directores.php"</script>';
             }
         } 
         else {
-            echo '<script>alert("Error al crear el administrador")</script>';
+            echo '<script>alert("Error al registrar el director")</script>';
         }
     }
 ?>
@@ -102,4 +111,24 @@
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+</body>
+    <script>
+        function email_password(email, nombre, apellido, documento, password_code) {
+            fetch('../../PHPMailer-master/config/email_password.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, nombre, apellido })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } 
+                else {
+                    throw new Error('Error en la solicitud');
+                }
+            })
+        }
+    </script>
 </html>

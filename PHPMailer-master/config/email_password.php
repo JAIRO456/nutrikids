@@ -7,8 +7,10 @@
     use PHPMailer\PHPMailer\Exception;
     use PHPMailer\PHPMailer\SMTP;
 
-    function email_estado($email, $nombre, $apellido) {
+    function email_password($email, $nombre, $apellido, $documento, $password_code) {
+        $password_desencriptado = $password_code;
         $mail = new PHPMailer(true);
+
         try {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
@@ -23,17 +25,17 @@
             $mail->addAddress($email, "$nombre $apellido");
 
             $mail->isHTML(true);
-            $mail->Subject = "¡Tu cuenta de NUTRIKIDS ya está activa!";
+            $mail->Subject = "¡Bienvenido/a a NUTRIKIDS! Tu cuenta ha sido creada";
             $mail->Body = "
                 <p>Buen día.</p>
-                <p>Estimado/a {$nombre} {$apellido},</p>
                 <p>¡Bienvenido/a a NUTRIKIDS!</p>
-                <p>Nos complace informarte que tu cuenta ha sido activada con éxito. Ya puedes iniciar sesión en la aplicación de NUTRIKIDS y comenzar a explorar nuestras herramientas y recursos diseñados para fomentar hábitos alimenticios saludables en los niños.</p>
-                <p>Para comenzar, solo necesitas:</p>
-                <p>1. Abrir la aplicación de NUTRIKIDS o visitar <a href='https://nutrikids.com'>nutrikids.com</a>.</p>
-                <p>2. Iniciar sesión con tu número de documento y contraseña.</p>
-                <p>Si tienes alguna pregunta o necesitas ayuda, nuestro equipo de soporte está a tu disposición.</p>
-                <p>Contáctanos en soporte@nutrikids.com.</p>
+                <p>Estimado/a {$nombre} {$apellido},</p>
+                <p>Nos complace informarte que tu cuenta ha sido creada con éxito. A continuación, encontrarás los detalles para iniciar sesión en nuestra aplicación:</p>
+                <p><strong>Usuario:</strong> {$documento}</p><br>
+                <p><strong>Contraseña:</strong> {$password_desencriptado}</p><br>
+                <p>Para comenzar, haz clic en el siguiente enlace e inicia sesión:</p>
+                <p><a href='http://localhost/project/nutrikids/login.html'>Iniciar sesión en NUTRIKIDS</a></p>
+                <p>Si tienes alguna pregunta o necesitas asistencia, nuestro equipo de soporte está disponible en soporte@nutrikids.com.</p>
                 <p>¡Gracias por unirte a la comunidad de NUTRIKIDS! Estamos emocionados de acompañarte a ti y a tu familia en este viaje hacia una vida más saludable.</p>
                 <p>Atentamente,</p>
                 <p>El equipo de NUTRIKIDS</p>

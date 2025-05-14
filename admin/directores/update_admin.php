@@ -156,7 +156,7 @@
             fetch('../../PHPMailer-master/config/email_estado.php', {
                 method: 'POST',
                 headers: {
-                     'Content-Type': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email, nombre, apellido })
             })
@@ -169,5 +169,5 @@
                 }
             })
         }
-     </script>
+    </script>
 </html>

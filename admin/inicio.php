@@ -85,11 +85,11 @@
                                 $dias_restantes = (new DateTime($licencia['fecha_fin']))->diff(new DateTime($hoy))->days;
                             ?>
                             <tr>
-                                <td><?= $licencia['nombre_emp']; ?></td>
+                                <td><?= $licencia['nombre_escuela']; ?></td>
                                 <td><?= date('d/m/Y', strtotime($licencia['fecha_fin'])) ?></td>
                                 <td><?= $dias_restantes ?></td>
                                 <td>
-                                    <a href="licencias/editar.php?id=<?= $licencia['licencia_id'] ?>" class="btn btn-sm btn-warning">Renovar</a>
+                                    <a href="licencias/update_licencia.php?id=<?= $licencia['id_licencia'] ?>" class="btn btn-sm btn-warning">Renovar</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
