@@ -13,53 +13,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- <link rel="stylesheet" href="../styles/inicio.css"> -->
+    <title>INICIO</title>
+    <link rel="stylesheet" href="../styles/inicio.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <main clase="container-main">
-        <h2>Información de tus hijos</h2>
-
-        <table class="table" id='table'>
-            <thead>
-                <tr>
-                    <th class="dates">Imagen</th>
-                    <th class="dates">Documento</th>
-                    <th>Nombre</th>
-                    <th>Menu</th>
-                    <th class="dates">Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
+    <main class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center">Estudiantes</h2>
+                <table class="table table-bordered table-striped" id="table-students">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Documento</th>
+                            <th>Apellidos</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 </body>
-<script>
-    function getEstudiantes() {
-        fetch('../ajax/info_hijos.php')
-            .then(response => response.json())
-            .then(estudiantes => {
-                const tbody = document.querySelector('#table tbody')
-                tbody.innerHTML = '';
-        
-                estudiantes.forEach(estudiante => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${estudiante.imagen_est}</td>
-                        <td>${estudiante.documento_est}</td>
-                        <td>${estudiante.nombre_est} ${estudiante.apellido_est}</td>
-                        <td><a href="pedidos.php?id=${estudiante.documento_est}">menu</a></td>
-                        <td>${estudiante.estado}</td>
-                        <td><a href="informacion_usuario.php?id=${estudiante.documento_est}"><i class="info bi bi-info-circle-fill"></i></a>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            })
-        .catch(error => console.error('Error al obtener los estudiantes:', error));
-    }
-
-    setInterval(getEstudiantes, 1000);
-</script>
+    <script>
+        function getStudents() {
+            fetch('../ajax/get_estudiantes.php')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#table-students tbody')
+                    tbody.innerHTML = '';
+            
+                    data.forEach(student => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${student.documento_est}</td>
+                            <td>${student.apellido}</td>
+                            <td>${student.nombre}</td>
+                            <td>${student.email}</td>
+                            <td>
+                                <a class='btn btn-primary' href="estudiantes/update_students.php?id=${student.documento_est}"><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error('Error al obtener los Estudiantes:', error));
+        }
+        setInterval(function () {
+            getStudents();
+        }, 3000);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
 </html>

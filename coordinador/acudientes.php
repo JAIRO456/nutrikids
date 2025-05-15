@@ -34,18 +34,18 @@
         }
 
         $sqlInsertDirector = $con->prepare("INSERT INTO usuarios (documento, nombre, apellido, email, telefono, password, imagen, id_rol, id_estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $imagen, 3, 2])) {
+        if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $imagen, 4, 2])) {
             $sqlInsertDetails = $con->prepare("INSERT INTO detalles_usuarios_escuela (documento, id_escuela) VALUES (?, ?)");
             if ($sqlInsertDetails->execute([$documento, $id_escuela])) {
-                echo '<script>alert("Vendedor creado exitosamente")</script>';
+                echo '<script>alert("Acudiente creado exitosamente")</script>';
                 echo '<script>window.location = "agregar.php"</script>';
             } 
             else {
-                echo '<script>alert("Error al asignar la escuela al Vendedor")</script>';
+                echo '<script>alert("Error al asignar la escuela al Acudiente")</script>';
             }
         } 
         else {
-            echo '<script>alert("Error al crear el Vendedor")</script>';
+            echo '<script>alert("Error al crear el Acudiente")</script>';
         }
     }
 ?>
@@ -55,7 +55,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Directores</title>
+    <title>Acudientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -65,7 +65,7 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">Agregar Nuevo Vendedor</h2>
+                    <h2 class="text-center">Crear Acudiente</h2>
                     <form id="formCreateAdmin" method="POST" action="" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="documento" class="form-label">Documento</label>
@@ -91,7 +91,7 @@
                             <label for="imagen" class="form-label">Imagen</label>
                             <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
                         </div>
-                        <button type="submit" class="btn btn-danger">Registrar Vendedor</button>
+                        <button type="submit" class="btn btn-danger">Registrar Acudiente</button>
                         <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>

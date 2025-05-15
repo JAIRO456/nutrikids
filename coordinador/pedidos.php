@@ -60,7 +60,8 @@ include 'menu.php';
             const dia = this.value;
             if (dia) {
                 getPedidos(dia);
-            } else {
+            } 
+            else {
                 const tbody = document.querySelector('#table-pedidos tbody');
                 tbody.innerHTML = '<tr><td colspan="3">Seleccione un día para ver los pedidos</td></tr>';
                 document.getElementById('total-pedidos').textContent = '';

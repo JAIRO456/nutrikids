@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h2 class="text-center">Usuarios</h2>
-                <table class="table table-bordered table-striped" id="table-users">
+                <table class="table table-bordered table-striped text-center" id="table-users">
                     <thead class="table-dark">
                         <tr>
                             <th>Imagen</th>
@@ -61,8 +61,10 @@
                             <td>${user.rol}</td>
                             <td>${user.email}</td>
                             <td>${user.estado}</td>
-                            <a class='btn btn-primary' href="usuarios/update_users.php?id=${user.documento}"><i class="bi bi-pencil-square"></i></a>
-                            <a class='btn btn-danger' href="usuarios/delete_users.php?id=${user.documento}"><i class="bi bi-trash"></i></a>
+                            <td>
+                                <a class='btn btn-primary' href="usuarios/update_users.php?id=${user.documento}"><i class="bi bi-pencil-square"></i></a>
+                                <a class='btn btn-danger' href="usuarios/delete_users.php?id=${user.documento}"><i class="bi bi-trash"></i></a>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
