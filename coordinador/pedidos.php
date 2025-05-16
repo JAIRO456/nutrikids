@@ -106,3 +106,28 @@ include 'menu.php';
     </script>
 </body>
 </html>
+
+try {
+        $listHorarios = [];
+        $total = 0;
+        $sqlHorarios = $con->prepare("SELECT producto.nombre_prod, detalles_pedidos_producto.cantidad, detalles_pedidos_producto.subtotal
+        FROM detalles_pedidos_producto
+        INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
+        INNER JOIN producto ON detalles_pedidos_producto.id_producto = producto.id_producto
+        INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
+        INNER JOIN detalles_estudiantes_escuela ON pedidos.id_detalle_estudiante = detalles_estudiantes_escuela.id_detalle_estudiante
+        WHERE detalles_estudiantes_escuela.documento_est = ?");
+        $sqlHorarios->execute([$id_estudiante]);
+        while ($row = $sqlHorarios->fetch(PDO::FETCH_ASSOC)) {
+            $listHorarios[] = $row;
+            $total += floatval($row['subtotal']);
+        }
+        echo json_encode([
+            'horarios' => $listHorarios,
+            'total' => number_format($total, 2, '.', '')
+        ]);
+    } 
+    catch (PDOException $e) {
+        echo json_encode(['error' => 'Error en la base de datos: ' . $e->getMessage()]);
+        exit;
+    }

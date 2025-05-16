@@ -25,7 +25,7 @@
                 <div class="col-md-12">
                     <h2 class="text-center">Escuelas</h2>
                     <a href="escuelas/crear_escuela.php" class="btn btn-success mb-3"><i class="bi bi-plus-circle"></i> Registrar Escuela</a>
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
                                 <th>Imagen</th>

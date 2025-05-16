@@ -1,11 +1,11 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
-    // include "adm_menu.html";
-    // include "header_user.php";
-    // include "../time.php";
+    require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
+
+    include '../menu.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fecha_inicio = $_POST['fecha_inicio'];

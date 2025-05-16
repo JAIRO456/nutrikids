@@ -25,7 +25,7 @@
                 <div class="col-md-12">
                     <h2 class="text-center">Licencias</h2>
                     <a href="licencias/crear_licencia.php" class="btn btn-success mb-3"><i class="bi bi-plus-circle"></i> Registrar Licencia</a>
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
@@ -73,8 +73,6 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
-
-        // document.addEventListener('DOMContentLoaded', getLicencias);
         setInterval(function () {
             getLicencias();
         }, 3000);

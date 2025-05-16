@@ -1,8 +1,11 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
+    require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
+
+    include '../menu.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $documento = $_POST['documento'];
@@ -65,42 +68,50 @@
                 <div class="col-md-12">
                     <h2 class="text-center">Crear Director</h2>
                     <form id="formCreateAdmin" method="POST" action="" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="documento" class="form-label">Documento</label>
-                            <input type="number" class="form-control" id="documento" name="documento" required>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="documento" class="form-label">Documento</label>
+                                <input type="number" class="form-control" id="documento" name="documento" required>
+                            </div>     
+                            <div class="col-md-6">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="apellido" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="apellido" name="apellido" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Correo</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" required>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="escuela" class="form-label">Escuela</label>
+                                <select class="form-select" id="escuela" name="escuela" required>
+                                    <option value="">Seleccione una escuela</option>
+                                    <?php
+                                        $sqlEscuelas = $con->prepare("SELECT * FROM escuelas");
+                                        $sqlEscuelas->execute();
+                                        while ($row = $sqlEscuelas->fetch(PDO::FETCH_ASSOC)) {
+                                            echo "<option value='{$row['id_escuela']}'>{$row['nombre_escuela']}</option>";
+                                        }
+                                    ?>
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="telefono" class="form-label">Telefono</label>
-                            <input type="number" class="form-control" id="telefono" name="telefono" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="escuela" class="form-label">Escuela</label>
-                            <select class="form-select" id="escuela" name="escuela" required>
-                                <option value="">Seleccione una escuela</option>
-                                <?php
-                                    $sqlEscuelas = $con->prepare("SELECT * FROM escuelas");
-                                    $sqlEscuelas->execute();
-                                    while ($row = $sqlEscuelas->fetch(PDO::FETCH_ASSOC)) {
-                                        echo "<option value='{$row['id_escuela']}'>{$row['nombre_escuela']}</option>";
-                                    }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="imagen" class="form-label">Imagen</label>
-                            <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="imagen" class="form-label">Imagen</label>
+                                <input type="file" class="form-control" id="imagen" name="imagen">
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-danger">Registrar Director</button>
                         <a href="../directores.php" class="btn btn-secondary">Cancelar</a>

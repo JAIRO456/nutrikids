@@ -1,11 +1,11 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
-    // include "adm_menu.html";
-    // include "header_user.php";
-    // include "../time.php";
+    require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
+
+    include '../menu.php';
 
     $id_licencia = $_GET['id'];
     $sqlLicencia = $con -> prepare("SELECT * FROM licencias 
