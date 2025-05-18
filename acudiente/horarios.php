@@ -5,10 +5,10 @@
     $conex =new Database;
     $con = $conex->conectar();
 
-    // include 'menu.php';
+    include 'menu.php';
 
     $doc = $_SESSION['documento'];
-    $sqlStudent = $con -> prepare("SELECT estudiantes.nombre, estudiantes.apellido, estudiantes.documento_est, estudiantes.nombre, estudiantes.imagen FROM detalles_estudiantes_escuela INNER JOIN estudiantes ON detalles_estudiantes_escuela.documento_est = estudiantes.documento_est
+    $sqlStudent = $con -> prepare("SELECT estudiantes.nombre, estudiantes.apellido, estudiantes.documento_est, estudiantes.imagen FROM detalles_estudiantes_escuela INNER JOIN estudiantes ON detalles_estudiantes_escuela.documento_est = estudiantes.documento_est
     INNER JOIN usuarios ON estudiantes.documento = usuarios.documento WHERE usuarios.documento = ?");
     $sqlStudent -> execute([$doc]);
     $Students = $sqlStudent -> fetchAll(PDO::FETCH_ASSOC);
@@ -26,20 +26,23 @@
 </head>
 <body>
     <main class="container mt-4">
+        <h2 class="text-center">Seleccione al Estudiante</h2>
+        <?php if (empty($Students)) { ?>
+            <div class="alert alert-info">No hay estudiantes asociados a este usuario.</div>
+        <?php } else { ?>
         <div class="row">
-            <div class="col-md-12">
-                <h2 class="text-center">Seleccione al Estudiante</h2>
-                <div class="card m-2" style="width: 18rem;">
-                    <?php foreach ($Students AS $student) {?>
-                        <div class="d-flex flex-column-2 align-items-center">
-                            <a href="pedidos.php?id_estudiante=<?= $student['documento_est']; ?>">
-                                <img src="../img/users/<?= $student['imagen']; ?>">
-                            </a>
-                            <h3><?= $student['nombre']; ?><br><?= $student['apellido']; ?></h3>
-                        </div>
-                    <?php } ?>
+            <?php foreach ($Students as $student) { ?>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="../img/users/<?php echo $student['imagen']; ?>" class="card-img-top" alt="Imagen del Estudiante" width="300" height="200">
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $student['nombre'] . ' ' . $student['apellido']; ?></h5>
+                        <p class="card-text">Documento: <?php echo $student['documento_est']; ?></p>
+                        <a href="pedidos.php?id_estudiante=<?php echo $student['documento_est']; ?>" class="btn btn-primary">Ver Pedidos</a>
+                    </div>
                 </div>
             </div>
+            <?php }} ?>
         </div>
     </main>
 </body>

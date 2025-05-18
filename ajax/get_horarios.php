@@ -5,37 +5,37 @@
     $conex =new Database;
     $con = $conex->conectar();
 
-    if (isset($_GET['id_estudiante']) && !empty($_GET['id_estudiante']) && isset($_GET['dia']) && !empty($_GET['dia'])) {
-        $dia = $_GET['dia'];
-        $id_estudiante = $_GET['id_estudiante'];
-    } 
-    else {
-        echo json_encode(['error' => 'ID de estudiante o día no especificado']);
+    $id_estudiante = $_GET['id_estudiante'];
+    $dia = $_GET['dia'];
+
+    if (empty($id_estudiante) || empty($dia)) {
+        echo json_encode(['error' => 'ID de estudiante o día no proporcionados.']);
         exit;
     }
 
-    try {
-        $listHorarios = [];
-        $total = 0;
-        $sqlHorarios = $con->prepare("SELECT producto.nombre_prod, detalles_pedidos_producto.cantidad, detalles_pedidos_producto.subtotal
-        FROM detalles_pedidos_producto
-        INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
-        INNER JOIN producto ON detalles_pedidos_producto.id_producto = producto.id_producto
-        INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
-        INNER JOIN detalles_estudiantes_escuela ON pedidos.id_detalle_estudiante = detalles_estudiantes_escuela.id_detalle_estudiante
-        WHERE detalles_estudiantes_escuela.documento_est = ? AND pedidos.dia = ?");
-        $sqlHorarios->execute([$id_estudiante, $dia]);
-        while ($row = $sqlHorarios->fetch(PDO::FETCH_ASSOC)) {
-            $listHorarios[] = $row;
-            $total += floatval($row['subtotal']);
-        }
-        echo json_encode([
-            'pedido' => $listHorarios,
-            'total' => number_format($total, 2, '.', '')
-        ]);
-    } 
-    catch (PDOException $e) {
-        echo json_encode(['error' => 'Error en la base de datos: ' . $e->getMessage()]);
-        exit;
+    $sql = $con->prepare("SELECT producto.precio, producto.nombre_prod, detalles_pedidos_producto.cantidad, detalles_pedidos_producto.subtotal 
+    FROM detalles_pedidos_producto 
+    INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu 
+    INNER JOIN producto ON detalles_pedidos_producto.id_producto = producto.id_producto 
+    INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos 
+    INNER JOIN estudiantes ON detalles_pedidos_producto.documento_est = detalles_pedidos_producto.documento_est 
+    WHERE estudiantes.documento_est = ? AND pedidos.dia = ?");
+    $sql->execute([$id_estudiante, $dia]);
+    $pedidos = $sql->fetchAll(PDO::FETCH_ASSOC);
+    $total = 0;
+    $response = [];
+    foreach ($pedidos as $pedido) { 
+        $subtotal = $pedido['precio'] * $pedido['cantidad'];
+        $total += $subtotal;
+        $response[] = [
+            'nombre_prod' => $pedido['nombre_prod'],
+            'cantidad' => $pedido['cantidad'],
+            'subtotal' => number_format($subtotal, 2)
+        ];
+    }
+    if (empty($response)) {
+        echo json_encode(['error' => 'No hay pedidos para este estudiante en este día.']);
+    } else {
+        echo json_encode(['pedidos' => $response, 'total' => number_format($total, 2)]);
     }
 ?>
