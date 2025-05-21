@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
+        .carrito {
+            
+        }
         .container-products {
             width: 200px;
             height: 200px;
@@ -55,6 +58,12 @@
         <?php if (empty($Produts)) { ?>
             <div class="alert alert-info">No hay Productos para esta categoria</div>
         <?php } else { ?>
+        <?= include 'carrito.php'; ?>
+        <div class="carrito mt-4" id="modal">
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-cart-fill"></i>
+            </button>
+        </div>
         <div class="row">
             <?php foreach ($Produts as $Produt) { ?>
                 <div class="col-md-4 mb-3" id="producto">
@@ -66,7 +75,7 @@
                                 <h6 class="card-title"><?= $Produt['precio']; ?></h6>
                             </a>
                         </div>
-                        <button type="button" onclick="agregarProducto(<?= $Produt['id_producto']; ?>, '<?= addslashes($Produt['nombre_prod']); ?>', '<?= $Produt['precio']; ?>')" class="btn btn-primary">Agregar</button>
+                        <button type="button" onclick="agregarProducto(<?= $Produt['id_producto']; ?>, '<?= $Produt['nombre_prod']; ?>', '<?= $Produt['precio']; ?>')" class="btn btn-primary">Agregar</button>
                     </div>
                 </div>
             <?php }} ?>
@@ -74,17 +83,5 @@
     </main>
 </body>
 <html>
-<script>
-    const listaProductos = [];
 
-    function agregarProducto(id_producto, nombre, precio) {
-        // Agregar el producto como objeto a la lista
-        listaProductos.push({
-            id_producto: id_producto,
-            nombre: nombre,
-            precio: precio
-        }); 
-        console.log(listaProductos);
-    }
-</script>
 </html>
