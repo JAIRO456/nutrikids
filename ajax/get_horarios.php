@@ -35,7 +35,8 @@
     }
     if (empty($response)) {
         echo json_encode(['error' => 'No hay pedidos para este estudiante en este día.']);
-    } else {
+    } 
+    else {
         echo json_encode(['pedidos' => $response, 'total' => number_format($total, 2)]);
     }
 ?>
