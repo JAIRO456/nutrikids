@@ -24,9 +24,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        .carrito {
-            
-        }
         .container-products {
             width: 200px;
             height: 200px;
@@ -66,7 +63,7 @@
         </div>
         <div class="row">
             <?php foreach ($Produts as $Produt) { ?>
-                <div class="col-md-4 mb-3" id="producto">
+                <div class="col-md-3 mb-3" id="producto">
                     <div class="container-products card">
                         <img src="../img/products/<?= $Produt['imagen_prod']; ?>" class="card-img-top" alt="<?= $Produt['nombre_prod']; ?>" width="100%" height="100%">
                         <div class="container-name card-body d-flex justify-content-center">
@@ -83,5 +80,13 @@
     </main>
 </body>
 <html>
-
+<script>
+    document.getElementById('modal').addEventListener('click', function () {
+            actualizarCarrito();
+            document.querySelector('.container-modal').style.display = 'block';
+    });
+    document.getElementById('close').addEventListener('click', function () {
+        document.querySelector('.container-modal').style.display = 'none';
+    });
+</script>
 </html>

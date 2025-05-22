@@ -3,10 +3,10 @@ class database {
     private $hostname = "localhost";
     private $username = "root";
     private $password = "";
-    private $database = "nutrikids2";
+    private $database = "nutrikids";
     private $charset = "utf8mb4";
 
-    function conectar()         
+    function conectar()
     {
         try{
             $conex = "mysql:host=" . $this->hostname . "; dbname=". $this->database . "; charset=" . $this->charset;
