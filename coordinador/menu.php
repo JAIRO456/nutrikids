@@ -32,9 +32,6 @@
                         <a class="nav-link" href="usuarios.php"><i class="bi bi-person"></i> Usuarios</a>
                     </li>   
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-basket"></i> Categorias</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="horarios.php"><i class="bi bi-clock"></i> Horarios</a>
                     </li>
                     <li class="nav-item">

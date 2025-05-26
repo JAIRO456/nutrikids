@@ -35,6 +35,9 @@
                         <a class="nav-link" href="escuelas.php"><i class="bi bi-box-seam"></i> Escuelas</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="productos.php"><i class="bi bi-basket"></i> Productos</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="licencias.php"><i class="bi bi-people"></i> Licencias</a>
                     </li>
                 </ul>

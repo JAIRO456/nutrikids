@@ -1,11 +1,11 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
-    require_once('../include/validate_sesion.php');
+    require_once('../../conex/conex.php');
+    require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
-    include 'menu.php';
+    include '../menu.php';
 
     
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,7 +15,6 @@
         $precio = $_POST['precio'];
         $id_categoria = $_POST['id_categoria'];
         $descripcion = $_POST['descripcion'];
-        $cantidad_alm = $_POST['cantidad_alm'];
         $imagen = $_FILES['imagen']['name'];
         $temp = $_FILES['imagen']['tmp_name'];
 
@@ -33,12 +32,12 @@
             $imagen = null;
         }
 
-        $sqlInsertProduct = $con->prepare("INSERT INTO producto (id_producto, nombre_prod, descripcion, precio, imagen_prod, cantidad_alm, id_categoria, id_marca) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        if ($sqlInsertProduct->execute([$id_producto, $nombre_prod, $descripcion, $precio, $imagen, $cantidad_alm, $id_categoria, $id_marca])) {
+        $sqlInsertProduct = $con->prepare("INSERT INTO producto (id_producto, nombre_prod, descripcion, precio, imagen_prod, id_categoria, id_marca) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        if ($sqlInsertProduct->execute([$id_producto, $nombre_prod, $descripcion, $precio, $imagen, $id_categoria, $id_marca])) {
             $sqlInsertInfoNutricional = $con->prepare("INSERT INTO informacion_nutricional (id_producto, calorias, proteinas, carbohidratos, grasas, azucares, sodio) VALUES (?, ?, ?, ?, ?, ?, ?)");
             if ($sqlInsertInfoNutricional->execute([$id_producto, $calorias, $proteinas, $carbohidratos, $grasas, $azucares, $sodio])) {
                 echo '<script>alert("Producto creado exitosamente")</script>';
-                echo '<script>window.location = "agregar.php"</script>';
+                echo '<script>window.location = "../productos.php"</script>';
             } 
             else {
                 echo '<script>alert("Error al crear la informacion nutricional al Producto")</script>';
@@ -61,21 +60,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="JsBarcode.all.min.js"></script>
 </head>
-<body>
+<body onload="formCreateProducts.documento.focus()">
     <main class="container-main">
         <div class="container mt-4">
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="mb-4 text-center">Agregar Nuevo Producto</h2>
-                    <form id="formCreateAdmin" method="POST" action="" enctype="multipart/form-data">
+                    <form id="formCreateProducts" method="POST" action="" enctype="multipart/form-data">
                         <h3>Información del Producto</h3>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="nombre_prod" class="form-label">Nombre</label>
                                 <input type="text" class="form-control" id="nombre_prod" name="nombre_prod" required>
                             </div>
-                        </div>
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="id_marca" class="form-label">Marca</label>
                                 <select class="form-select" id="id_marca" name="id_marca" required>
@@ -89,12 +86,12 @@
                                     ?>
                                 </select>
                             </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="precio" class="form-label">Precio</label>
                                 <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
                             </div>
-                        </div>
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="id_categoria" class="form-label">Categoria</label>
                                 <select class="form-select" id="id_categoria" name="id_categoria" required>
@@ -108,15 +105,11 @@
                                     ?>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <label for="descripcion" class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="descripcion" name="descripcion" required>
-                            </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="cantidad_alm" class="form-label">Cantidad almacenada</label>
-                                <input type="number" class="form-control" id="cantidad_alm" name="cantidad_alm" required>
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="imagen" class="form-label">Imagen</label>
@@ -154,7 +147,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-danger">Registrar Producto</button>
-                        <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
+                        <a href="../productos.php" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>
             </div>

@@ -12,9 +12,13 @@
         $fecha_fin = $_POST['fecha_fin'];
         $id_tipo = $_POST['id_tipo'];
         $id_escuela = $_POST['id_escuela'];
+        
+        // Generar un ID único para la licencia, tendra numeros y letras, tendra 20 caracteres y cada 4 caracteres tendra un guion
+        $id_licencia = bin2hex(random_bytes(10)); // Genera un ID de 20 caracteres hexadecimales
+        $id_licencia = substr($id_licencia, 0, 4) . '-' . substr($id_licencia, 4, 4) . '-' . substr($id_licencia, 8, 4) . '-' . substr($id_licencia, 12, 4) . '-' . substr($id_licencia, 16, 4);
 
-        $sqlInsert = $con->prepare("INSERT INTO licencias (fecha_inicio, fecha_fin, id_tipo, id_escuela) VALUES (?, ?, ?, ?)");
-        if ($sqlInsert->execute([$fecha_inicio, $fecha_fin, $id_tipo, $id_escuela])) {
+        $sqlInsert = $con->prepare("INSERT INTO licencias (id_licencia, fecha_inicio, fecha_fin, id_tipo, id_escuela) VALUES (?, ?, ?, ?, ?)");
+        if ($sqlInsert->execute([$id_licencia, $fecha_inicio, $fecha_fin, $id_tipo, $id_escuela])) {
             echo '<script>alert("Licencia registrada exitosamente")</script>';
             echo '<script>window.location = "../licencias.php"</script>';
         } 

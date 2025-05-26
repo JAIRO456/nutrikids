@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
-<body onload="form.documento.focus()">
+<body>
     <main class="container-main">
         <div class="container mt-4">
             <div class="row">
@@ -28,7 +28,7 @@
                     <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
-                                <th>ID</th>
+                                <th>Code</th>
                                 <th>Nombre</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Fin</th>

@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
 </head>
 <body>
     <main class="container-main">
@@ -67,7 +68,7 @@
                                     while ($tipo = $sqlTipos->fetch(PDO::FETCH_ASSOC)) {
                                         echo '<option value="' . $tipo['id_tipo'] . '"' . ($tipo['id_tipo'] == $licencia['id_tipo'] ? ' selected' : '') . '>' . $tipo['tipo'] . '</option>';
                                     }
-                                ?>
+                                    ?>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -83,8 +84,12 @@
                                 ?>
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <label for="id_licencia" class="form-label">Code</label><br>
+                            <svg id="barcode-<?= $licencia['id_licencia']; ?>"></svg>
+                        </div>
                         <div class="mb-3 text-center">
-                            <button type="submit" class="btn btn-primary">Actualizar Licencia</button>
+                            <button type="submit" class="btn btn-danger">Actualizar Licencia</button>
                             <a href="../licencias.php" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </form>
@@ -93,4 +98,12 @@
         </div>
     </main>
 </body>
+<script>
+    JsBarcode("#barcode-<?= $licencia['id_licencia']; ?>", "<?= $licencia['id_licencia']; ?>", {
+        format: "CODE128",
+        width: 2,
+        height: 40,
+        displayValue: true
+    });
+</script>
 </html>
