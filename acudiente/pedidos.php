@@ -6,7 +6,6 @@
     $con = $conex->conectar();
     
     include 'menu.php';
-
 ?>
 
 <!DOCTYPE html>

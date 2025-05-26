@@ -113,8 +113,10 @@
                                 <input type="file" class="form-control" id="imagen" name="imagen">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-danger">Registrar Director</button>
-                        <a href="../directores.php" class="btn btn-secondary">Cancelar</a>
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-danger">Registrar Director</button>
+                            <a href="../directores.php" class="btn btn-secondary">Cancelar</a>
+                        </div>
                     </form>
                 </div>
             </div>

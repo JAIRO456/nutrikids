@@ -57,9 +57,14 @@
 
     <script>
         document.getElementById('dia').addEventListener('change', function () {
+            // obtenemos el valor del día seleccionado y el id del estudiante
             const dia = this.value;
-            if (dia) {
-                getPedidos(dia);
+            const urlParams = new URLSearchParams(window.location.search);
+            const id_estudiante = urlParams.get('id_estudiante');
+
+            // verificamos si el día y el id del estudiante están definidos
+            if (dia && id_estudiante) {
+                getPedidos(dia, id_estudiante);
             } 
             else {
                 const tbody = document.querySelector('#table-pedidos tbody');
@@ -68,66 +73,35 @@
             }
         });
 
-        function getPedidos(dia) {
-            fetch(`../ajax/get_pedidos.php?dia=${encodeURIComponent(dia)}`)
+        function getPedidos(dia, id_estudiante) {
+            fetch(`../ajax/get_horarios.php?id_estudiante=${id_estudiante}&dia=${dia}`)
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.querySelector('#table-pedidos tbody');
-                    const totalCell = document.getElementById('total-pedidos');
                     tbody.innerHTML = '';
-                    totalCell.textContent = '';
+                    let total = 0;
 
                     if (data.error) {
                         tbody.innerHTML = `<tr><td colspan="3">${data.error}</td></tr>`;
-                    } 
-                    else if (data.pedidos.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="3">No hay pedidos para este día</td></tr>';
-                    } 
-                    else {
-                        data.pedidos.forEach(pedido => {
-                            const tr = document.createElement('tr');
-                            tr.innerHTML = `
-                                <td>${pedido.nombre_prod}</td>
-                                <td>${pedido.cantidad}</td>
-                                <td>${pedido.subtotal}</td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
-                        totalCell.textContent = `$${data.total}`;
+                        document.getElementById('total-pedidos').textContent = '';
+                        return;
                     }
+
+                    data.pedidos.forEach(pedido => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${pedido.nombre_prod}</td>
+                            <td>${pedido.cantidad}</td>
+                            <td>${pedido.subtotal}</td>
+                        `;
+                        tbody.appendChild(tr);
+                        total += parseFloat(pedido.subtotal);
+                    });
+
+                    document.getElementById('total-pedidos').textContent = total.toFixed(2);
                 })
-                .catch(error => {
-                    console.error('Error al obtener el Pedido:', error);
-                    const tbody = document.querySelector('#table-pedidos tbody');
-                    tbody.innerHTML = '<tr><td colspan="3">Error al cargar los pedidos. Inténtelo de nuevo.</td></tr>';
-                    document.getElementById('total-pedidos').textContent = '';
-                });
+                .catch(error => console.error('Error al obtener los pedidos:', error));
         }
     </script>
 </body>
 </html>
-
-try {
-        $listHorarios = [];
-        $total = 0;
-        $sqlHorarios = $con->prepare("SELECT producto.nombre_prod, detalles_pedidos_producto.cantidad, detalles_pedidos_producto.subtotal
-        FROM detalles_pedidos_producto
-        INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
-        INNER JOIN producto ON detalles_pedidos_producto.id_producto = producto.id_producto
-        INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
-        INNER JOIN detalles_estudiantes_escuela ON pedidos.id_detalle_estudiante = detalles_estudiantes_escuela.id_detalle_estudiante
-        WHERE detalles_estudiantes_escuela.documento_est = ?");
-        $sqlHorarios->execute([$id_estudiante]);
-        while ($row = $sqlHorarios->fetch(PDO::FETCH_ASSOC)) {
-            $listHorarios[] = $row;
-            $total += floatval($row['subtotal']);
-        }
-        echo json_encode([
-            'horarios' => $listHorarios,
-            'total' => number_format($total, 2, '.', '')
-        ]);
-    } 
-    catch (PDOException $e) {
-        echo json_encode(['error' => 'Error en la base de datos: ' . $e->getMessage()]);
-        exit;
-    }

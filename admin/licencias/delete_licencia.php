@@ -10,5 +10,5 @@
     $sqlLicencias -> execute([$id_licencia]);
     $Delete = $sqlLicencias -> fetch();
     echo '<script>alert("Licencia Eliminado")</script>';
-    echo '<script>window.location = "../../licencias.php"</script>';
+    echo '<script>window.location = "../licencias.php"</script>';
 ?>

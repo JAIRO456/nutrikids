@@ -64,9 +64,11 @@
                         <div class="mb-3">
                             <label for="imagen" class="form-label">Imagen</label>
                             <input type="file" class="form-control" id="imagen" name="imagen">
+                        </div>      
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-danger">Registrar Escuela</button>
+                            <a href="../escuelas.php" class="btn btn-secondary">Cancelar</a>
                         </div>
-                        <button type="submit" class="btn btn-danger">Registrar Escuela</button>
-                        <a href="../escuelas.php" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>
             </div>

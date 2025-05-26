@@ -91,8 +91,10 @@
                             <label for="imagen" class="form-label">Imagen</label>
                             <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
                         </div>
-                        <button type="submit" class="btn btn-danger">Registrar Acudiente</button>
-                        <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger">Crear Acudiente</button>
+                            <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
+                        </div>
                     </form>
                 </div>
             </div>

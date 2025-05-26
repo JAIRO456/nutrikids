@@ -75,8 +75,10 @@
                             <label for="imagen_actual" class="form-label">Imagen Actual</label><br>
                             <img src="../../img/schools/<?= $usuarios['imagen_esc']; ?>" alt="<?= $usuarios['nombre_escuela']; ?>" class="img-thumbnail" width="200">
                         </div>
-                        <button type="submit" class="btn btn-danger">Actualizar Escuela</button>
-                        <a href="../escuelas.php" class="btn btn-secondary">Cancelar</a>
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-danger">Actualizar Escuela</button>
+                            <a href="../escuelas.php" class="btn btn-secondary">Cancelar</a>
+                        </div>
                     </form>
                 </div>
             </div>

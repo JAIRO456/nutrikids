@@ -38,7 +38,7 @@
             }
         }
 
-        header("Location: productos.php");
+        header("Location: categorias.php");
         exit();
     }
     else {

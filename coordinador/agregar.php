@@ -66,17 +66,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
-                    <div class="card-body text-center">
-                        <a class="nav-link" href="productos.php" class="text-white">
-                            <h5 class="card-title">Productos</h5>
-                            <i class="bi bi-basket"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>         
+            </div>        
         </div>
     </main>
 </body>

@@ -10,5 +10,5 @@
     $sqlProducto -> execute([$id_producto]);
     $Delete = $sqlProducto -> fetch();
     echo '<script>alert("Producto Eliminado")</script>';
-    echo '<script>window.location = "../../productos.php"</script>';
+    echo '<script>window.location = "../productos.php"</script>';
 ?>

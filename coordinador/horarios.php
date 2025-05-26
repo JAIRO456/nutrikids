@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="text-center">Menus</h2>
-                    <table class="table table-bordered table-striped" id="table-menus">
+                    <table class="table table-bordered table-striped text-center" id="table-menus">
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
@@ -56,11 +56,11 @@
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                             <td>${menu.id_menu}</td>
-                            <td>${menu.nombre}</td>
+                            <td>${menu.nombre} ${menu.apellido}</td>
                             <td>${menu.nombre_menu}</td>
                             <td>${menu.estado}</td>
                             <td>
-                                <a class='btn btn-primary' href="pedidos.php?id=${menu.id_det_ped_prod}"><i class="bi bi-info-circle"></i></a>
+                                <a class='btn btn-primary' href="pedidos.php?id_estudiante=${menu.documento_est}"><i class="bi bi-info-circle"></i></a>
                             </td>
                         `;
                         tbody.appendChild(tr);

@@ -158,9 +158,11 @@
                                 <label for="sodio" class="form-label">Sodio (mg)</label>
                                 <input type="number" step="0.01" class="form-control" id="sodio" name="sodio" value="<?php echo $producto['sodio']; ?>" required>
                             </div>
+                        </div>              
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger">Actualizar Producto</button>
+                            <a href="../productos.php" class="btn btn-secondary">Cancelar</a>
                         </div>
-                        <button type="submit" class="btn btn-danger">Actualizar Producto</button>
-                        <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>
             </div>

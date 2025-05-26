@@ -115,8 +115,10 @@
                                 <input type="number" class="form-control" id="telefono_acu" name="telefono_acu" readonly>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-danger">Registrar Estudiante</button>
-                        <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger">Registrar Estudiante</button>
+                            <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
+                        </div>
                     </form>
                 </div>
             </div>

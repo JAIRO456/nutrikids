@@ -78,9 +78,11 @@
                                     }
                                 ?>
                             </select>
+                        </div>             
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-danger">Registrar Licencia</button>
+                            <a href="../licencias.php" class="btn btn-secondary">Cancelar</a>
                         </div>
-                        <button type="submit" class="btn btn-danger">Registrar Licencia</button>
-                        <a href="../licencias.php" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>
             </div>
