@@ -1,0 +1,48 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0%;
+    padding: 0%;
+    background-color: white;
+}
+
+.container-form {
+    padding-top: 5%;
+    text-align: center;
+    align-content: center;
+    padding-left: 20%;
+}
+
+.container-form .container-table {
+    width: 1000px;
+    background-color: rgb(226, 226, 226);
+}
+
+.container-table .container-tbody {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+}
+
+.container-table .container-tbody .container-tr {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.container-tbody .container-tr td input {
+    width: 400px;
+}
+
+.container-tbody .container-tr td select {
+    width: 410px;
+}
+
+.container-form .actualizar {
+    width: 100px;
+    height: 30px;
+    background-color: #6ab16d;
+    border: none;
+    border-radius: 10px;
+}
+
+.actualizar:hover {
+    background: #488b4b;
+}
