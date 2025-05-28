@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?php include "menu.php"; ?>
+=======
+<?php include "menu.html"; ?>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +10,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/index.css">
+<<<<<<< HEAD
     <link rel="icon" href="../img/logo-nutrikids2.png" type="image/png">
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     <title>NUTRIKIDS</title>
 </head>
 <body>

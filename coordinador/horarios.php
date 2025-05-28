@@ -1,7 +1,10 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
+<<<<<<< HEAD
     require_once('../include/validate_sesion.php');
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $conex =new Database;
     $con = $conex->conectar();
 
@@ -55,7 +58,11 @@
                     data.forEach(menu => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
+<<<<<<< HEAD
                             <td>${menu.id_menu}</td>
+=======
+                            <td>${menu.id_det_ped_prod}</td>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                             <td>${menu.nombre}</td>
                             <td>${menu.nombre_menu}</td>
                             <td>${menu.estado}</td>

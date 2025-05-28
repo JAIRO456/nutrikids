@@ -3,7 +3,15 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
+<<<<<<< HEAD
 -- Tiempo de generación: 25-05-2025 a las 00:55:01
+=======
+<<<<<<< HEAD
+-- Tiempo de generación: 08-05-2025 a las 13:56:25
+=======
+-- Tiempo de generación: 07-05-2025 a las 00:30:34
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,11 +41,16 @@ CREATE TABLE `categorias` (
   `imagen` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 --
 -- Volcado de datos para la tabla `categorias`
 --
 
 INSERT INTO `categorias` (`id_categoria`, `categoria`, `imagen`) VALUES
+<<<<<<< HEAD
 (1, 'BEBIDAS FRIAS', 'bebidas.jpg'),
 (2, 'BEBIDAS CALIENTES', 'cafes.jpg'),
 (3, 'POSTRES', 'postres.png'),
@@ -45,6 +58,18 @@ INSERT INTO `categorias` (`id_categoria`, `categoria`, `imagen`) VALUES
 (5, 'PANADERIA', 'panaderia.jpg'),
 (6, 'SNACKS', 'snack.jpeg');
 
+=======
+(1, 'BEBIDAS FRIAS', 'bebidas_frias.jpg'),
+(2, 'BEBIDAS CALIENTES', 'bebidas_calientes.jpg'),
+(3, 'POSTRES', 'postres.jpg'),
+(4, 'FRUTAS', 'frutas.jpg'),
+(5, 'PANES', 'panes.jpg'),
+(6, 'PANADERIA', 'panaderia.jpg'),
+(7, 'SNACKS', 'snacks.jpg');
+
+=======
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 -- --------------------------------------------------------
 
 --
@@ -83,7 +108,15 @@ CREATE TABLE `detalles_pedidos_producto` (
   `id_pedido` int(11) NOT NULL,
   `documento_est` int(11) NOT NULL,
   `id_menu` smallint(4) NOT NULL,
+<<<<<<< HEAD
   `id_producto` bigint(20) NOT NULL,
+=======
+<<<<<<< HEAD
+  `id_producto` bigint(20) NOT NULL,
+=======
+  `id_producto` bigint(10) NOT NULL,
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
   `cantidad` int(3) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -126,9 +159,13 @@ CREATE TABLE `estados` (
 
 INSERT INTO `estados` (`id_estado`, `estado`) VALUES
 (1, 'activo'),
+<<<<<<< HEAD
 (2, 'inactivo'),
 (3, 'entregado'),
 (4, 'pendiente');
+=======
+(2, 'inactivo');
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 -- --------------------------------------------------------
 
@@ -185,6 +222,7 @@ CREATE TABLE `informacion_nutricional` (
   `sodio` decimal(6,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 --
 -- Volcado de datos para la tabla `informacion_nutricional`
 --
@@ -193,6 +231,8 @@ INSERT INTO `informacion_nutricional` (`id_nutricion`, `id_producto`, `calorias`
 (1, 2025, 10.00, 90.00, 40.00, 2.00, 30.00, 20.00),
 (2, 30, 10.00, 10.00, 10.00, 10.00, 10.00, 10.00);
 
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 -- --------------------------------------------------------
 
 --
@@ -226,6 +266,10 @@ INSERT INTO `licencia` (`id_licencia`, `nombre`, `precio`, `fecha_inicio`, `fech
 
 CREATE TABLE `marcas` (
   `id_marca` smallint(6) NOT NULL,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
   `marca` set('Colombina','Alpina','Zenú','Quala','Noel','Postobón','Nestlé') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -242,6 +286,14 @@ INSERT INTO `marcas` (`id_marca`, `marca`) VALUES
 (6, 'Postobón'),
 (7, 'Nestlé');
 
+<<<<<<< HEAD
+=======
+=======
+  `marca` set('Colombina','Alpina','Zenú','Quala','Noel') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 -- --------------------------------------------------------
 
 --
@@ -292,6 +344,7 @@ CREATE TABLE `pedidos` (
   `id_estado` smallint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 --
 -- Volcado de datos para la tabla `pedidos`
 --
@@ -304,6 +357,8 @@ INSERT INTO `pedidos` (`id_pedidos`, `dia`, `documento`, `total_pedido`, `id_met
 (15, 'viernes', 1073155246, 5000.00, 1, '2025-05-22 12:40:09', '2025-05-22 12:40:09', 1),
 (50, 'viernes', 1234567890, 120000.00, 1, '2025-06-30 12:42:02', '0000-00-00 00:00:00', 1);
 
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 -- --------------------------------------------------------
 
 --
@@ -311,7 +366,15 @@ INSERT INTO `pedidos` (`id_pedidos`, `dia`, `documento`, `total_pedido`, `id_met
 --
 
 CREATE TABLE `producto` (
+<<<<<<< HEAD
   `id_producto` bigint(20) NOT NULL,
+=======
+<<<<<<< HEAD
+  `id_producto` bigint(20) NOT NULL,
+=======
+  `id_producto` bigint(10) NOT NULL,
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
   `nombre_prod` varchar(25) NOT NULL,
   `descripcion` varchar(50) NOT NULL,
   `precio` decimal(10,0) NOT NULL,
@@ -321,6 +384,10 @@ CREATE TABLE `producto` (
   `id_marca` smallint(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 --
 -- Volcado de datos para la tabla `producto`
 --
@@ -330,7 +397,11 @@ INSERT INTO `producto` (`id_producto`, `nombre_prod`, `descripcion`, `precio`, `
 (2, 'Banano', 'Banano maduro con potasio', 1000, 'banano.jpg', 180, 4, 2),
 (3, 'Uvas Verdes', 'Uvas frescas sin semillas', 3500, 'uvas_verdes.jpg', 150, 4, 2),
 (4, 'Pera', 'Pera dulce y jugosa', 1500, 'pera.jpg', 100, 4, 2),
+<<<<<<< HEAD
 (5, 'Jugo de Naranja', 'Jugo natural rico en vitamina C', 2500, 'jugo_naranja.webp', 100, 1, 6),
+=======
+(5, 'Jugo de Naranja', 'Jugo natural rico en vitamina C', 2500, 'jugo_naranja.jpg', 100, 1, 6),
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 (6, 'Agua Cristal', 'Agua pura y saludable', 2000, 'agua_cristal.jpg', 150, 1, 6),
 (7, 'Jugo de Mango', 'Jugo natural de mango', 2700, 'jugo_mango.jpg', 120, 1, 6),
 (8, 'Leche Alpina', 'Leche entera rica en calcio', 4000, 'leche_alpina.jpg', 120, 2, 2),
@@ -339,6 +410,7 @@ INSERT INTO `producto` (`id_producto`, `nombre_prod`, `descripcion`, `precio`, `
 (11, 'Yogur Alpina', 'Yogur natural bajo en azúcar', 2500, 'yogur_alpina.jpg', 100, 3, 2),
 (12, 'Gelatina de Frutas', 'Gelatina con trozos de frutas', 2000, 'gelatina_frutas.jpg', 150, 3, 1),
 (13, 'Flan de Caramelo', 'Flan bajo en grasas', 3000, 'flan_caramelo.jpg', 80, 3, 5),
+<<<<<<< HEAD
 (14, 'Pan Integral', 'Pan integral con fibra', 2500, 'pan_integral.jpg', 50, 5, 3),
 (16, 'Pan Aliñado', 'Pan tradicional colombiano', 2000, 'pan_alinado.jpg', 100, 5, 5),
 (17, 'Barra de Granola', 'Barra de granola con miel y frutos secos', 3000, 'barra_granola.jpg', 80, 6, 1),
@@ -347,6 +419,17 @@ INSERT INTO `producto` (`id_producto`, `nombre_prod`, `descripcion`, `precio`, `
 (30, 'Festival de chocolate.', 'Galleta de chocolate.', 1200, 'galleta_festival.jpeg', 100, 6, 1),
 (2025, 'Agua de coco', 'Es una agua de coco con muchos vitaminas y mineral', 300, 'C:\\xampp\\htdocs\\nutrikids\\img\\products\\Water of coconut.jpeg', 40, 1, 6);
 
+=======
+(14, 'Pan Integral', 'Pan integral con fibra', 2500, 'pan_integral.jpg', 50, 6, 3),
+(15, 'Pan de Avena', 'Pan saludable con avena', 2700, 'pan_avena.jpg', 60, 6, 3),
+(16, 'Pan Aliñado', 'Pan tradicional colombiano', 2000, 'pan_alinado.jpg', 100, 6, 5),
+(17, 'Barra de Granola', 'Barra de granola con miel y frutos secos', 3000, 'barra_granola.jpg', 80, 7, 1),
+(18, 'Frutos Secos', 'Mezcla de frutos secos naturales', 3500, 'frutos_secos.jpg', 60, 7, 1),
+(19, 'Chips de Plátano', 'Chips horneados de plátano', 2500, 'chips_platano.jpg', 100, 7, 1);
+
+=======
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 -- --------------------------------------------------------
 
 --
@@ -413,8 +496,17 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`documento`, `nombre`, `apellido`, `email`, `telefono`, `password`, `imagen`, `id_rol`, `id_estado`) VALUES
+<<<<<<< HEAD
 (1073155246, 'fabian', 'martinez', 'edwinfabian.2006tmpg@gmai', 2147483647, '$2y$10$jfe.veAVOAxduyJ1HE/2zeaSzyRzw3/b1xzPxNh4Uc9uigYBsFqVS', 'WIN_20240829_09_04_28_Pro.jpg', 3, 1),
 (1234567890, 'Kant', 'Arboles', 'kant@example.com', 1122334455, '$2y$10$pgTzplGU2AjQ./sHIImuyurpM9xXXlPH/EZmjqusAzpNbQlBkfq/.', NULL, 1, 1);
+=======
+<<<<<<< HEAD
+(1073155246, 'fabian', 'martinez', 'edwinfabian.2006tmpg@gmai', 2147483647, '$2y$10$jfe.veAVOAxduyJ1HE/2zeaSzyRzw3/b1xzPxNh4Uc9uigYBsFqVS', 'WIN_20240829_09_04_28_Pro.jpg', 3, 1),
+(1234567890, 'Kant', 'Arboles', 'kant@example.com', 1122334455, '$2y$10$pgTzplGU2AjQ./sHIImuyurpM9xXXlPH/EZmjqusAzpNbQlBkfq/.', NULL, 1, 1);
+=======
+(1073155246, 'fabian', 'martinez', 'edwinfabian.2006tmpg@gmai', 2147483647, '$2y$10$jfe.veAVOAxduyJ1HE/2zeaSzyRzw3/b1xzPxNh4Uc9uigYBsFqVS', 'WIN_20240829_09_04_28_Pro.jpg', 3, 1);
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 --
 -- Índices para tablas volcadas
@@ -558,7 +650,15 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
+<<<<<<< HEAD
   MODIFY `id_categoria` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+=======
+<<<<<<< HEAD
+  MODIFY `id_categoria` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+=======
+  MODIFY `id_categoria` smallint(4) NOT NULL AUTO_INCREMENT;
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_estudiantes_escuela`
@@ -588,7 +688,11 @@ ALTER TABLE `escuelas`
 -- AUTO_INCREMENT de la tabla `estados`
 --
 ALTER TABLE `estados`
+<<<<<<< HEAD
   MODIFY `id_estado` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+=======
+  MODIFY `id_estado` smallint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 --
 -- AUTO_INCREMENT de la tabla `estado_licencia`
@@ -600,7 +704,11 @@ ALTER TABLE `estado_licencia`
 -- AUTO_INCREMENT de la tabla `informacion_nutricional`
 --
 ALTER TABLE `informacion_nutricional`
+<<<<<<< HEAD
   MODIFY `id_nutricion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+=======
+  MODIFY `id_nutricion` int(11) NOT NULL AUTO_INCREMENT;
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 --
 -- AUTO_INCREMENT de la tabla `licencia`
@@ -612,7 +720,15 @@ ALTER TABLE `licencia`
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
+<<<<<<< HEAD
   MODIFY `id_marca` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+=======
+<<<<<<< HEAD
+  MODIFY `id_marca` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+=======
+  MODIFY `id_marca` smallint(6) NOT NULL AUTO_INCREMENT;
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 --
 -- AUTO_INCREMENT de la tabla `menus`
@@ -630,13 +746,35 @@ ALTER TABLE `metodos_pago`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
+<<<<<<< HEAD
   MODIFY `id_pedidos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+=======
+  MODIFY `id_pedidos` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+<<<<<<< HEAD
+  MODIFY `id_producto` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+=======
+  MODIFY `id_producto` bigint(10) NOT NULL AUTO_INCREMENT;
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
+<<<<<<< HEAD
   MODIFY `id_rol` smallint(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+=======
+<<<<<<< HEAD
+  MODIFY `id_rol` smallint(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+=======
+  MODIFY `id_rol` smallint(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_licencia`

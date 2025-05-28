@@ -28,6 +28,7 @@ if ($inactividad > $inactividad_max) {
 // Actualizamos la última actividad con la hora actual
 $_SESSION['last_activity'] = time();
 
+<<<<<<< HEAD
 ?>
 
 $p = []; // Inicializar la variable para evitar errores si no hay resultados
@@ -72,3 +73,6 @@ $p = []; // Inicializar la variable para evitar errores si no hay resultados
                             <td><?php echo array_sum(array_column($p, 'subtotal')); ?></td>
                         </tr>
                     </tfoot>
+=======
+?>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57

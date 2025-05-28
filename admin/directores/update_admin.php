@@ -1,7 +1,13 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
+<<<<<<< HEAD
     require_once('../../include/validate_sesion.php');
+=======
+    // include "adm_menu.html";
+    // include "header_user.php";
+    // include "../time.php";
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $conex =new Database;
     $con = $conex->conectar();
 
@@ -29,12 +35,16 @@
             $imagen = $usuarios['imagen'];
         }
 
+<<<<<<< HEAD
         $estado_old = $usuarios['id_estado'];
 
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
         $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
         if ($sqlUpdate->execute([$telefono, $imagen, $id_rol, $id_estado, $usuario_id])) {
             $sqlUpdateDetails = $con->prepare("UPDATE detalles_usuarios_escuela SET id_escuela = ? WHERE documento = ?");
             if ($sqlUpdateDetails->execute([$id_escuela, $usuario_id])) {
+<<<<<<< HEAD
                 if ($estado_old != $id_estado && $id_estado == 1) {
                     $sqlEmail = $con->prepare("SELECT email, nombre, apellido FROM usuarios WHERE documento = ?");
                     $sqlEmail->execute([$usuario_id]);
@@ -50,6 +60,10 @@
                 }
                 echo '<script>alert("Director actualizado correctamente")</script>';
                 echo '<script>window.location.href="../directores.php"</script>';
+=======
+                echo '<script>alert("Director actualizado exitosamente")</script>';
+                echo '<script>window.location = "../directores.php"</script>';
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
             } 
             else {
                 echo '<script>alert("Error al actualizar la escuela del director")</script>';
@@ -151,6 +165,7 @@
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+<<<<<<< HEAD
     <script>
         function email_estado(email, nombre, apellido) {
             fetch('../../PHPMailer-master/config/email_estado.php', {
@@ -170,4 +185,6 @@
             })
         }
      </script>
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 </html>

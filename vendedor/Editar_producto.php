@@ -6,6 +6,10 @@ $con = $conex->conectar();
 
 include 'menu.php';
 
+<<<<<<< HEAD
+=======
+// Generar un código de barras aleatorio
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 $codigo_barras = rand(100000000000, 999999999999);
 
 

@@ -1,7 +1,10 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
+<<<<<<< HEAD
     require_once('../include/validate_sesion.php');
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $conex =new Database;
     $con = $conex->conectar();
 

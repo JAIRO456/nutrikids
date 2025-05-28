@@ -29,9 +29,12 @@
                         <a class="nav-link" href="inicio.php"><i class="bi bi-speedometer2"></i> Inicio</a>
                     </li>
                     <li class="nav-item">
+<<<<<<< HEAD
                         <a class="nav-link" href="usuarios.php"><i class="bi bi-person"></i> Usuarios</a>
                     </li>   
                     <li class="nav-item">
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                         <a class="nav-link" href="#"><i class="bi bi-basket"></i> Categorias</a>
                     </li>
                     <li class="nav-item">

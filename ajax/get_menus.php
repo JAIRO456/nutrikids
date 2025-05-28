@@ -4,11 +4,24 @@
     $conex = new Database;
     $con = $conex->conectar();
 
+<<<<<<< HEAD
     $sqlMenusEstudiantes = $con->prepare("SELECT DISTINCT menus.id_menu, estudiantes.nombre, menus.nombre_menu, estados.estado FROM detalles_pedidos_producto
     INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
     INNER JOIN detalles_menu ON menus.id_menu = detalles_menu.id_menu
     INNER JOIN estados ON detalles_menu.id_estado = estados.id_estado
     INNER JOIN estudiantes ON detalles_pedidos_producto.documento_est = estudiantes.documento_est");
+=======
+<<<<<<< HEAD
+    $sqlMenusEstudiantes = $con->prepare("SELECT detalles_pedidos_producto.id_det_ped_prod, estudiantes.nombre, menus.nombre_menu, estados.estado FROM detalles_pedidos_producto
+    INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
+    INNER JOIN estudiantes ON detalles_pedidos_producto.documento_est = estudiantes.documento_est
+    INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
+    INNER JOIN producto ON detalles_pedidos_producto.id_producto = producto.id_producto
+    INNER JOIN estados ON pedidos.id_estado = estados.id_estado");
+=======
+    $sqlMenusEstudiantes = $con->prepare("SELECT * FROM estudiantes INNER JOIN estados ON estudiantes.id_estado = estados.id_estado");
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $sqlMenusEstudiantes->execute();
 
     $listMenus = [];

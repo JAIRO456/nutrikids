@@ -40,12 +40,27 @@ $con = $conex->conectar();
             <h1>Productos:</h1>
             <div class="container-section">
                 <?php
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                     if (isset($_GET['categoria'])) {
                     $idCategoria = addslashes($_GET['categoria']);
                     $sqlProducts = $con->prepare("SELECT * FROM producto WHERE id_categoria = '$idCategoria'");
                     $sqlProducts->execute();
                     $p = $sqlProducts->fetchAll(PDO::FETCH_ASSOC);
                     foreach ($p as $producto) {
+<<<<<<< HEAD
+=======
+=======
+                    // if (isset($_GET['categoria'])) {
+                    // $idCategoria = addslashes($_GET['categoria']);
+                    // $sqlProducts = $con->prepare("SELECT * FROM producto WHERE id_categoria = '$idCategoria'");
+                    // $sqlProducts->execute();
+                    // $p = $sqlProducts->fetchAll(PDO::FETCH_ASSOC);
+                    // foreach ($p as $producto) {
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                 ?>
         
                 <div class="container-products">
@@ -56,9 +71,19 @@ $con = $conex->conectar();
                     </div>
                     <button type="button" onclick="agregarProducto(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['nombre_prod']; ?>', '<?php echo $producto['precio']; ?>')">Agregar</button>
                 </div>
+<<<<<<< HEAD
                 <?php 
                     }}
                     ?>
+=======
+<<<<<<< HEAD
+                <?php 
+                    }}
+                    ?>
+=======
+                
+>>>>>>> 07e8428420d0f8ce8d201799ed79a099eca68b22
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
             </div>      
         </form>
     </main>

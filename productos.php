@@ -2,7 +2,11 @@
 
 session_start();
 require_once('conex/conex.php');
+<<<<<<< HEAD
 include "menu.php";
+=======
+include "menu.html";
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 $conex = new Database;
 $con = $conex->conectar();
 
@@ -16,6 +20,7 @@ $con = $conex->conectar();
     <link rel="stylesheet" href="styles/index_productos.css">
     <title>Productos</title>
 </head>
+<<<<<<< HEAD
 ..
 <body>
     <div class="container mt-4">
@@ -41,6 +46,34 @@ $con = $conex->conectar();
             <div class="alert alert-info">Selecciona una categoría para ver los productos.</div>
         <?php endif; ?>
     </div>
+=======
+<body>
+    <main class="container-main">
+        <?php
+            $sqlCategories = $con->prepare("SELECT * FROM categorias");
+            $sqlCategories->execute();
+            $c = $sqlCategories->fetchAll(PDO::FETCH_ASSOC);
+        ?>
+
+        <section class="container-productos">
+            <?php 
+                foreach ($c as $category){ 
+                    if ($category['id_categoria'] < 6){?>
+                
+                    <div class="productos">
+                        <a href="productos2.php?categoria=<?php echo $category['id_categoria']; ?>"><img src="img/categories/<?php echo $category['imagen']; ?>" alt=""></a>
+                        <h3><?php echo $category['categoria']; ?></h3>
+                    </div>
+            <?php
+                    }}
+            ?>
+ 
+        </section>
+    </main>
+    
+    <?php include "footer.html"; ?>
+
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
 </html>

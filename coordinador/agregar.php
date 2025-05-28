@@ -1,7 +1,10 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
+<<<<<<< HEAD
     require_once('../include/validate_sesion.php');
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $conex =new Database;
     $con = $conex->conectar();
 
@@ -37,6 +40,7 @@
 <body>
     <main class="container mt-4">
         <div class="row">
+<<<<<<< HEAD
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">
                     <div class="card-body text-center">
@@ -77,6 +81,27 @@
                     </div>
                 </div>
             </div>         
+=======
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>CREAR CUENTA PARA:</h4>
+                    <div class="card-body">
+                    <div class="col-md-3">
+                        <div class="card text-white bg-success">
+                            <div class="card-body">
+                                <li class="nav-item">
+                                    <a href="vendedores.php" class="nav-link text-white">
+                                        <i class="bi bi-person-circle"></i>
+                                        <h5 class="card-title">Vendedores</h5>
+                                    </a>
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
         </div>
     </main>
 </body>
