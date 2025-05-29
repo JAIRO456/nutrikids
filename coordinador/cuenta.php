@@ -27,6 +27,8 @@
             $fileType = $_FILES['profileImage']['type'];
 
             $ruta = '../img/users/';
+            // Remplazar los espacios en blanco
+            $fileName = str_replace(' ', '_', $fileName);
             $newruta = $ruta . basename($fileName);
             $formatType = array("jpg", "jpeg", "png");
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
@@ -43,12 +45,14 @@
                     echo '<script>alert("Error al subir la imagen. Inténtelo de nuevo.")</script>';
                     // Redirigir a la misma página para evitar reenvío de formulario
                     header("Location: cuenta.php");
+                    exit;
                 }
             } 
             else {
                 echo '<script>alert("Formato de imagen no válido.")</script>';
                 // Redirigir a la misma página para evitar reenvío de formulario
                 header("Location: cuenta.php");
+                exit;
             }
         }
         else {
@@ -57,6 +61,7 @@
             echo '<script>alert("Información actualizada correctamente.")</script>';
             // Redirigir a la misma página para evitar reenvío de formulario
             header("Location: cuenta.php");
+            exit;
         }
     }
 ?>
@@ -74,8 +79,8 @@
 <body>
     <main class="container account-container">
         <form id="formCreateAdmin" method="POST" action="" enctype="multipart/form-data">
-            <div class="text-center mb-4">
-                <h1 class="h3 mb-3 fw-normal">Mi Cuenta</h1>
+            <div class="text-center mb-1">
+                <h1 class="h3 mb-1 fw-normal">Mi Cuenta</h1>
                 <p class="text-muted">Actualiza tu información personal</p>
                 <img src="../img/users/<?= $usuarios['imagen']; ?>" alt="<?= $usuarios['nombre']; ?>" class="profile-img mb-3" style="width: 150px; height: 150px; border-radius: 50%;">
                 <div class="mb-3">
@@ -121,57 +126,80 @@
                     </select>
                 </div>
             </div>
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                <button type="button" class="btn btn-secondary">Cancelar</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger">Guardar Cambios</button>
             </div>
-        </form>
-        <div class="text-center mb-4">
-            <h2 class="mt-4">Información de la Escuela</h2>
-            <p class="text-muted">Aquí puedes ver la información de tu escuela</p>
-            <img src="../img/schools/<?= $usuarios['imagen_esc']; ?>" alt="<?= $usuarios['nombre_escuela']; ?>" class="profile-img mb-3" style="width: 150px; height: 150px; border-radius: 50%;">
-            <div class="mb-3">
-                <input type="file" class="form-control d-inline-block w-auto" name="profileImage" id="profileImage" accept="image/*">
+        
+            <div class="text-center mb-4">
+                <h2 class="mt-4">Información de la Escuela</h2>
+                <p class="text-muted">Aquí puedes ver la información de tu escuela</p>
+                <img src="../img/schools/<?= $usuarios['imagen_esc']; ?>" alt="<?= $usuarios['nombre_escuela']; ?>" class="profile-img mb-3" style="width: 150px; height: 150px; border-radius: 50%;">
             </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="nombre_escuela" class="form-label">Nombre de la Escuela</label>
-                <input type="text" class="form-control" id="nombre_escuela" name="nombre_escuela" value="<?= $usuarios['nombre_escuela']; ?>" readonly>
-            </div>
-            <div class="col-md-6">
-                <label for="email" class="form-label">Correo de la Escuela</label>
-                <input type="email" class="form-control" id="email" name="email" value="<?= $usuarios['email_esc']; ?>" readonly>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="telefono_escuela" class="form-label">Telefono de la Escuela</label>
-                <input type="number" class="form-control" id="telefono_escuela" name="telefono_escuela" value="<?= $usuarios['telefono_esc']; ?>">
-            </div>
-        </div>
-        <div class="text-center mb-4">
-            <h2 class="mt-4">Información de la Licencia</h2>
-            <p class="text-muted">Aquí puedes ver la información de tu licencia</p>
-            <?php
-                $sqlLicencia = $con->prepare("SELECT * FROM licencias WHERE id_escuela = ?");
-                $sqlLicencia->execute([$usuarios['id_escuela']]);
-                $licencia = $sqlLicencia->fetch();
-            ?>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
-                    <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" value="<?= $licencia['fecha_inicio']; ?>" readonly>
+                    <label for="nombre_escuela" class="form-label">Nombre de la Escuela</label>
+                    <input type="text" class="form-control" id="nombre_escuela" name="nombre_escuela" value="<?= $usuarios['nombre_escuela']; ?>" readonly>
                 </div>
                 <div class="col-md-6">
-                    <label for="fecha_fin" class="form-label">Fecha de Fin</label>
-                    <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="<?= $licencia['fecha_fin']; ?>" readonly>
+                    <label for="email" class="form-label">Correo de la Escuela</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<?= $usuarios['email_esc']; ?>" readonly>
                 </div>
             </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-sm btn-warning">Renovar</button>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="telefono_escuela" class="form-label">Telefono de la Escuela</label>
+                    <input type="number" class="form-control" id="telefono_escuela" name="telefono_escuela" value="<?= $usuarios['telefono_esc']; ?>">
+                </div>
             </div>
-        </div>
+            <div class="text-center mb-4">
+                <h2 class="mt-4">Información de la Licencia</h2>
+                <p class="text-muted">Aquí puedes ver la información de tu licencia</p>
+                <?php
+                    $sqlLicencia = $con->prepare("SELECT * FROM licencias WHERE id_escuela = ?");
+                    $sqlLicencia->execute([$usuarios['id_escuela']]);
+                    $licencia = $sqlLicencia->fetch();
+                ?>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" value="<?= $licencia['fecha_inicio']; ?>" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fecha_fin" class="form-label">Fecha de Fin</label>
+                        <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="<?= $licencia['fecha_fin']; ?>" readonly>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button id="license-btn" class="btn btn-sm btn-warning">Renovar</button>
+                </div>
+            </div>
+        </form>
     </main>
 </body>
+<script>
+    // Actualizar la licencias dependiendo del id_escuela
+    document.getElementById('license-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        const idEscuela = <?= $usuarios['id_escuela']; ?>;
+        
+        fetch('../ajax/update_license.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'id_escuela=' + idEscuela
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                location.reload(); // Recargar la página para ver los cambios
+            } 
+            else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
 </html>

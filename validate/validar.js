@@ -7,7 +7,7 @@ const expres = {
     doc: /^\d{10,11}$/,
     email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     tel: /^\d{10,12}$/,
-    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
+    password: /^\d{4,4}$/,
 }
 
 const campos = {

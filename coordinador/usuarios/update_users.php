@@ -17,25 +17,75 @@
     $sqlUsuarios -> execute([$usuario_id]);
     $usuarios = $sqlUsuarios -> fetch();
 
+    $sqlEstudiantes = $con -> prepare("SELECT * FROM estudiantes 
+    INNER JOIN detalles_estudiantes_escuela ON estudiantes.documento_est = detalles_estudiantes_escuela.documento_est
+    INNER JOIN escuelas ON detalles_estudiantes_escuela.id_escuela = escuelas.id_escuela
+    WHERE documento = ?");
+    $sqlEstudiantes -> execute([$usuario_id]);
+    $estudiantes = $sqlEstudiantes -> fetch();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $imagen = $_FILES['imagen']['name'];
         $telefono = $_POST['telefono'];
         $id_rol = $_POST['id_rol'];
         $id_estado = $_POST['id_estado'];
-        $id_escuela = $usuarios['id_escuela'];
 
-        if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/users/" . $imagen);
-        } 
-        else {
-            $imagen = $usuarios['imagen'];
+        $telefono_est = $_POST['telefono_est'];
+        $id_estado_est = $_POST['id_estado_est'];
+
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+            $fileTmp = $_FILES['imagen']['tmp_name'];
+            $fileName = $_FILES['imagen']['name'];
+            $fileSize = $_FILES['imagen']['size'];
+            $fileType = $_FILES['imagen']['type'];
+
+            $ruta = '../../img/users/';
+            // Remplazar los espacios en blanco
+            $fileName = str_replace(' ', '_', $fileName);
+            $newruta = $ruta . basename($fileName);
+            $formatType = array("jpg", "jpeg", "png");
+            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+            if (in_array($fileExtension, $formatType)) {
+                if (move_uploaded_file($fileTmp, $newruta)) {
+                    $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
+                    if ($sqlUpdate->execute([$telefono, $fileName, $id_rol, $id_estado, $usuario_id])) {
+                        $sqlUpdateEstudiante = $con->prepare("UPDATE estudiantes SET ");
+                } 
+                else {
+                    echo '<script>alert("Error al subir la imagen. Inténtelo de nuevo.")</script>';
+                }
+            } else {
+                echo '<script>alert("Formato de imagen no válido.")</script>';
+            }
+        } else {
+            // Si no se sube una nueva imagen, se mantiene la existente
+            $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
+            $sqlUpdate->execute([$telefono, $id_rol, $id_estado, $usuario_id]);
+            echo '<script>alert("Usuario actualizado exitosamente")</script>';
+            echo '<script>window.location = "../usuarios.php"</script>';
         }
-
-        $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
-        $sqlUpdate->execute([$telefono, $imagen, $id_rol, $id_estado, $usuario_id]);
-        echo '<script>alert("Usuario actualizado exitosamente")</script>';
-        echo '<script>window.location = "../usuarios.php"</script>';
     }
+
+
+    // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //     $imagen = $_FILES['imagen']['name'];
+    //     $telefono = $_POST['telefono'];
+    //     $id_rol = $_POST['id_rol'];
+    //     $id_estado = $_POST['id_estado'];
+    //     $id_escuela = $usuarios['id_escuela'];
+
+    //     if (!empty($imagen)) {
+    //         move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/users/" . $imagen);
+    //     } 
+    //     else {
+    //         $imagen = $usuarios['imagen'];
+    //     }
+
+    //     $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
+    //     $sqlUpdate->execute([$telefono, $imagen, $id_rol, $id_estado, $usuario_id]);
+    //     echo '<script>alert("Usuario actualizado exitosamente")</script>';
+    //     echo '<script>window.location = "../usuarios.php"</script>';
+    // }
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +105,7 @@
                 <div class="col-md-12">
                     <h2 class="text-center">Actualizar Usuario</h2>
                     <form id="form" method="POST" action="" enctype="multipart/form-data">
+                        <h3 class="text-center mb-4">Información del Usuario</h3>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="documento" class="form-label">Documento</label>
@@ -119,6 +170,50 @@
                                 <a href="../usuarios.php" class="btn btn-secondary mt-3">Cancelar</a>
                             </div>
                         </div>
+
+                        <h3 class="text-center mb-4">Información de los Estudiantes</h3>
+                        <?php foreach ($estudiantes as $estudiante): ?>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="documento_est" class="form-label">Documento del Estudiante</label>
+                                    <input type="text" class="form-control" id="documento_est" name="documento_est" value="<?php echo $estudiante['documento_est']; ?>" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="nombre_est" class="form-label">Nombre del Estudiante</label>
+                                    <input type="text" class="form-control" id="nombre_est" name="nombre_est" value="<?php echo $estudiante['nombre_est']; ?>" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="apellido_est" class="form-label">Apellido del Estudiante</label>
+                                    <input type="text" class="form-control" id="apellido_est" name="apellido_est" value="<?php echo $estudiante['apellido_est']; ?>" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="telefono_est" class="form-label">Teléfono del Estudiante</label>
+                                    <input type="text" class="form-control" id="telefono_est" name="telefono_est" value="<?php echo $estudiante['telefono_est']; ?>" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="email_est" class="form-label">Correo Electrónico del Estudiante</label>
+                                    <input type="email" class="form-control" id="email_est" name="email_est" value="<?php echo $estudiante['email_est']; ?>" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="id_estado_est" class="form-label">Estado</label>
+                                    <select class="form-select" id="id_estado_est" name="id_estado_est" required>
+                                        <option value="<?php echo $estudiante['id_estado']; ?>"><?php echo $estudiante['estado']; ?></option>
+                                        <?php
+                                            $sqlEstados = $con->prepare("SELECT * FROM estados WHERE id_estado != ?");
+                                            $sqlEstados->execute([$estudiante['id_estado']]);
+                                            $estados = $sqlEstados->fetchAll();
+                                            foreach ($estados as $estado) {
+                                                echo "<option value='{$estado['id_estado']}'>{$estado['estado']}</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </form>
                 </div>
             </div>

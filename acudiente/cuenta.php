@@ -15,7 +15,6 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $telefono = $_POST['telefono'];
-        $id_rol = $_POST['id_rol'];
 
         if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] == 0) {
             $fileTmp = $_FILES['profileImage']['tmp_name'];
@@ -24,14 +23,16 @@
             $fileType = $_FILES['profileImage']['type'];
 
             $ruta = '../img/users/';
+            // Remplazar los espacios en blanco
+            $fileName = str_replace(' ', '_', $fileName);
             $newruta = $ruta . basename($fileName);
             $formatType = array("jpg", "jpeg", "png");
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
             if (in_array($fileExtension, $formatType)) {
                 if (move_uploaded_file($fileTmp, $newruta)) {
-                    $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, id_rol = ?, imagen = ? WHERE documento = ?");
-                    $sqlUpdate->execute([$telefono, $id_rol, $fileName, $usuarios['documento']]);
+                    $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ? WHERE documento = ?");
+                    $sqlUpdate->execute([$telefono, $fileName, $usuarios['documento']]);
                     echo '<script>alert("Información actualizada correctamente.")</script>';
                     // Redirigir a la misma página para evitar reenvío de formulario
                     header("Location: cuenta.php");
@@ -49,8 +50,8 @@
             }
         }
         else {
-            $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, id_rol = ? WHERE documento = ?");
-            $sqlUpdate->execute([$telefono, $id_rol, $usuarios['documento']]);
+            $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ? WHERE documento = ?");
+            $sqlUpdate->execute([$telefono, $usuarios['documento']]);
             echo '<script>alert("Información actualizada correctamente.")</script>';
             // Redirigir a la misma página para evitar reenvío de formulario
             header("Location: cuenta.php");
@@ -104,31 +105,11 @@
                     <label for="telefono" class="form-label">Telefono</label>
                     <input type="number" class="form-control" id="telefono" name="telefono" value="<?= $usuarios['telefono']; ?>">
                 </div>
-                <div class="col-md-6">
-                    <label for="id_rol" class="form-label">Rol</label>
-                    <select class="form-select" id="id_rol" name="id_rol">
-                        <option value="<?= $usuarios['id_rol']; ?>"><?= $usuarios['rol']; ?></option>
-                        <?php
-                            $sqlRoles = $con->prepare("SELECT * FROM roles WHERE id_rol != $usuarios[id_rol] ORDER BY id_rol ASC");
-                            $sqlRoles->execute();
-                            while ($row = $sqlRoles->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<option value='{$row['id_rol']}'>{$row['rol']}</option>";
-                            }
-                        ?>
-                    </select>
-                </div>
             </div>
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                <button type="button" class="btn btn-secondary">Cancelar</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger">Guardar Cambios</button>
             </div>
         </form>
-        <div class="text-center mb-4">
-            <h2 class="mt-4">Información del Estudiante(s)</h2>
-            <p class="text-muted">Aquí puedes ver la información de los estudiantes asociados a tu escuela.</p>
-            
-
-        </div>
     </main>
 </body>
 </html>

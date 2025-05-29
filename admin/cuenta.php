@@ -24,6 +24,8 @@
             $fileType = $_FILES['profileImage']['type'];
 
             $ruta = '../img/users/';
+            // Remplazar los espacios en blanco
+            $fileName = str_replace(' ', '_', $fileName);
             $newruta = $ruta . basename($fileName);
             $formatType = array("jpg", "jpeg", "png");
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));

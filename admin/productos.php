@@ -22,11 +22,32 @@
 </head>
 <body>
     <main class="container-main">
-        <div class="container mt-4">
+        <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">Produtos</h2>
-                    <a href="produtos/crear_produtos.php" class="btn btn-success mb-3"><i class="bi bi-plus-circle"></i> Registrar Produto</a>
+                    <h2 class="text-center mb-3">Produtos</h2>
+                    <div class="row mb-1">
+                        <div class="col-md-6">
+                            <a href="produtos/crear_produtos.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Produto</a>            
+                        </div>
+                        <div class="col-md-6">
+                            <form id="search-form" class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Buscar producto..." aria-label="Buscar" id="search-input">
+                                <select class="form-select me-2" id="category-select">
+                                    <option value="">Todas las categorias</option>
+                                    <?php
+                                        $sqlCategorias = $con->prepare("SELECT DISTINCT categorias.id_categoria, categoria FROM producto 
+                                        INNER JOIN categorias ON producto.id_categoria = categorias.id_categoria ORDER BY categoria");
+                                        $sqlCategorias->execute();
+                                        while ($row = $sqlCategorias->fetch(PDO::FETCH_ASSOC)) {
+                                            echo "<option value='{$row['id_categoria']}'>{$row['categoria']}</option>";
+                                        }
+                                    ?>
+                                </select>
+                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
@@ -49,7 +70,8 @@
 </body>
     <script>
         function getProdutos() {
-            fetch('../ajax/get_products.php')
+            fetch('../ajax/get_products.php?search=' + encodeURIComponent(document.getElementById('search-input').value) + 
+                '&category=' + encodeURIComponent(document.getElementById('category-select').value))
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('table-body');
@@ -80,8 +102,18 @@
                 })
                 .catch(error => console.error('Error al obtener los produtos:', error));
         }
-        setInterval(function () {
+        // Manejar el evento de búsqueda
+        document.getElementById('search-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Evitar el envío del formulario
+            getProdutos(); // Llamar a la función para obtener los produtos
+        });
+        // Cargar produtos al inicio
+        document.addEventListener('DOMContentLoaded', function () {
             getProdutos();
-        }, 5000);
+        });
+
+        // setInterval(function () {
+        //     getProdutos();
+        // }, 5000);
     </script>
 </html>

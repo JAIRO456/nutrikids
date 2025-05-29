@@ -20,11 +20,32 @@
 </head>
 <body>
     <main class="container-main">
-        <div class="container mt-4">
+        <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">Licencias</h2>
-                    <a href="licencias/crear_licencia.php" class="btn btn-success mb-3"><i class="bi bi-plus-circle"></i> Registrar Licencia</a>
+                    <h2 class="text-center mb-3">Licencias</h2>
+                    <div class="row mb-1">
+                        <div class="col-md-6">
+                            <a href="licencias/crear_licencia.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Licencia</a>
+                        </div>
+                        <div class="col-md-6">
+                            <form id="search-form" class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Buscar licencia..." aria-label="Buscar" id="search-input">
+                                <select class="form-select me-2" id="tipo-select">
+                                    <option value="">Todas las licencias</option>
+                                    <?php
+                                        $sqlCategorias = $con->prepare("SELECT DISTINCT tipo_licencia.id_tipo, tipo_licencia.tipo FROM licencias 
+                                        INNER JOIN tipo_licencia ON licencias.id_tipo = tipo_licencia.id_tipo ORDER BY id_tipo");
+                                        $sqlCategorias->execute();
+                                        while ($row = $sqlCategorias->fetch(PDO::FETCH_ASSOC)) {
+                                            echo "<option value='{$row['id_tipo']}'>{$row['tipo']}</option>";
+                                        }
+                                    ?>
+                                </select>
+                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
@@ -49,7 +70,8 @@
 </body>
     <script>
         function getLicencias() {
-            fetch('../ajax/get_licencias.php')
+            fetch('../ajax/get_licencias.php?search=' + encodeURIComponent(document.getElementById('search-input').value) + 
+                '&tipo=' + encodeURIComponent(document.getElementById('tipo-select').value))
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('table-body');
@@ -73,8 +95,14 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
-        setInterval(function () {
+        // Manejar el evento de búsqueda
+        document.getElementById('search-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Evitar el envío del formulario
+            getLicencias(); // Llamar a la función para obtener los licencias
+        });
+        // Cargar las licencias al inicio
+        document.addEventListener('DOMContentLoaded', function () {
             getLicencias();
-        }, 3000);
+        });
     </script>
 </html>

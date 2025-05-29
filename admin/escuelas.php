@@ -20,11 +20,21 @@
 </head>
 <body>
     <main class="container-main">
-        <div class="container mt-4">
+        <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">Escuelas</h2>
-                    <a href="escuelas/crear_escuela.php" class="btn btn-success mb-3"><i class="bi bi-plus-circle"></i> Registrar Escuela</a>
+                    <h2 class="text-center mb-3">Escuelas</h2>
+                    <div class="row mb-1">
+                        <div class="col-md-6">
+                            <a href="escuelas/crear_escuela.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Escuela</a>
+                        </div>
+                        <div class="col-md-6">
+                            <form id="search-form" class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Buscar licencia..." aria-label="Buscar" id="search-input">
+                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
@@ -48,7 +58,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
     <script>
         function getschools() {
-            fetch('../ajax/get_schools.php')
+            fetch('../ajax/get_schools.php?search=' + encodeURIComponent(document.getElementById('search-input').value))
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('table-body');
@@ -72,8 +82,14 @@
                 })
                 .catch(error => console.error('Error al cargar los datos:', error));
         }
-        setInterval(function () {
+        // Manejar el evento de búsqueda
+        document.getElementById('search-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Evitar el envío del formulario
+            getschools(); // Llamar a la función para obtener las escuelas
+        });
+        // Cargar la escuelas al inicio
+        document.addEventListener('DOMContentLoaded', function () {
             getschools();
-        }, 3000);
+        });
     </script>
 </html>

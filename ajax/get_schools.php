@@ -4,16 +4,23 @@
     $conex = new Database;
     $con = $conex->conectar();
 
-    $sqlSchools = $con -> prepare("SELECT * FROM escuelas ORDER BY nombre_escuela ASC;");
-    $sqlSchools -> execute();
+    $search = isset($_GET['search']) ? $_GET['search'] : '';
+    $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');
 
-    $listAdmins = [];
-
-    if ($sqlSchools -> rowCount() > 0) {
-        while ($Schools = $sqlSchools -> fetch(PDO::FETCH_ASSOC)) {
-            $listSchools[] = $Schools;
-        }
+    if (!empty($search)) {
+        $searchLike = "%$search%";
+        $sqlSchools = $con->prepare("SELECT * FROM escuelas WHERE id_escuela LIKE ? OR nombre_escuela LIKE ? OR email_esc LIKE ? ORDER BY nombre_escuela ASC");
+        $sqlSchools->execute([$searchLike, $searchLike, $searchLike]);
+    } 
+    else {
+        $sqlSchools = $con->prepare("SELECT * FROM escuelas ORDER BY nombre_escuela ASC");
+        $sqlSchools->execute();
     }
-    
+
+    $listSchools = [];
+    while ($school = $sqlSchools->fetch(PDO::FETCH_ASSOC)) {
+        $listSchools[] = $school;
+    }
+
     echo json_encode($listSchools);
 ?>

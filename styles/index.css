@@ -1,152 +1,169 @@
+/* General */
 body {
+    background: #e9f5f5; /* Color de fondo */
+    font-family: 'Arial', sans-serif; /* Fuente moderna */
+    color: #333; /* Color de texto */
     margin: 0;
     padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: white;
 }
 
 .container-main {
-    padding-top: 12%;
-    align-items: center;
-    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px; /* Aumenta el padding */
 }
 
-.container-main .container-carousel {
+/* Carrusel */
+.container-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px; /* Aumenta el margen inferior */
     position: relative;
-    width: 100%;
-    height: 400px;
-    margin: auto;
-    overflow: hidden;
 }
 
-.container-main .container-carousel .container-carousel-imgs {
-    width: 100%;
-    height: 100%;
-}
-
-.container-carousel .container-carousel-imgs .img {
-    display: block;
-}
-
-.container-carousel-imgs .img img {
-    width: 100%;
-    height: 100%;
-}
-
-.container-carousel button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+.button-previous, .button-next {
+    background: #00b894; /* Color de fondo */
     border: none;
-    padding: 10px;
+    color: #fff;
+    font-size: 2rem;
+    border-radius: 50%;
+    width: 50px; /* Aumenta el tamaño */
+    height: 50px; /* Aumenta el tamaño */
     cursor: pointer;
-    width: 100px;
-    height: 40px;
-    border: none;
-    border-radius: 10px;
+    transition: background 0.3s; /* Suaviza la transición */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Mejora la sombra */
 }
 
-.container-carousel .button-previous {
-    left: 10px;
+.button-previous:hover, .button-next:hover {
+    background: #098c6c; /* Color al pasar el mouse */
 }
 
-.container-carousel .button-next {
-    right: 10px;
+.container-carousel-imgs {
+    display: flex;
+    width: 100%; /* Asegúrate de que sea responsivo */
+    height: 350px; /* Aumenta la altura */
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15); /* Mejora la sombra */
+    background: #fff;
+    position: relative;
 }
 
-.container-main .container-section {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    background-color: beige;
-}
-
-.container-section .container-div1 h2 {
-    font-style: italic;
-}
-
-.container-main .container-section .container-div1 {
-    color: #9d2142;
-    align-content: center;
-    width: 100%;
+.img {
+    min-width: 100%;
+    transition: opacity 0.5s;
+    display: none;
+    justify-content: center;
     align-items: center;
 }
 
-.container-main .container-section .container-img {
+.img img {
     width: 100%;
-    height: 500px;
+    height: 350px; /* Aumenta la altura */
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+/* Sección principal */
+.container-section {
+    display: flex;
     align-items: center;
-    align-self: center;
-    text-align: center;
-    place-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px; /* Aumenta el margen inferior */
+    gap: 50px; /* Aumenta el espacio entre elementos */
+    flex-wrap: wrap;
 }
 
-.container-section .container-img .nutri {
-    width: 100%;
-    height: 100%;   
+.container-div1 {
+    flex: 1 1 350px;
 }
 
-.container-main .container-section2 {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    background-color: bisque;
-    align-content: center;
-    text-align: center;
+.container-div1 h1 {
+    font-size: 2.8rem; /* Aumenta el tamaño del título */
+    color: #00b894; /* Color del título */
+    margin-bottom: 15px; /* Aumenta el margen inferior */
+    font-weight: 700;
 }
 
-.container-section2 .container-info ul {
-    list-style: none;
-    padding: 0%;
+.container-div1 h2 {
+    font-size: 1.5rem; /* Aumenta el tamaño del subtítulo */
+    color: #222;
+    margin-bottom: 15px;
+    font-weight: 500;
 }
 
-.container-section2 .container-info ul li {
-    width: 100%;
+.container-div1 p {
+    font-size: 1rem;
+    color: #555;
 }
 
-@media (max-width: 768px) {
-    .container-main .container-carousel {
-        width: 100%;
-        height: 100%;
+.container-img {
+    flex: 1 1 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-img .nutri {
+    width: 260px;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15); /* Mejora la sombra */
+    border: 4px solid #00b894; /* Borde verde */
+}
+
+/* Sección tarjetas */
+.container-section2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.container-info {
+    background: #fff;
+    border-radius: 20px; /* Cambia el radio de borde */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Mejora la sombra */
+    padding: 40px 30px; /* Aumenta el padding */
+    flex: 1 1 320px;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.container-info h2 {
+    color: #00b894; /* Color del título */
+    font-size: 1.8rem; /* Aumenta el tamaño del título */
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.container-info ul {
+    padding-left: 18px;
+}
+
+.container-info li {
+    margin-bottom: 10px;
+    color: #444;
+    font-size: 1rem;
+}
+
+/* Media Queries */
+@media (max-width: 900px) {
+    .container-section {
+        flex-direction: column;
+        gap: 20px;
     }
-
-    .container-main .container-carousel .container-carousel-imgs {
-        width: 100%;
-        height: 100%;
+    .container-img .nutri {
+        width: 180px;
+        height: 180px;
     }
-
-    .container-carousel .container-carousel-imgs .img {
-        width: 100%;
-        height: 100%;
+    .container-carousel-imgs {
+        height: 200px;
     }
-
-    .container-carousel-imgs .img img {
-        width: 100%;
-        height: 700px;
-    } 
-
-    .container-main .container-section {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        width: 100%;
-    }
-
-    .container-main .container-section .container-div1 {
-        padding: 5%;
-        width: 100%;
-    }
-
-    .container-main .container-section2 {
-        width: 100%;
-        height: 100%;
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-    .container-section2 .container-info {
-        padding: 5%;
+    .img img {
+        height: 200px;
     }
 }

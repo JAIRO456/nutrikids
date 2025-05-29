@@ -19,10 +19,28 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
-    <main class="container mt-4">
+    <main class="container mt-2">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center">Usuarios</h2>
+                <h2 class="text-center mb-3">Usuarios</h2>
+                <div class="row mb-1 justify-content-end">
+                    <div class="col-md-6">
+                        <form id="search-form" class="d-flex">
+                            <input class="form-control me-2" type="search" placeholder="Buscar usuario..." aria-label="Buscar" id="search-input">
+                            <select class="form-select me-2" id="rol-select">
+                                <option value="">Todas los roles</option>
+                                <?php
+                                    $sqlRoles = $con->prepare("SELECT * FROM roles WHERE id_rol > 2 ORDER BY id_rol");
+                                    $sqlRoles->execute();
+                                    while ($row = $sqlRoles->fetch(PDO::FETCH_ASSOC)) {
+                                        echo "<option value='{$row['id_rol']}'>{$row['rol']}</option>";
+                                    }
+                                ?>
+                            </select>
+                            <button class="btn btn-outline-success" type="submit">Buscar</button>
+                        </form>
+                    </div>
+                </div>
                 <table class="table table-bordered table-striped text-center" id="table-users">
                     <thead class="table-dark">
                         <tr>
@@ -30,7 +48,6 @@
                             <th>Documento</th>
                             <th>Nombre</th>
                             <th>Rol</th>
-                            <th>Correo</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -46,7 +63,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
     <script>
         function getAllUsers() {
-            fetch('../ajax/get_allusers.php')
+            fetch('../ajax/get_allusers.php?search=' + encodeURIComponent(document.getElementById('search-input').value) + 
+            '&rol=' + encodeURIComponent(document.getElementById('rol-select').value))
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.querySelector('#table-users tbody')
@@ -59,7 +77,6 @@
                             <td>${user.documento}</td>
                             <td>${user.nombre} ${user.apellido}</td>
                             <td>${user.rol}</td>
-                            <td>${user.email}</td>
                             <td>${user.estado}</td>
                             <td>
                                 <a class='btn btn-primary' href="usuarios/update_users.php?id=${user.documento}"><i class="bi bi-pencil-square"></i></a>
@@ -71,8 +88,14 @@
                 })
             .catch(error => console.error('Error al obtener los Usuarios:', error));
         }
-        setInterval(function () {
+        // Manejar el evento de búsqueda
+        document.getElementById('search-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Evitar el envío del formulario
+            getAllUsers(); // Llamar a la función para obtener los licencias
+        });
+        // Cargar las licencias al inicio
+        document.addEventListener('DOMContentLoaded', function () {
             getAllUsers();
-        }, 3000);
+        });
     </script>
 </html>

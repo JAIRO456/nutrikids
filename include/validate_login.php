@@ -13,6 +13,11 @@
             echo '<script>window.location = "../login.html"</script>';
             exit();
         }
+        elseif (!is_numeric($documento)) {
+            echo "<script>alert('Tipo de dato no requerido, en el Documento')</script>";
+            echo '<script>window.location = "../login.html"</script>';
+            exit();
+        } 
         else {
             $password_descr = htmlentities(addslashes($password));
             $sqlUser = $con -> prepare("SELECT * FROM usuarios WHERE documento = ?");

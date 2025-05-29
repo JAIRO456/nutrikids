@@ -20,11 +20,21 @@
 </head>
 <body>
     <main class="container-main">
-        <div class="container mt-4">
+        <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">Directores</h2>
-                    <a href="directores/crear_admin.php" class="btn btn-success mb-3"><i class="bi bi-plus-circle"></i> Registrar Director</a>
+                    <h2 class="text-center mb-3">Directores</h2>
+                    <div class="row mb-1">
+                        <div class="col-md-6">
+                            <a href="directores/crear_admin.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Director</a>
+                        </div>
+                        <div class="col-md-6">
+                            <form id="search-form" class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Buscar directores..." aria-label="Buscar" id="search-input">
+                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-striped">
                         <thead class="table-dark">
                             <tr>
@@ -45,11 +55,11 @@
             </div>
         </div>
     </main>
-</body>
+</body> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
     <script>
         function getAdmins() {
-            fetch('../ajax/get_admins.php')
+            fetch('../ajax/get_admins.php?search=' + encodeURIComponent(document.getElementById('search-input').value))
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('table-body');
@@ -74,8 +84,14 @@
                 })
                 .catch(error => console.error('Error al cargar los datos:', error));
         }
-        setInterval(function () {
+        // Manejar el evento de búsqueda
+        document.getElementById('search-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Evitar el envío del formulario
+            getAdmins(); // Llamar a la función para obtener los directores
+        });
+        // Cargar los directores al inicio
+        document.addEventListener('DOMContentLoaded', function () {
             getAdmins();
-        }, 3000);
+        });
     </script>
 </html>

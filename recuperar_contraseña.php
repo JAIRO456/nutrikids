@@ -1,42 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/login.css">
-    <!-- <title></title> -->
+    <link rel="icon" href="img/logo-nutrikids2.png" type="image/png">
+    <title>Recuperar Contraseña</title>
 </head>
 <body>
     <header class="container-header">
         <div class="container-logo-header">
-            <a href="index.php"><img class="logo" src="img/logo-nutrikids.png" alt=""></a>
+            <a href="index.php"><img class="logo" src="img/logo-nutrikids2.png" alt="Logo Nutrikids"></a>
         </div>
     </header>
-    
     <main class="container-main">
-        <section class="container-section">
-            <h1 class="title">NUTRIKIDS</h1>
-            <p class="subtitle">"Elige sabiamente para garantizar el bienestar y el futuro de tus hijos, tomando decisiones que les brinden un ambiente seguro, amoroso y lleno de oportunidades para su desarrollo integral."</p>
-        </section>
-
-        <section class="container-section2">
+        <div class="login-card">
             <h1 class="title2">Recuperar Contraseña</h1>
-            <form action="PHPMailer-master/config/email_update_password.php" method="post" name="form1" id="form1" class="form1">
-                <div class="container-input">
-                    <label for="email" class="label">CORREO</label>
-                    <input type="email" name="email" id="email" class="email" placeholder="Ingrese su correo" required>
+            <p class="subtitle">Ingresa el número de documento asociado a tu cuenta y te enviaremos instrucciones para restablecer tu contraseña.</p>
+            <form action="PHPMailer-master/config/email_update_password.php" method="post" class="form1">
+                <div class="x_grupo" id="x_email">
+                    <label for="email">Correo electrónico</label>
+                    <div class="x_input">
+                        <input type="email" id="email" name="email" placeholder="Ingrese su correo Gmail" required>
+                        <i class="form_estado bi bi-exclamation-circle-fill"></i>
+                    </div>
+                    <p class="x_typerror">Correo inválido</p>
                 </div>
 
-                <button type="submit" name="enviar" id="botton">ENVIAR</button>
-                <button type="button" href="login.html" class="btn red">REGRESAR</button>
+                <div class="form1-buttons">
+                    <button type="submit">ENVIAR</button>
+                    <button type="button" class="btn red" onclick="window.location.href='login.php'">CANCELAR</button>
+                </div>
             </form>
-        </section>
+            <div style="text-align:center; margin-top: 18px;">
+                <a href="login.html" style="color:#77b885; text-decoration:underline; font-size:1rem;">
+                    ¿Ya recordaste tu contraseña? Inicia sesión
+                </a>
+            </div>
+        </div>
     </main>
-
-    <footer class="container-footer">
-        <p class="container-p">"Mantener una alimentación saludable no solo contribuye a un bienestar inmediato, sino que también juega un papel fundamental en la prevención de enfermedades crónicas a largo plazo, 
-            mejorando tu calidad de vida y fortaleciendo el sistema inmunológico para enfrentar los desafíos del futuro. :D"</p>
-    </footer>
-</body>
     <script src="validate/validar.js"></script>
-</html>
+</body>

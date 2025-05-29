@@ -12,7 +12,7 @@
     use PHPMailer\PHPMailer\Exception;
     use PHPMailer\PHPMailer\SMTP;
 
-    if (isset($_POST['enviar'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $correo = $_POST['email'];
         
         $sqlUsuario = $con->prepare("SELECT * FROM usuarios WHERE email = ?");
