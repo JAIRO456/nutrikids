@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
+<<<<<<< HEAD
     require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
@@ -8,6 +9,14 @@
     include '../menu.php';
 
 
+=======
+    // include "adm_menu.html";
+    // include "header_user.php";
+    // include "../time.php";
+    $conex =new Database;
+    $con = $conex->conectar();
+
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $id_escuela = $_GET['id'];
     $sqlUsuarios = $con -> prepare("SELECT * FROM escuelas WHERE id_escuela = ?");
     $sqlUsuarios -> execute([$id_escuela]);
@@ -71,6 +80,7 @@
                             <label for="imagen" class="form-label">Imagen</label>
                             <input type="file" class="form-control" id="imagen" name="imagen">
                         </div>
+<<<<<<< HEAD
                         <div class="mb-3">
                             <label for="imagen_actual" class="form-label">Imagen Actual</label><br>
                             <img src="../../img/schools/<?= $usuarios['imagen_esc']; ?>" alt="<?= $usuarios['nombre_escuela']; ?>" class="img-thumbnail" width="200">
@@ -79,6 +89,9 @@
                             <button type="submit" class="btn btn-danger">Actualizar Escuela</button>
                             <a href="../escuelas.php" class="btn btn-secondary">Cancelar</a>
                         </div>
+=======
+                        <button type="submit" class="btn btn-danger">Actualizar Escuela</button>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                     </form>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
     session_start();
     require_once('../conex/conex.php');
@@ -105,3 +106,6 @@
     </script>
 </body>
 </html>
+=======
+1234567891
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57

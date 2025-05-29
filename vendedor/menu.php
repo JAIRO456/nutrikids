@@ -18,7 +18,11 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<<<<<<< HEAD
         <div class="container-fluid">
+=======
+        <div class="container">
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
             <a class="navbar-brand" href="inicio.php"><img src="../img/logo-nutrikids2.png" alt="" width="50px"> NUTRIKIDS</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -32,10 +36,17 @@
                         <a class="nav-link" href="categoria.php"><i class="bi bi-basket"></i> Categorias</a>
                     </li>
                     <li class="nav-item">
+<<<<<<< HEAD
                         <a class="nav-link" href="horarios.php"><i class="bi bi-clock"></i> Horarios</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="ventas.php"><i class="bi bi-bar-chart"></i> Ventas</a>
+=======
+                        <a class="nav-link" href=""><i class="bi bi-clock"></i> Horarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-bar-chart"></i> Ventas</a>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">

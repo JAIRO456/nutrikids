@@ -1,17 +1,27 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
+<<<<<<< HEAD
     require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
     include '../menu.php';
 
+=======
+    // include "adm_menu.html";
+    // include "header_user.php";
+    // include "../time.php";
+    $conex =new Database;
+    $con = $conex->conectar();
+
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fecha_inicio = $_POST['fecha_inicio'];
         $fecha_fin = $_POST['fecha_fin'];
         $id_tipo = $_POST['id_tipo'];
         $id_escuela = $_POST['id_escuela'];
+<<<<<<< HEAD
         
         // Generar un ID único para la licencia, tendra numeros y letras, tendra 20 caracteres y cada 4 caracteres tendra un guion
         $id_licencia = bin2hex(random_bytes(10)); // Genera un ID de 20 caracteres hexadecimales
@@ -19,6 +29,11 @@
 
         $sqlInsert = $con->prepare("INSERT INTO licencias (id_licencia, fecha_inicio, fecha_fin, id_tipo, id_escuela) VALUES (?, ?, ?, ?, ?)");
         if ($sqlInsert->execute([$id_licencia, $fecha_inicio, $fecha_fin, $id_tipo, $id_escuela])) {
+=======
+
+        $sqlInsert = $con->prepare("INSERT INTO licencias (fecha_inicio, fecha_fin, id_tipo, id_escuela) VALUES (?, ?, ?, ?)");
+        if ($sqlInsert->execute([$fecha_inicio, $fecha_fin, $id_tipo, $id_escuela])) {
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
             echo '<script>alert("Licencia registrada exitosamente")</script>';
             echo '<script>window.location = "../licencias.php"</script>';
         } 
@@ -78,11 +93,17 @@
                                     }
                                 ?>
                             </select>
+<<<<<<< HEAD
                         </div>             
                         <div class="mb-3 text-center">
                             <button type="submit" class="btn btn-danger">Registrar Licencia</button>
                             <a href="../licencias.php" class="btn btn-secondary">Cancelar</a>
                         </div>
+=======
+                        </div>
+                        <button type="submit" class="btn btn-danger">Registrar Licencia</button>
+                        <a href="../licencias.php" class="btn btn-secondary">Cancelar</a>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                     </form>
                 </div>
             </div>

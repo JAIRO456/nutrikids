@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
     margin: 0;
     padding: 0;
@@ -140,12 +141,119 @@ body {
 .x_grupo-correcto .x_input input {
     border: 2px solid #1ed12d;
     background: #f0fff0;
+=======
+/* background-color: #9d2142; */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: url(..\img\sodapdf-converted.png);
+}
+
+.container-header .container-logo-header {
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    text-align: center;
+}
+
+.container-header .container-logo-header a img {
+    width: 100px;
+    height: 100px;
+}
+
+.container-main {
+    padding-top: 2%;
+    place-items: center;
+    text-align: center;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    
+}
+
+.container-main .container-section {
+    width: 100%;
+    height: 100%;
+    color: #9d2142;
+    align-content: center;
+    margin: 20%;
+}
+
+.container-main .container-section2 {
+    width: 100%;
+    height: 100%;
+    place-items: center;
+}
+
+.container-main .container-section2 form {
+    width: 100%;
+}
+
+.container-section2 form .x_grupo {
+    width: 100%;
+    padding-top: 3%;
+    place-items: center;
+}
+
+form .x_grupo .x_input {
+    width: 80%;
+    
+}
+
+.x_grupo .x_input input {
+    width: 100%;
+    height: 40px;
+    background-color: #8dc2bf;
+    border: none;
+}
+
+.container-section2 form button {
+    margin-top: 3%;
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background-color: #77b885;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.container-footer {
+    display: flex;
+    position: fixed;
+    z-index: 1;
+    margin-top: 5%;
+    width: 100%;
+    height: 150px;
+    background-color: #9d2142;
+    text-align: center;
+    align-content: center;
+}
+
+.container-footer .container-p {
+    width: 100%;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: bold;
+    color: white;
+    padding-left: 10%;
+}
+
+/* ------------------------ */
+
+.x_grupo-correcto .form_estado {
+    color: #1ed12d;
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 }
 
 .x_grupo-incorrecto .form_estado {
     color: #bb2929;
 }
 
+<<<<<<< HEAD
 .x_grupo-correcto .form_estado {
     color: #1ed12d;
 }
@@ -219,3 +327,81 @@ body {
         padding: 0 2%;
     }
 }
+=======
+.x_grupo-correcto .x_input {
+    border: 3px solid #1ed12d;
+}
+
+.x_grupo-incorrecto .x_input {
+    border: 3px solid #bb2929;
+}
+
+.bi-check-circle-fill {
+    color: #1ed12d;
+}
+
+.bi-exclamation-circle-fill {
+    color: #bb2929;
+}
+
+.x_error-block {
+    display: block;
+    color: red;
+    font-size: 14px;
+}
+
+.x_typerror {
+    display: none;
+}
+
+.x_typerror-block {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .container-header .container-logo-header {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .container-header .container-logo-header a img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .container-main {
+        grid-template-columns: 1fr;
+        padding: 5%;
+    }
+
+    .container-main .container-section .subtitle {
+        padding-left: 0;
+        width: 100%;
+    }
+
+    .container-footer .container-p {
+        margin-top: 5%;
+        font-size: 16px;
+        padding-left: 0;
+    }
+
+    .container-section2 form {
+        width: 100%;
+    }
+
+    .x_grupo .x_input {
+        width: 80%;
+    }
+
+    .x_grupo .x_input input {
+        width: 100%;
+        text-align: center;
+    }
+
+    .container-section2 form button {
+        width: 40%;
+        height: 30%;
+    }
+}
+
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57

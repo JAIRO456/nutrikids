@@ -4,6 +4,7 @@
     $conex = new Database;
     $con = $conex->conectar();
 
+<<<<<<< HEAD
     $search = isset($_GET['search']) ? $_GET['search'] : '';
     $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');
 
@@ -22,5 +23,18 @@
         $listSchools[] = $school;
     }
 
+=======
+    $sqlSchools = $con -> prepare("SELECT * FROM escuelas ORDER BY nombre_escuela ASC;");
+    $sqlSchools -> execute();
+
+    $listAdmins = [];
+
+    if ($sqlSchools -> rowCount() > 0) {
+        while ($Schools = $sqlSchools -> fetch(PDO::FETCH_ASSOC)) {
+            $listSchools[] = $Schools;
+        }
+    }
+    
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     echo json_encode($listSchools);
 ?>

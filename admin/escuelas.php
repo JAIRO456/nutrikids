@@ -1,7 +1,10 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
+<<<<<<< HEAD
     require_once('../include/validate_sesion.php');
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $conex =new Database;
     $con = $conex->conectar();
 
@@ -20,6 +23,7 @@
 </head>
 <body>
     <main class="container-main">
+<<<<<<< HEAD
         <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
@@ -36,6 +40,14 @@
                         </div>
                     </div>
                     <table class="table table-bordered table-striped text-center">
+=======
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-center">Escuelas</h2>
+                    <a href="escuelas/crear_escuela.php" class="btn btn-success mb-3"><i class="bi bi-plus-circle"></i> Registrar Escuela</a>
+                    <table class="table table-bordered table-striped">
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                         <thead class="table-dark">
                             <tr>
                                 <th>Imagen</th>
@@ -58,7 +70,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
     <script>
         function getschools() {
+<<<<<<< HEAD
             fetch('../ajax/get_schools.php?search=' + encodeURIComponent(document.getElementById('search-input').value))
+=======
+            fetch('../ajax/get_schools.php')
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('table-body');
@@ -82,6 +98,7 @@
                 })
                 .catch(error => console.error('Error al cargar los datos:', error));
         }
+<<<<<<< HEAD
         // Manejar el evento de búsqueda
         document.getElementById('search-form').addEventListener('submit', function (e) {
             e.preventDefault(); // Evitar el envío del formulario
@@ -91,5 +108,10 @@
         document.addEventListener('DOMContentLoaded', function () {
             getschools();
         });
+=======
+        setInterval(function () {
+            getschools();
+        }, 3000);
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     </script>
 </html>

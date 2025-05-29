@@ -1,5 +1,6 @@
 <?php
 <<<<<<< HEAD
+<<<<<<< HEAD
     session_start();
     require_once('../conex/conex.php');
     require_once('../include/validate_sesion.php');
@@ -168,6 +169,8 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
 =======
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 session_start();
 require_once('../conex/conex.php');
 $conex = new Database;
@@ -279,5 +282,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<<<<<<< HEAD
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
+=======
 >>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 </html>

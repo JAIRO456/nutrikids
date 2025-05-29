@@ -1,7 +1,10 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
+<<<<<<< HEAD
     require_once('../include/validate_sesion.php');
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $conex =new Database;
     $con = $conex->conectar();
 
@@ -20,6 +23,7 @@
 </head>
 <body>
     <main class="container-main">
+<<<<<<< HEAD
         <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
@@ -50,6 +54,17 @@
                         <thead class="table-dark">
                             <tr>
                                 <th>Code</th>
+=======
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-center">Licencias</h2>
+                    <a href="licencias/crear_licencia.php" class="btn btn-success mb-3"><i class="bi bi-plus-circle"></i> Registrar Licencia</a>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                                 <th>Nombre</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Fin</th>
@@ -70,8 +85,12 @@
 </body>
     <script>
         function getLicencias() {
+<<<<<<< HEAD
             fetch('../ajax/get_licencias.php?search=' + encodeURIComponent(document.getElementById('search-input').value) + 
                 '&tipo=' + encodeURIComponent(document.getElementById('tipo-select').value))
+=======
+            fetch('../ajax/get_licencias.php')
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('table-body');
@@ -95,6 +114,7 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
+<<<<<<< HEAD
         // Manejar el evento de búsqueda
         document.getElementById('search-form').addEventListener('submit', function (e) {
             e.preventDefault(); // Evitar el envío del formulario
@@ -104,5 +124,12 @@
         document.addEventListener('DOMContentLoaded', function () {
             getLicencias();
         });
+=======
+
+        // document.addEventListener('DOMContentLoaded', getLicencias);
+        setInterval(function () {
+            getLicencias();
+        }, 3000);
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     </script>
 </html>

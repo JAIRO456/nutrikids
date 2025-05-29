@@ -1,7 +1,10 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
+<<<<<<< HEAD
     require_once('../include/validate_sesion.php');
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $conex =new Database;
     $con = $conex->conectar();
 
@@ -24,7 +27,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="text-center">Menus</h2>
+<<<<<<< HEAD
                     <table class="table table-bordered table-striped text-center" id="table-menus">
+=======
+                    <table class="table table-bordered table-striped" id="table-menus">
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
@@ -55,12 +62,21 @@
                     data.forEach(menu => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
+<<<<<<< HEAD
                             <td>${menu.id_menu}</td>
                             <td>${menu.nombre} ${menu.apellido}</td>
                             <td>${menu.nombre_menu}</td>
                             <td>${menu.estado}</td>
                             <td>
                                 <a class='btn btn-primary' href="pedidos.php?id_estudiante=${menu.documento_est}"><i class="bi bi-info-circle"></i></a>
+=======
+                            <td>${menu.id_det_ped_prod}</td>
+                            <td>${menu.nombre}</td>
+                            <td>${menu.nombre_menu}</td>
+                            <td>${menu.estado}</td>
+                            <td>
+                                <a class='btn btn-primary' href="pedidos.php?id=${menu.id_det_ped_prod}"><i class="bi bi-info-circle"></i></a>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                             </td>
                         `;
                         tbody.appendChild(tr);

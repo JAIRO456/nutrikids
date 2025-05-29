@@ -1,12 +1,21 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
+<<<<<<< HEAD
     require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
     include '../menu.php';
 
+=======
+    // include "adm_menu.html";
+    // include "header_user.php";
+    // include "../time.php";
+    $conex =new Database;
+    $con = $conex->conectar();
+
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     $usuario_id = $_GET['id'];
     $sqlUsuarios = $con -> prepare("SELECT * FROM usuarios
     INNER JOIN roles ON usuarios.id_rol = roles.id_rol 
@@ -31,12 +40,16 @@
             $imagen = $usuarios['imagen'];
         }
 
+<<<<<<< HEAD
         $estado_old = $usuarios['id_estado'];
 
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
         $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
         if ($sqlUpdate->execute([$telefono, $imagen, $id_rol, $id_estado, $usuario_id])) {
             $sqlUpdateDetails = $con->prepare("UPDATE detalles_usuarios_escuela SET id_escuela = ? WHERE documento = ?");
             if ($sqlUpdateDetails->execute([$id_escuela, $usuario_id])) {
+<<<<<<< HEAD
                 if ($estado_old != $id_estado && $id_estado == 1) {
                     $sqlEmail = $con->prepare("SELECT email, nombre, apellido FROM usuarios WHERE documento = ?");
                     $sqlEmail->execute([$usuario_id]);
@@ -52,6 +65,10 @@
                 }
                 echo '<script>alert("Director actualizado correctamente")</script>';
                 echo '<script>window.location.href="../directores.php"</script>';
+=======
+                echo '<script>alert("Director actualizado exitosamente")</script>';
+                echo '<script>window.location = "../directores.php"</script>';
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
             } 
             else {
                 echo '<script>alert("Error al actualizar la escuela del director")</script>';
@@ -81,6 +98,7 @@
                 <div class="col-md-12">
                     <h2 class="text-center">Actualizar Director</h2>
                     <form id="formCreateAdmin" method="POST" action="" enctype="multipart/form-data">
+<<<<<<< HEAD
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="documento" class="form-label">Documento</label>
@@ -158,6 +176,73 @@
                             <button type="submit" class="btn btn-danger">Actualizar Administrador</button>
                             <a href="../directores.php" class="btn btn-secondary">Cancelar</a>
                         </div>
+=======
+                        <div class="mb-3">
+                            <label for="documento" class="form-label">Documento</label>
+                            <input type="number" class="form-control" id="documento" name="documento" value="<?php echo $usuarios['documento']; ?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $usuarios['nombre']; ?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="apellido" name="apellido" value="<?php echo $usuarios['apellido']; ?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo $usuarios['email']; ?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Telefono</label>
+                            <input type="number" class="form-control" id="telefono" name="telefono" value="<?php echo $usuarios['telefono']; ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_rol" class="form-label">Rol</label>
+                            <select class="form-select" id="id_rol" name="id_rol">
+                                <option value="<?= $usuarios['id_rol']; ?>"><?= $usuarios['rol']; ?></option>
+                                <?php
+                                    $sqlRoles = $con->prepare("SELECT * FROM roles WHERE id_rol != $usuarios[id_rol] ORDER BY id_rol ASC");
+                                    $sqlRoles->execute();
+                                    while ($row = $sqlRoles->fetch(PDO::FETCH_ASSOC)) {
+                                        echo "<option value='{$row['id_rol']}'>{$row['rol']}</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_estado" class="form-label">Estado</label>
+                            <select class="form-select" id="id_estado" name="id_estado">
+                                <option value="<?= $usuarios['id_estado']; ?>"><?= $usuarios['estado']; ?></option>
+                                <?php
+                                    $sqlEstados = $con->prepare("SELECT * FROM estados WHERE id_estado != $usuarios[id_estado] ORDER BY id_estado ASC");
+                                    $sqlEstados->execute();
+                                    while ($row = $sqlEstados->fetch(PDO::FETCH_ASSOC)) {
+                                        echo "<option value='{$row['id_estado']}'>{$row['estado']}</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_escuela" class="form-label">Escuela</label>
+                            <select class="form-select" id="id_escuela" name="id_escuela">
+                                <option value="<?= $usuarios['id_escuela']; ?>"><?= $usuarios['nombre_escuela']; ?></option>
+                                <?php
+                                    $sqlEscuelas = $con->prepare("SELECT * FROM escuelas WHERE id_escuela != $usuarios[id_escuela] ORDER BY nombre_escuela ASC");
+                                    $sqlEscuelas->execute();
+                                    while ($row = $sqlEscuelas->fetch(PDO::FETCH_ASSOC)) {
+                                        echo "<option value='{$row['id_escuela']}'>{$row['nombre_escuela']}</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="imagen" class="form-label">Imagen</label>
+                            <input type="file" class="form-control" id="imagen" name="imagen">
+                        </div>
+                        <button type="submit" class="btn btn-danger">Actualizar Administrador</button>
+                        <a href="../directores.php" class="btn btn-secondary">Cancelar</a>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                     </form>
                 </div>
             </div>
@@ -165,6 +250,7 @@
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+<<<<<<< HEAD
     <script>
         function email_estado(email, nombre, apellido) {
             fetch('../../PHPMailer-master/config/email_estado.php', {
@@ -184,4 +270,6 @@
             })
         }
     </script>
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 </html>

@@ -1,20 +1,33 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
+<<<<<<< HEAD
     require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
     include '../menu.php';
 
+=======
+    // include "adm_menu.html";
+    // include "header_user.php";
+    // include "../time.php";
+    $conex =new Database;
+    $con = $conex->conectar();
+
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $documento = $_POST['documento'];
         $nombre = $_POST['nombre'];
         $apellido = $_POST['apellido'];
         $email = $_POST['email'];
         $telefono = $_POST['telefono'];
+<<<<<<< HEAD
         $password_code = rand(1000, 9999);
         $password = password_hash($password_code, PASSWORD_DEFAULT);
+=======
+        $password = password_hash(rand(1000, 9999), PASSWORD_DEFAULT);
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
         $id_escuela = $_POST['escuela'];
         $imagen = $_FILES['imagen']['name'];
         $temp = $_FILES['imagen']['tmp_name'];
@@ -30,6 +43,7 @@
         if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $imagen, 2, 2])) {
             $sqlInsertDetails = $con->prepare("INSERT INTO detalles_usuarios_escuela (documento, id_escuela) VALUES (?, ?)");
             if ($sqlInsertDetails->execute([$documento, $id_escuela])) {
+<<<<<<< HEAD
                 $sqlEmailPassword = $con->prepare("SELECT email, nombre, apellido, documento, password FROM usuarios WHERE documento = ?");
                 $sqlEmailPassword->execute([$documento]);
                 $email = $sqlEmailPassword->fetch(PDO::FETCH_ASSOC);
@@ -47,6 +61,17 @@
         } 
         else {
             echo '<script>alert("Error al registrar el director")</script>';
+=======
+                echo '<script>alert("Director creado exitosamente")</script>';
+                echo '<script>window.location = "../directores.php"</script>';
+            } 
+            else {
+                echo '<script>alert("Error al asignar la escuela al administrador")</script>';
+            }
+        } 
+        else {
+            echo '<script>alert("Error al crear el administrador")</script>';
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
         }
     }
 ?>
@@ -68,6 +93,7 @@
                 <div class="col-md-12">
                     <h2 class="text-center">Crear Director</h2>
                     <form id="formCreateAdmin" method="POST" action="" enctype="multipart/form-data">
+<<<<<<< HEAD
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="documento" class="form-label">Documento</label>
@@ -117,6 +143,47 @@
                             <button type="submit" class="btn btn-danger">Registrar Director</button>
                             <a href="../directores.php" class="btn btn-secondary">Cancelar</a>
                         </div>
+=======
+                        <div class="mb-3">
+                            <label for="documento" class="form-label">Documento</label>
+                            <input type="number" class="form-control" id="documento" name="documento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="apellido" name="apellido" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Telefono</label>
+                            <input type="number" class="form-control" id="telefono" name="telefono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="escuela" class="form-label">Escuela</label>
+                            <select class="form-select" id="escuela" name="escuela" required>
+                                <option value="">Seleccione una escuela</option>
+                                <?php
+                                    $sqlEscuelas = $con->prepare("SELECT * FROM escuelas");
+                                    $sqlEscuelas->execute();
+                                    while ($row = $sqlEscuelas->fetch(PDO::FETCH_ASSOC)) {
+                                        echo "<option value='{$row['id_escuela']}'>{$row['nombre_escuela']}</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="imagen" class="form-label">Imagen</label>
+                            <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn btn-danger">Registrar Director</button>
+                        <a href="../directores.php" class="btn btn-secondary">Cancelar</a>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                     </form>
                 </div>
             </div>
@@ -124,6 +191,7 @@
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+<<<<<<< HEAD
 </body>
     <script>
         function email_password(email, nombre, apellido, documento, password_code) {
@@ -144,4 +212,6 @@
             })
         }
     </script>
+=======
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 </html>

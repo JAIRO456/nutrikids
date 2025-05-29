@@ -1,12 +1,21 @@
 <?php
     session_start();
     require_once('../../conex/conex.php');
+<<<<<<< HEAD
     require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
     include '../menu.php';
 
+=======
+    // include "adm_menu.html";
+    // include "header_user.php";
+    // include "../time.php";
+    $conex =new Database;
+    $con = $conex->conectar();
+
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre = $_POST['nombre'];
         $email = $_POST['email'];
@@ -64,11 +73,17 @@
                         <div class="mb-3">
                             <label for="imagen" class="form-label">Imagen</label>
                             <input type="file" class="form-control" id="imagen" name="imagen">
+<<<<<<< HEAD
                         </div>      
                         <div class="mb-3 text-center">
                             <button type="submit" class="btn btn-danger">Registrar Escuela</button>
                             <a href="../escuelas.php" class="btn btn-secondary">Cancelar</a>
                         </div>
+=======
+                        </div>
+                        <button type="submit" class="btn btn-danger">Registrar Escuela</button>
+                        <a href="../escuelas.php" class="btn btn-secondary">Cancelar</a>
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
                     </form>
                 </div>
             </div>

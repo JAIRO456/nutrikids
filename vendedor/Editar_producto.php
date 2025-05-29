@@ -7,6 +7,10 @@ $con = $conex->conectar();
 include 'menu.php';
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+// Generar un código de barras aleatorio
+>>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
 =======
 // Generar un código de barras aleatorio
 >>>>>>> 445ed401a5f306f3c2b0b9e88e67d6a8e6bd8c57
