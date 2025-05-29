@@ -1,0 +1,89 @@
+<style>
+        .container-modal{
+            overflow: auto;
+            border-radius: 1%;
+            text-align: center;
+            position: fixed;
+            z-index: 2;
+            background-color: gray;
+            width: 600px;
+            height: 450px;
+            top: 15%;
+            right: 1%;
+        }
+        .container-div {
+            width: 550px;
+        }
+    </style>
+    <div class="container-modal">
+        <div class="modal-content">
+            <span class="close text-right" id="close"><i class="bi bi-x-circle-fill"></i></span>
+                <h4>Carrito</h4>
+                <form id="menuForm" method="POST" action="menus.php">
+                    <div class="container-div card mb-1">
+                        <button type="submit" class="btn btn-primary">Crear Menu</button>
+                    </div>
+                    <div class="container-div card mb-3" id="container-div">
+                        <label for="nombre_menu" class="form-label">Nombre del Menu</label>
+                        <textarea type="varchar" class="form-control" id="nombre_menu" name="nombre_menu" required></textarea>
+                    </div>
+                    <input type="hidden" name="productos" id="productos">
+                    <div class="container-div mb-1">
+                        <table class="table table-bordered table-striped" id="table-carrito">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Productos</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-end fw-bold">Total:</td>
+                                    <td id="total-pedidos" class="fw-bold"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let listaProductos = [];
+
+        function agregarProducto(id_producto, nombre_prod, precio) {
+            const productoExistente = listaProductos.find(p => p.id_producto === id_producto);
+            if (productoExistente) {
+                productoExistente.cantidad += 1;
+            } 
+            else {
+                listaProductos.push({ id_producto, nombre_prod, precio, cantidad: 1 });
+            }
+            actualizarCarrito();
+            getMenu();
+        }
+        function actualizarCarrito() {
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '';
+            let total = 0;
+            listaProductos.forEach(producto => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${producto.nombre_prod}</td>
+                    <td>${producto.cantidad}</td>
+                    <td>${(producto.precio * producto.cantidad).toFixed(2)}</td>
+                `;
+                tableBody.appendChild(tr);
+                total += parseFloat(producto.precio) * producto.cantidad;
+            });
+            document.getElementById('total-pedidos').textContent = total.toFixed(2);
+        }
+        document.getElementById('menuForm').addEventListener('submit', function(e) {
+            document.getElementById('productos').value = JSON.stringify(listaProductos);
+        })
+</script>

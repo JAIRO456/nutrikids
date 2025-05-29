@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0%;
+    padding: 0%;
+    background-color: white;
+}
+
+.container-main {
+    /* text-align: center;
+    align-content: center; */
+    padding-top: 5%;
+    padding-left: 20%;
+}
+
+.container-main .container-form {
+    background: #e7e9eb;
+    width: 1000px;
+    height: 550px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.container-form .container-img-products {
+    width: 400px;
+    position: relative;
+    left: 50px;
+    align-content: center;
+}
+
+.container-img-products img {
+    width: 100%;
+}
+
+.container-form .container-info-productos {
+    display: grid;
+    gap: 2%;
+}
+
+.container-buttons .agregar {
+    background-color: #6ab16d;
+    font-size: 12px;
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.container-buttons a .eliminar {
+    background-color: #9d2142;
+    font-size: 12px;
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.container-buttons a .actualizar {
+    background-color: #268faf;
+    font-size: 12px;
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}

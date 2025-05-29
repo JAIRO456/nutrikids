@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="icon" href="img/logo-nutrikids2.png" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Login</title>
+</head>
+<body>
+    <header class="container-header">
+        <div class="container-logo-header">
+            <a href="index.php"><img class="logo" src="img/logo-nutrikids2.png" alt=""></a>
+        </div>
+    </header>
+    
+    <main class="container-main">
+        <div class="login-card">
+            <h1 class="title2">INICIO SESION</h1>
+            <p class="subtitle">
+                "Elige sabiamente para garantizar el bienestar y el futuro de tus hijos, tomando decisiones que les brinden un ambiente seguro, amoroso y lleno de oportunidades para su desarrollo integral."
+            </p>
+            <form action="include/validate_login.php" method="post" name="form1" id="form1" class="form1" autocomplete="off">
+                <div class="x_grupo" id="x_documento">
+                    <label for="documento">Usuario</label>
+                    <div class="x_input">
+                        <input type="number" id="documento" name="documento" placeholder="Ingrese su documento">
+                        <i class="form_estado bi bi-exclamation-circle-fill"></i>
+                    </div>
+                    <p class="x_typerror">Documento inválido</p>
+                </div>
+
+                <div class="x_grupo" id="x_password">
+                    <label for="password">Contraseña</label>
+                    <div class="x_input" style="position:relative;">
+                        <input type="password" id="password" name="password" placeholder="Ingrese tu contraseña">
+                        <i class="bi bi-eye-slash" id="togglePassword" style="position:absolute; right:36px; top:50%; transform:translateY(-50%); font-size:1.3rem; color:#888; cursor:pointer;"></i>
+                    </div>
+                    <p class="x_typerror">Contraseña inválida</p>
+                </div>
+
+                <div class="form1-buttons">
+                    <button type="submit" name="enviar" id="botton">ENVIAR</button>
+                    <button type="button" class="btn red" onclick="window.location.href='index.php'">REGRESAR</button>
+                </div>
+
+                <!-- Apartado para recuperar contraseña -->
+                <div style="text-align:center; margin-top: 18px;">
+                    <a href="recuperar_contraseña.php" style="color:#77b885; text-decoration:underline; font-size:1rem;">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="validate/validar.js"></script>
+    <script>
+        // Solo funcionalidad del ojito
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+
+        togglePassword.addEventListener('click', function() {
+          if (passwordInput.type === 'password') {
+              passwordInput.type = 'text';
+              togglePassword.classList.remove('bi-eye-slash');
+              togglePassword.classList.add('bi-eye');
+          } 
+          else {
+              passwordInput.type = 'password';
+              togglePassword.classList.remove('bi-eye');
+              togglePassword.classList.add('bi-eye-slash');
+          }
+        });
+    </script>
+</body>
+</html>
