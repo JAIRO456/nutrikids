@@ -17,6 +17,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    // renposive a la table
+    <style>
+        @media (max-width: 768px) {
+            @media screen and (max-width: 768px) {
+                .table {
+                    overflow-x: auto;
+                    display: grid;
+                    grid-template-columns: repeat();
+                }
+                
+            }
+        }
+    </style>
 </head>
 <body>
     <main class="container mt-2">
@@ -39,6 +52,12 @@
                             </select>
                             <button class="btn btn-outline-success" type="submit">Buscar</button>
                         </form>
+                    </div>
+                </div>
+                // renposive si el ancho de la pantalla es menor a 768px
+                <div class="row mb-3">
+                    <div class="col-md-12 text-end">
+                        <a href="usuarios/create_users.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Agregar Usuario</a>
                     </div>
                 </div>
                 <table class="table table-bordered table-striped text-center" id="table-users">

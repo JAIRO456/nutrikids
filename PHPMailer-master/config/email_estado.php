@@ -13,13 +13,13 @@
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'kantarboles@gmail.com';
-            $mail->Password = 'ilda zzrl jyou gjnk';
+            $mail->Username = 'nutrikids.fj@gmail.com';
+            $mail->Password = 'bbyn qnjf ehol bqyu';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->CharSet = 'UTF-8';
             $mail->Port = 587;
 
-            $mail->setFrom('kantarboles@gmail.com', 'NUTRIKIDS');
+            $mail->setFrom('nutrikids.fj@gmail.com', 'NUTRIKIDS');
             $mail->addAddress($email, "$nombre $apellido");
 
             $mail->isHTML(true);

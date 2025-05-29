@@ -24,8 +24,8 @@
             $nombre = $usuario['nombre'];
             $apellido = $usuario['apellido'];
             
-            $sqlUpdatePassword = $con->prepare("UPDATE usuarios SET password = ? WHERE email = ?");
-            $sqlUpdatePassword->execute([password_hash($new_password, PASSWORD_DEFAULT), $correo]);
+            $sqlUpdatePassword = $con->prepare("UPDATE usuarios SET password = ? WHERE documento = ?");
+            $sqlUpdatePassword->execute([password_hash($new_password, PASSWORD_DEFAULT), $usuario['documento']]);
             
             $mail = new PHPMailer(true);
 
@@ -33,13 +33,13 @@
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
-                $mail->Username = 'kantarboles@gmail.com';
-                $mail->Password = 'ilda zzrl jyou gjnk';
+                $mail->Username = 'nutrikids.fj@gmail.com';
+                $mail->Password = 'bbyn qnjf ehol bqyu';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->CharSet = 'UTF-8';
                 $mail->Port = 587;
 
-                $mail->setFrom('kantarboles@gmail.com', 'NUTRIKIDS');
+                $mail->setFrom('nutrikids.fj@gmail.com', 'NUTRIKIDS');
                 $mail->addAddress($correo, "$nombre $apellido");
 
                 $mail->isHTML(true);
