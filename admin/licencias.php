@@ -49,7 +49,7 @@
                     <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
-                                <th>Code</th>
+                                <th class="d-none d-sm-table-cell">Code</th>
                                 <th>Nombre</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Fin</th>
@@ -80,7 +80,7 @@
                     data.forEach(licencia => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td>${licencia.id_licencia}</td>
+                            <td class="d-none d-sm-table-cell">${licencia.id_licencia}</td>
                             <td>${licencia.tipo}</td>
                             <td>${licencia.fecha_inicio}</td>
                             <td>${licencia.fecha_fin}</td>

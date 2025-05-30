@@ -29,7 +29,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Estudiante</th>
-                                <th>Menu</th>
+                                <th class="d-none d-sm-table-cell">Menu</th>
                                 <th>Estado</th>
                                 <th>Accion</th>
                             </tr>
@@ -57,7 +57,7 @@
                         tr.innerHTML = `
                             <td>${menu.id_menu}</td>
                             <td>${menu.nombre} ${menu.apellido}</td>
-                            <td>${menu.nombre_menu}</td>
+                            <td class="d-none d-sm-table-cell">${menu.nombre_menu}</td>
                             <td>${menu.estado}</td>
                             <td>
                                 <a class='btn btn-primary' href="pedidos.php?id_estudiante=${menu.documento_est}"><i class="bi bi-info-circle"></i></a>

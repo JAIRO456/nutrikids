@@ -63,9 +63,13 @@
                 return false;
             }
         }
+        else {
+            echo '<script>alert("El correo no está registrado en el sistema")</script>';
+            echo '<script>window.location = "../../recuperar_contraseña.php"</script>';
+        }
     }
     else {
-        echo '<script>alert("El correo no está registrado en el sistema")</script>';
+        echo '<script>alert("Método no permitido")</script>';
         echo '<script>window.location = "../../recuperar_contraseña.php"</script>';
     }
 ?>

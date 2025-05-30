@@ -21,34 +21,43 @@
 <body>
     <main class="container mt-4">
         <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card text-white bg-danger">
-                        <div class="card-body">
-                            <h5 class="card-title">Directores</h5>
-                            <p class="card-text display-4" id='TotalUsers'>
-                                <i class="bi bi-person-fill"></i> 
-                            </p>
-                        </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Directores</h5>
+                        <p class="card-text display-4" id='TotalUsers'>
+                            <i class="bi bi-person-fill"></i> 
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card text-white bg-danger">
-                        <div class="card-body">
-                            <h5 class="card-title">Licencias Activas</h5>
-                            <p class="card-text display-4" id='TotalLicencias'>
-                                <i class="bi bi-file-earmark-check-fill"></i> 
-                            </p>
-                        </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Licencias Activas</h5>
+                        <p class="card-text display-4" id='TotalLicencias'>
+                            <i class="bi bi-file-earmark-check-fill"></i> 
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card text-white bg-danger">
-                        <div class="card-body">
-                            <h5 class="card-title">Escuelas</h5>
-                            <p class="card-text display-4" id='TotalSchools'>
-                                <i class="bi bi-house-fill"></i> 
-                            </p>
-                        </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Escuelas</h5>
+                        <p class="card-text display-4" id='TotalSchools'>
+                            <i class="bi bi-house-fill"></i> 
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Productos</h5>
+                        <p class="card-text display-4" id='TotalProducts'>
+                            <i class="bi bi-basket"></i>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -109,7 +118,7 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
-                                <th>Email</th>
+                                <th class="d-none d-sm-table-cell">Email</th>
                             </tr>
                         </thead>
                         <tbody id="table-body">
@@ -148,6 +157,7 @@
                     document.getElementById('TotalUsers').innerHTML = `<i class="bi bi-person-fill"></i> ${data.TotalUsers}`;
                     document.getElementById('TotalLicencias').innerHTML = `<i class="bi bi-file-earmark-check-fill"></i> ${data.TotalLicencias}`;
                     document.getElementById('TotalSchools').innerHTML = `<i class="bi bi-house-fill"></i> ${data.TotalSchools}`;
+                    document.getElementById('TotalProducts').innerHTML = `<i class="bi bi-basket"></i> ${data.TotalProducts}`;
                 })
                 .catch(error => console.error('Error al obtener datos:', error));
         }
@@ -164,7 +174,7 @@
                         tr.innerHTML = `
                             <td>${user.nombre}</td>
                             <td>${user.apellido}</td>
-                            <td>${user.email}</td>
+                            <td class="d-none d-sm-table-cell">${user.email}</td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -191,12 +201,12 @@
                 })
             .catch(error => console.error('Error al obtener los productos:', error));
         }
-
-        setInterval(function () {
+        // Cargar los datos al inicio
+        document.addEventListener('DOMContentLoaded', function () {
             updateCounts();
             getUsers();
             getProducts();
-        }, 1000);
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
 </html>

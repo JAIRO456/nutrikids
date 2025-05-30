@@ -29,7 +29,7 @@
                             <th>Documento</th>
                             <th>Apellidos</th>
                             <th>Nombre</th>
-                            <th>Correo</th>
+                            <th class="d-none d-sm-table-cell">Correo</th>
                             <th>Accion</th>
                         </tr>
                     </thead>
@@ -55,7 +55,7 @@
                             <td>${student.documento_est}</td>
                             <td>${student.apellido}</td>
                             <td>${student.nombre}</td>
-                            <td>${student.email}</td>
+                            <td class="d-none d-sm-table-cell">${student.email}</td>
                             <td>
                                 <a class='btn btn-primary' href="estudiantes/update_students.php?id=${student.documento_est}"><i class="bi bi-pencil-square"></i></a>
                             </td>

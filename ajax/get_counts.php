@@ -6,25 +6,31 @@
 
     $response = [];
 
-    // Obtener el conteo de usuarios
-    $sqlRoles = $con->prepare("SELECT COUNT(*) AS TotalUser FROM usuarios");
-    $sqlRoles->execute();
-    $u = $sqlRoles->fetch();
-    $response['TotalUsers'] = $u['TotalUsers'];
+    $sql = "SELECT COUNT(*) AS total FROM usuarios 
+    INNER JOIN roles ON usuarios.id_rol = roles.id_rol WHERE roles.id_rol = 2";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $response['TotalUsers'] = $result['total'];
 
-    // Obtener el conteo de licencias
-    $sqlProducts = $con->prepare("SELECT COUNT(*) AS TotalProducts FROM licencias");
-    $sqlProducts->execute();
-    $p = $sqlProducts->fetch();
-    $response['TotalLicencias'] = $p['TotalLicencias'];
+    $sql = "SELECT COUNT(*) AS total FROM licencias WHERE id_estado = 1";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $response['TotalLicencias'] = $result['total'];
 
-    // Obtener el conteo de escuelas
-    $sqlSchools = $con->prepare("SELECT COUNT(*) AS TotalSchools FROM escuelas");
-    $sqlSchools->execute();
-    $s = $sqlSchools->fetch();
-    $response['TotalSchools'] = $s['TotalSchools'];
+    $sql = "SELECT COUNT(*) AS total FROM escuelas";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $response['TotalSchools'] = $result['total'];
 
-    // Devolver la respuesta en formato JSON
+    $sql = "SELECT COUNT(*) AS total FROM producto";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $response['TotalProducts'] = $result['total'];
+
     header('Content-Type: application/json');
     echo json_encode($response);
 ?>

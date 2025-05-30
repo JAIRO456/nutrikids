@@ -10,7 +10,7 @@
     <title>NUTRIKIDS</title>
 </head>
 <body>
-    <main class="container-main">
+    <main class="container">
         <section class="container-carousel">
             <button class="button-previous" onclick="move(-1)">&#10094;</button>
             <div class="container-carousel-imgs">

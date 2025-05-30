@@ -17,8 +17,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- <script src="../JsBarcode/jsbarcode.all.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
 </head>
 <body>
     <main class="container-main">
@@ -51,10 +49,10 @@
                     <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
-                                <th>CODE</th>
+                                <th class="d-none d-sm-table-cell">CODE</th>
                                 <th>Nombre</th>
                                 <th>Categoria</th>
-                                <th>Precio</th>
+                                <th class="d-none d-sm-table-cell">Precio</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -78,26 +76,18 @@
                     tableBody.innerHTML = '';
 
                     data.forEach(product => {
-                        const barcodeId = `barcode-${product.id_producto}`;
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td><svg id="${barcodeId}"></svg></td>
+                            <td class="d-none d-sm-table-cell">${product.id_producto}</td>
                             <td>${product.nombre_prod}</td>
                             <td>${product.categoria}</td>
-                            <td>${product.precio}</td>
+                            <td class="d-none d-sm-table-cell">${product.precio}</td>
                             <td>
                                 <a href="produtos/update_producto.php?id=${product.id_producto}" class="btn btn-primary"><i class="bi bi-pencil"></i></a>
                                 <a href="produtos/delete_producto.php?id=${product.id_producto}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                             </td>
                         `;
                         tableBody.appendChild(row);
-
-                        JsBarcode(`#${barcodeId}`, product.id_producto, {
-                            format: "CODE128",
-                            width: 2,
-                            height: 40,
-                            displayValue: true,
-                        });
                     });
                 })
                 .catch(error => console.error('Error al obtener los produtos:', error));

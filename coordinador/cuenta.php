@@ -18,7 +18,6 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $telefono = $_POST['telefono'];
-        $id_rol = $_POST['id_rol'];
 
         if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] == 0) {
             $fileTmp = $_FILES['profileImage']['tmp_name'];
@@ -35,8 +34,8 @@
 
             if (in_array($fileExtension, $formatType)) {
                 if (move_uploaded_file($fileTmp, $newruta)) {
-                    $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, id_rol = ?, imagen = ? WHERE documento = ?");
-                    $sqlUpdate->execute([$telefono, $id_rol, $fileName, $usuarios['documento']]);
+                    $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ? WHERE documento = ?");
+                    $sqlUpdate->execute([$telefono, $fileName, $usuarios['documento']]);
                     echo '<script>alert("Información actualizada correctamente.")</script>';
                     // Redirigir a la misma página para evitar reenvío de formulario
                     header("Location: cuenta.php");
@@ -114,22 +113,15 @@
                 </div>
                 <div class="col-md-6">
                     <label for="id_rol" class="form-label">Rol</label>
-                    <select class="form-select" id="id_rol" name="id_rol">
-                        <option value="<?= $usuarios['id_rol']; ?>"><?= $usuarios['rol']; ?></option>
-                        <?php
-                            $sqlRoles = $con->prepare("SELECT * FROM roles WHERE id_rol != $usuarios[id_rol] ORDER BY id_rol ASC");
-                            $sqlRoles->execute();
-                            while ($row = $sqlRoles->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<option value='{$row['id_rol']}'>{$row['rol']}</option>";
-                            }
-                        ?>
-                    </select>
+                    <input type="varchar" class="form-control" id="id_rol" name="id_rol" value="<?= $usuarios['rol']; ?>" readonly>
                 </div>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-danger">Guardar Cambios</button>
             </div>
-        
+
+            <hr class="mb-4">
+
             <div class="text-center mb-4">
                 <h2 class="mt-4">Información de la Escuela</h2>
                 <p class="text-muted">Aquí puedes ver la información de tu escuela</p>
@@ -148,9 +140,11 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="telefono_escuela" class="form-label">Telefono de la Escuela</label>
-                    <input type="number" class="form-control" id="telefono_escuela" name="telefono_escuela" value="<?= $usuarios['telefono_esc']; ?>">
+                    <input type="number" class="form-control" id="telefono_escuela" name="telefono_escuela" value="<?= $usuarios['telefono_esc']; ?>" readonly>
                 </div>
             </div>
+            <hr class="mb-4">
+
             <div class="text-center mb-4">
                 <h2 class="mt-4">Información de la Licencia</h2>
                 <p class="text-muted">Aquí puedes ver la información de tu licencia</p>

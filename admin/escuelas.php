@@ -38,11 +38,10 @@
                     <table class="table table-bordered table-striped text-center">
                         <thead class="table-dark">
                             <tr>
-                                <th>Imagen</th>
+                                <th class="d-none d-sm-table-cell">Imagen</th>
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Correo</th>
-                                <th>Telefono</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -67,11 +66,10 @@
                     data.forEach(school => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td><img src="../img/schools/${school.imagen_esc}" alt="Imagen" width="50" height="50"></td>
+                            <td class="d-none d-sm-table-cell"><img class="d-none d-sm-table-cell" src="../img/schools/${school.imagen_esc}" alt="Imagen" width="50" height="50"></td>
                             <td>${school.id_escuela}</td>
                             <td>${school.nombre_escuela}</td>
                             <td>${school.email_esc}</td>
-                            <td>${school.telefono_esc}</td>
                             <td> 
                                 <a href="escuelas/update_escuela.php?id=${school.id_escuela}" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
                                 <a href="escuelas/delete_escuela.php?id=${school.id_escuela}" class="btn btn-danger"><i class="bi bi-trash"></i></a>

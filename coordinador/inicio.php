@@ -44,16 +44,6 @@
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">
                     <div class="card-body">
-                        <h5 class="card-title">Productos</h5>
-                        <p class="card-text display-4" id='TotalProducts'>
-                            <i class="bi bi-basket"></i>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
-                    <div class="card-body">
                         <h5 class="card-title">Ventas</h5>
                         <p class="card-text display-4" id='TotalVentas'>
                             <i class="bi bi-bar-chart"></i>
@@ -84,13 +74,13 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">Productos Recientes</h2>
-                    <table class="table table-bordered table-striped" id="table-products">
+                    <h2 class="text-center">Estudiantes Recientes</h2>
+                    <table class="table table-bordered table-striped" id="table-students">
                         <thead class="table-dark">
                             <tr>
                                 <th>Nombre</th>
-                                <th>Categoria</th>
-                                <th>Precio</th>
+                                <th>Apellido</th>
+                                <th>Email</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -108,7 +98,6 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('TotalUsers').innerHTML = `<i class="bi bi-person-fill"></i> ${data.TotalUsers}`;
-                    document.getElementById('TotalProducts').innerHTML = `<i class="bi bi-file-earmark-check-fill"></i> ${data.TotalProducts}`;
                     document.getElementById('TotalEstudiantes').innerHTML = `<i class="bi bi-house-fill"></i> ${data.TotalEstudiantes}`;
                 })
                 .catch(error => console.error('Error al obtener datos:', error));
@@ -134,31 +123,31 @@
             .catch(error => console.error('Error al obtener los usuarios:', error));
         }
 
-        function getProducts() {
-            fetch('../ajax/get_products.php')
+        function getStudents() {
+            fetch('../ajax/get_student2.php')
                 .then(response => response.json())
-                .then(products => {
-                    const tbody = document.querySelector('#table-products tbody')
+                .then(users => {
+                    const tbody = document.querySelector('#table-students tbody')
                     tbody.innerHTML = '';
             
-                    products.forEach(product => {
+                    users.forEach(student => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${product.nombre_prod}</td>
-                            <td>${product.categoria}</td>
-                            <td>${product.precio}</td>
+                            <td>${student.nombre}</td>
+                            <td>${student.apellido}</td>
+                            <td>${student.email}</td>
                         `;
                         tbody.appendChild(tr);
                     });
                 })
-            .catch(error => console.error('Error al obtener los productos:', error));
+            .catch(error => console.error('Error al obtener los estudiantes:', error));
         }
 
-        setInterval(function () {
+        document.addEventListener('DOMContentLoaded', function () {
             updateCounts();
             getUsers();
-            getProducts();
-        }, 1000);
+            getStudents();
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
 </html>

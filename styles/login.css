@@ -129,7 +129,7 @@ body {
     color: #bb2929;
     font-size: 0.95rem;
     margin-top: 4px;
-    display: none;
+    display: block;
 }
 
 .x_grupo-incorrecto .x_input input {

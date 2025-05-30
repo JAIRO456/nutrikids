@@ -95,6 +95,8 @@
                             <label for="documento_acudiente" class="form-label">Documento del Acudiente</label>
                             <input type="number" class="form-control" id="documento_acudiente" name="documento_acudiente" required>
                         </div>
+
+                        <hr class="mb-4">
                         
                         <div class="col-md-12 mt-4">
                             <h2 class="text-center">Información del Acudiente</h2>

@@ -120,9 +120,9 @@
                     </select>
                 </div>
             </div>
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                <button type="button" class="btn btn-secondary">Cancelar</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger">Guardar Cambios</button>
+                <a href="inicio.php" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </main>

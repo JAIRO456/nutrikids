@@ -66,7 +66,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- <script src="JsBarcode.all.min.js"></script> -->
+     <!-- <script src="../JsBarcode/jsbarcode.all.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
 </head>
 <body onload="formCreateProducts.documento.focus()">
     <main class="container-main">
@@ -158,6 +159,10 @@
                                 <label for="sodio" class="form-label">Sodio (mg)</label>
                                 <input type="number" step="0.01" class="form-control" id="sodio" name="sodio" value="<?php echo $producto['sodio']; ?>" required>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_producto" class="form-label">Code</label><br>
+                            <svg id="barcode-<?= $producto['id_producto']; ?>"></svg>
                         </div>              
                         <div class="text-center">
                             <button type="submit" class="btn btn-danger">Actualizar Producto</button>
@@ -170,4 +175,12 @@
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+<script>
+    JsBarcode("#barcode-<?= $producto['id_producto']; ?>", "<?= $producto['id_producto']; ?>", {
+        format: "CODE128",
+        width: 2,
+        height: 40,
+        displayValue: true
+    });
+</script>
 </html>

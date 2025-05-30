@@ -40,7 +40,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">
                     <div class="card-body text-center">
-                        <a class="nav-link" href="vendedor.php" class="text-white">
+                        <a class="nav-link" href="crear_vendedores.php" class="text-white">
                             <h5 class="card-title">Vendedor</h5> 
                             <i class="bi bi-person-fill"></i>
                         </a>
@@ -50,7 +50,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">
                     <div class="card-body text-center">
-                        <a class="nav-link" href="acudientes.php" class="text-white">
+                        <a class="nav-link" href="crear_acudientes.php" class="text-white">
                             <h5 class="card-title">Acudientes</h5> 
                             <i class="bi bi-person-fill"></i>
                         </a>
@@ -60,7 +60,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">
                     <div class="card-body text-center">
-                        <a class="nav-link" href="estudiantes.php" class="text-white">
+                        <a class="nav-link" href="crear_estudiantes.php" class="text-white">
                             <h5 class="card-title">Estudiantes</h5>
                             <i class="bi bi-person-fill"></i>
                         </a>

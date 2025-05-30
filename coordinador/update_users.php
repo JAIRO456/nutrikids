@@ -170,50 +170,6 @@
                                 <a href="../usuarios.php" class="btn btn-secondary mt-3">Cancelar</a>
                             </div>
                         </div>
-
-                        <h3 class="text-center mb-4">Información de los Estudiantes</h3>
-                        <?php foreach ($estudiantes as $estudiante): ?>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="documento_est" class="form-label">Documento del Estudiante</label>
-                                    <input type="text" class="form-control" id="documento_est" name="documento_est" value="<?php echo $estudiante['documento_est']; ?>" readonly>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="nombre_est" class="form-label">Nombre del Estudiante</label>
-                                    <input type="text" class="form-control" id="nombre_est" name="nombre_est" value="<?php echo $estudiante['nombre_est']; ?>" readonly>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="apellido_est" class="form-label">Apellido del Estudiante</label>
-                                    <input type="text" class="form-control" id="apellido_est" name="apellido_est" value="<?php echo $estudiante['apellido_est']; ?>" readonly>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="telefono_est" class="form-label">Teléfono del Estudiante</label>
-                                    <input type="text" class="form-control" id="telefono_est" name="telefono_est" value="<?php echo $estudiante['telefono_est']; ?>" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="email_est" class="form-label">Correo Electrónico del Estudiante</label>
-                                    <input type="email" class="form-control" id="email_est" name="email_est" value="<?php echo $estudiante['email_est']; ?>" readonly>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="id_estado_est" class="form-label">Estado</label>
-                                    <select class="form-select" id="id_estado_est" name="id_estado_est" required>
-                                        <option value="<?php echo $estudiante['id_estado']; ?>"><?php echo $estudiante['estado']; ?></option>
-                                        <?php
-                                            $sqlEstados = $con->prepare("SELECT * FROM estados WHERE id_estado != ?");
-                                            $sqlEstados->execute([$estudiante['id_estado']]);
-                                            $estados = $sqlEstados->fetchAll();
-                                            foreach ($estados as $estado) {
-                                                echo "<option value='{$estado['id_estado']}'>{$estado['estado']}</option>";
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
                     </form>
                 </div>
             </div>

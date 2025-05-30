@@ -38,11 +38,10 @@
                     <table class="table table-bordered table-striped">
                         <thead class="table-dark">
                             <tr>
-                                <th>Imagen</th>
+                                <th class="d-none d-sm-table-cell">Imagen</th>
                                 <th>Documento</th>
-                                <th>Apellidos</th>
-                                <th>Nombres</th>
-                                <th>Correo</th>
+                                <th>Nombre</th>
+                                <th class="d-none d-sm-table-cell">Correo</th>
                                 <th>Escuela</th>
                                 <th>Acciones</th>
                             </tr>
@@ -68,11 +67,10 @@
                     data.forEach(admin => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td><img src="../users/${admin.imagen}" alt="Imagen" width="50"></td>
+                            <td class="d-none d-sm-table-cell"><img class="d-none d-sm-table-cell" src="../users/${admin.imagen}" alt="Imagen" width="50"></td>
                             <td>${admin.documento}</td>
-                            <td>${admin.apellido}</td>
-                            <td>${admin.nombre}</td>
-                            <td>${admin.email}</td>
+                            <td>${admin.apellido} ${admin.nombre}</td>
+                            <td class="d-none d-sm-table-cell">${admin.email}</td>
                             <td>${admin.nombre_escuela}</td>
                             <td>
                                 <a class='btn btn-primary' href="directores/update_admin.php?id=${admin.documento}"><i class="bi bi-pencil-square"></i></a>
@@ -93,5 +91,5 @@
         document.addEventListener('DOMContentLoaded', function () {
             getAdmins();
         });
-    </script>
+    </script> 
 </html>
