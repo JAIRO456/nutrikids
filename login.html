@@ -7,6 +7,47 @@
     <link rel="icon" href="img/logo-nutrikids2.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Login</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+        }
+        .modal-content button {
+            margin-top: 10px;
+        }
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .spinner {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+        }
+    </style>
 </head>
 <body onload="document.form1.documento.focus()">
     <header class="container-header">
@@ -21,14 +62,14 @@
             <p class="subtitle">
                 "Elige sabiamente para garantizar el bienestar y el futuro de tus hijos, tomando decisiones que les brinden un ambiente seguro, amoroso y lleno de oportunidades para su desarrollo integral."
             </p>
-            <form action="include/validate_login.php" method="post" name="form1" id="form1" class="form1" autocomplete="off">
+            <form action="" method="post" name="form1" id="form1" class="form1" autocomplete="on">
                 <div class="x_grupo" id="x_documento">
                     <label for="documento">Usuario</label>
                     <div class="x_input">
                         <input type="number" id="documento" name="documento" placeholder="Ingrese su documento">
                         <i class="form_estado bi bi-exclamation-circle-fill"></i>
                     </div>
-                    <p class="x_typerror">Documento inválido</p>
+                    <p class="x_typerror" id='x_typerror'>Documento inválido</p>
                 </div>
 
                 <div class="x_grupo" id="x_password">
@@ -37,7 +78,7 @@
                         <input type="password" id="password" name="password" placeholder="Ingrese tu contraseña">
                         <i class="bi bi-eye-slash" id="togglePassword" style="position:absolute; right:36px; top:50%; transform:translateY(-50%); font-size:1.3rem; color:#888; cursor:pointer;"></i>
                     </div>
-                    <p class="x_typerror">Contraseña inválida</p>
+                    <p class="x_typerror" id='x_typerror'>Contraseña inválida</p>
                 </div>
                 
                 <dialog id="termsDialog" style="max-width: 800px; margin: 40px auto; padding: 20px; background: #fffbe7; border-radius: 8px;">
@@ -59,10 +100,13 @@
 
                 <div class="x_grupo" id="x_terms">
                     <label>
-                        <input type="checkbox" id="terms" name="terms" required>
+                        <input type="checkbox" id="terms" name="terms">
                         Acepto los <a href="#" onclick="document.getElementById('termsDialog').showModal()">términos y condiciones</a>
                     </label>
-                    <p class="x_typerror">Debe aceptar los términos y condiciones</p>
+                    <p class="x_typerror" id="termsError" style="display:none; color:#d9534f; font-size:1rem;">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        Debe aceptar los términos y condiciones
+                    </p>
                 </div>
 
                 <div class="form1-buttons">
@@ -78,6 +122,22 @@
                 </div>
             </form>
         </div>
+        <div class="loading" id="loading">
+            <div class="spinner">
+                <p id="okMessage">
+                    
+                </p>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <p id="errorMessage">
+
+                </p>
+                <button onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
     </main>
 
     <script src="validate/validar.js"></script>
@@ -87,17 +147,80 @@
         const togglePassword = document.getElementById('togglePassword');
 
         togglePassword.addEventListener('click', function() {
-          if (passwordInput.type === 'password') {
-              passwordInput.type = 'text';
-              togglePassword.classList.remove('bi-eye-slash');
-              togglePassword.classList.add('bi-eye');
-          } 
-          else {
-              passwordInput.type = 'password';
-              togglePassword.classList.remove('bi-eye');
-              togglePassword.classList.add('bi-eye-slash');
-          }
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                togglePassword.classList.remove('bi-eye-slash');
+                togglePassword.classList.add('bi-eye');
+            } 
+            else {
+                passwordInput.type = 'password';
+                togglePassword.classList.remove('bi-eye');
+                togglePassword.classList.add('bi-eye-slash');
+            }
         });
+
+        const errorModal = document.getElementById('errorModal');
+        const errorMessage = document.getElementById('errorMessage');
+        const loading = document.getElementById('loading');
+        const okMessage = document.getElementById('okMessage');
+
+        document.getElementById('form1').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loading.style.display = 'none'; 
+            const documento = document.getElementById('documento').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const terms = document.getElementById('terms').checked;
+
+            document.getElementById('termsError').style.display = 'none';
+
+            if (!terms) {
+                document.getElementById('termsError').style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('include/validate_login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `documento=${encodeURIComponent(documento)}&password=${encodeURIComponent(password)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Mostrar ícono de carga y mensaje de éxito, luego redirigir después de 3 segundos
+                    loading.style.display = 'block';
+                    showModal('Login exitoso, redirigiendo...');
+                    setTimeout(() => {
+                        if (result.redirect) {
+                            window.location.href = result.redirect;
+                        }
+                    }, 3000);
+                    loading.style.display = 'none';
+                } 
+                else {
+                    showModal(result.message);
+                }
+            } 
+            catch (error) {
+                showErrorModal('Error de conexión. Por favor, intenta de nuevo.');
+                loading.style.display = 'none';
+            }
+        });
+
+        function showModal(message) {
+            errorMessage.textContent = message;
+            errorModal.style.display = 'flex';
+        }
+        function showModalok(messageok) {
+            okMessage.textContent = messageok;
+            loading.style.display = 'flex';
+        }
+        function closeModal() {
+            errorModal.style.display = 'none';
+        }
     </script>
 </body>
 </html>

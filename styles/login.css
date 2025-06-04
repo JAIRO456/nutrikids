@@ -126,11 +126,16 @@ body {
 }
 
 .x_typerror {
+    display: none;
+}
+
+.x_typerror-block {
     color: #bb2929;
     font-size: 0.95rem;
     margin-top: 4px;
     display: block;
 }
+
 
 .x_grupo-incorrecto .x_input input {
     border: 2px solid #bb2929;

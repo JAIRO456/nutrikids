@@ -19,7 +19,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <main class="container mt-4">
+    <main class="container mt-2">
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">

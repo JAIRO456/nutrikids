@@ -4,7 +4,7 @@
     $conex = new Database;
     $con = $conex->conectar();
 
-    $sqlUserNew = $con -> prepare("SELECT nombre, apellido, email FROM usuarios ORDER BY documento DESC LIMIT 5");
+    $sqlUserNew = $con -> prepare("SELECT documento, nombre, apellido, email FROM usuarios ORDER BY documento ASC LIMIT 10");
     $sqlUserNew -> execute();
 
     $listUsers = [];

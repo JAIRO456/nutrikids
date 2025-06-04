@@ -23,32 +23,38 @@
         <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center mb-3">Escuelas</h2>
                     <div class="row mb-1">
                         <div class="col-md-6">
                             <a href="escuelas/crear_escuela.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Escuela</a>
                         </div>
                         <div class="col-md-6">
                             <form id="search-form" class="d-flex">
-                                <input class="form-control me-2" type="search" placeholder="Buscar licencia..." aria-label="Buscar" id="search-input">
+                                <input class="form-control me-2" type="search" placeholder="Buscar escuela..." aria-label="Buscar" id="search-input">
                                 <button class="btn btn-outline-success" type="submit">Buscar</button>
                             </form>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped text-center">
-                        <thead class="table-dark">
-                            <tr>
-                                <th class="d-none d-sm-table-cell">Imagen</th>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
+                    <div class="card shadow mt-1">
+                        <div class="card-header">
+                            <h4 class='text-center'>Escuelas</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table" id="table-schools">
+                                <thead class='text-center'>
+                                    <tr>
+                                        <th class="d-none d-sm-table-cell">Imagen</th>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Correo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body" class='text-center'>
 
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

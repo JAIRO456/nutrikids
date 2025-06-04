@@ -23,10 +23,11 @@
         <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center mb-3">Directores</h2>
                     <div class="row mb-1">
                         <div class="col-md-6">
                             <a href="directores/crear_admin.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Director</a>
+                            <a href="directores/pdf.php" class='btn btn-danger'><i class="bi bi-file-earmark-pdf-fill"></i> PDF</a>
+                            <button onclick="window.location.href='directores/excel.php'" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i> Excel</button>
                         </div>
                         <div class="col-md-6">
                             <form id="search-form" class="d-flex">
@@ -35,21 +36,46 @@
                             </form>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th class="d-none d-sm-table-cell">Imagen</th>
-                                <th>Documento</th>
-                                <th>Nombre</th>
-                                <th class="d-none d-sm-table-cell">Correo</th>
-                                <th>Escuela</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            
-                        </tbody>
-                    </table>
+
+                    <div class="card shadow mt-1">
+                        <div class="card-header">
+                            <h4 class='text-center'>Directores</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table" id="table-users">
+                                <thead>
+                                    <tr>
+                                        <th class="d-none d-sm-table-cell">Imagen</th>
+                                        <th>Documento</th>
+                                        <th>Nombres</th>
+                                        <th>Apellidos</th>
+                                        <th class="d-none d-sm-table-cell">Correo</th>
+                                        <th>Escuela</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <nav aria-label="...">
+                      <ul class="pagination">
+                        <li class="page-item disabled">
+                          <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item active">
+                          <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                          <a class="page-link" href="#">Next</a>
+                        </li>
+                      </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -69,7 +95,8 @@
                         row.innerHTML = `
                             <td class="d-none d-sm-table-cell"><img class="d-none d-sm-table-cell" src="../users/${admin.imagen}" alt="Imagen" width="50"></td>
                             <td>${admin.documento}</td>
-                            <td>${admin.apellido} ${admin.nombre}</td>
+                            <td>${admin.nombre}</td>
+                            <td>${admin.apellido}</td>
                             <td class="d-none d-sm-table-cell">${admin.email}</td>
                             <td>${admin.nombre_escuela}</td>
                             <td>

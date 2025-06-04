@@ -1,4 +1,4 @@
-<?php
+ <?php
     session_start();
     require_once('../conex/conex.php');
     $conex = new Database;

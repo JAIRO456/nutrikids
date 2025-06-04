@@ -1,38 +1,30 @@
 <?php
-session_start();
-require_once('../conex/conex.php');
-require_once('../include/validate_sesion.php');
-$conex = new Database;
-$con = $conex->conectar();
+    session_start();
+    require_once('../conex/conex.php');
+    require_once('../include/validate_sesion.php');
+    $conex = new Database;
+    $con = $conex->conectar();  
 
-include 'menu.php';
+    include 'menu.php';    
 
-$productos = [];
-$categoria_nombre = "";
+    $productos = [];
+    $categoria_nombre = ""; 
 
-// Si viene por POST, redirecciona a GET (para evitar el reenvío del formulario)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_categoria'])) {
-    $id_categoria = $_POST['id_categoria'];
-    header("Location: productos.php?id_categoria=" . urlencode($id_categoria));
-    exit;
-}
+    if (isset($_GET['id_categoria'])) {
+        $id_categoria = $_GET['id_categoria'];  
 
-// Si viene por GET, carga los productos normalmente
-if (isset($_GET['id_categoria'])) {
-    $id_categoria = $_GET['id_categoria'];
+        // Obtener los productos de la categoría seleccionada
+        $query_productos = $con->prepare("SELECT * FROM producto WHERE id_categoria = :id_categoria");
+        $query_productos->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+        $query_productos->execute();
+        $productos = $query_productos->fetchAll(PDO::FETCH_ASSOC);  
 
-    // Obtener los productos de la categoría seleccionada
-    $query_productos = $con->prepare("SELECT * FROM producto WHERE id_categoria = :id_categoria");
-    $query_productos->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
-    $query_productos->execute();
-    $productos = $query_productos->fetchAll(PDO::FETCH_ASSOC);
-
-    // Obtener el nombre de la categoría
-    $query_categoria = $con->prepare("SELECT categoria FROM categorias WHERE id_categoria = :id_categoria");
-    $query_categoria->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
-    $query_categoria->execute();
-    $categoria_nombre = $query_categoria->fetchColumn();
-}
+        // Obtener el nombre de la categoría
+        $query_categoria = $con->prepare("SELECT categoria FROM categorias WHERE id_categoria = :id_categoria");
+        $query_categoria->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+        $query_categoria->execute();
+        $categoria_nombre = $query_categoria->fetchColumn();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -64,23 +56,25 @@ if (isset($_GET['id_categoria'])) {
     </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h1>Productos de la categoría: <?php echo htmlspecialchars($categoria_nombre); ?></h1>
-    <div class="row">
-        <?php if (!empty($productos)): ?>
-            <?php foreach ($productos as $producto): ?>
-                <div class="col-md-3 product-card">
-                    <a href="especificacione_produ.php?id_producto=<?php echo $producto['id_producto']; ?>" style="text-decoration:none; color:inherit;">
-                        <img src="../img/products/<?php echo $producto['imagen_prod']; ?>" alt="<?php echo $producto['nombre_prod']; ?>">
-                        <h3><?php echo $producto['nombre_prod']; ?></h3>
-                        <p>$<?php echo number_format($producto['precio'], 2); ?></p>
-                    </a>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No hay productos disponibles para esta categoría.</p>
-        <?php endif; ?>
-    </div>
-</div>
+    <main class="container mt-2">
+        <a href="categorias.php" class="btn btn-secondary mb-3">Regresar</a>
+        <h3 class='text-center'>Productos de la categoría: <br><?php echo htmlspecialchars($categoria_nombre); ?></h1>
+        <div class="row">
+            <?php if (!empty($productos)): ?>
+                <?php foreach ($productos as $producto): ?>
+                    <div class="col-md-3 product-card">
+                        <a href="especificacione_produ.php?id_producto=<?php echo $producto['id_producto']; ?>" style="text-decoration:none; color:inherit;">
+                            <img src="../img/products/<?php echo htmlspecialchars($producto['imagen_prod']); ?>" alt="<?php echo htmlspecialchars($producto['nombre_prod']); ?>">
+                            <h3><?php echo htmlspecialchars($producto['nombre_prod']); ?></h3>
+                            <p>$<?php echo number_format($producto['precio'], 2); ?></p>
+                        </a>
+
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No hay productos disponibles para esta categoría.</p>
+            <?php endif; ?>
+        </div>
+    </main>
 </body>
 </html>

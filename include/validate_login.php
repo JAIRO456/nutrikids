@@ -4,18 +4,22 @@
     $conex =new Database;
     $con = $conex->conectar();
 
-    if (isset($_POST['enviar'])){
-        $documento = $_POST['documento'];
-        $password = $_POST['password'];
+    header('Content-Type: application/json');
+
+    $response = ['success' => false, 'message' => '', 'redirect' => ''];
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $documento = isset($_POST['documento']) ? trim($_POST['documento']) : '';
+        $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
         if (empty($documento) || empty($password)) {
-            echo '<script>alert("Existen datos vacíos")</script>';
-            echo '<script>window.location = "../login.html"</script>';
+            $response['message'] = 'Existen datos vacíos';
+            echo json_encode($response);
             exit();
-        }
+        } 
         elseif (!is_numeric($documento)) {
-            echo "<script>alert('Tipo de dato no requerido, en el Documento')</script>";
-            echo '<script>window.location = "../login.html"</script>';
+            $response['message'] = 'Tipo de dato no requerido, en el Documento';
+            echo json_encode($response);
             exit();
         } 
         else {
@@ -29,44 +33,50 @@
                 $_SESSION['rol'] = $u['id_rol'];
                 $_SESSION['estate'] = $u['id_estado'];
 
-                    if($_SESSION['rol'] == 1){
-                        header("Location: ../admin/inicio.php");
-                        exit();
-                    }
-                    if($_SESSION['rol'] == 2 && $_SESSION['estate'] == 1){
-                        header("Location: ../coordinador/inicio.php");
-                        exit();
-                    }
-                    if($_SESSION['rol'] == 3 && $_SESSION['estate'] == 1){
-                        header("Location: ../vendedor/inicio.php");
-                        exit();
-                    }
-                    if($_SESSION['rol'] == 4 && $_SESSION['estate'] == 1){
-                        header("Location: ../acudiente/inicio.php");
-                        exit();
-                    }
-            }
+                $response['success'] = true;
+                $response['message'] = 'Login exitoso';
 
-            // si el usuario existe, pero está inactivo
+                if ($_SESSION['rol'] == 1) {
+                    $response['message'] = 'Login exitoso';
+                    $response['redirect'] = '../nutrikids/admin/inicio.php';
+                } 
+                elseif ($_SESSION['rol'] == 2 && $_SESSION['estate'] == 1) {
+                    $response['message'] = 'Login exitoso';
+                    $response['redirect'] = '../nutrikids/coordinador/inicio.php';
+                } 
+                elseif ($_SESSION['rol'] == 3 && $_SESSION['estate'] == 1) {
+                    $response['message'] = 'Login exitoso';
+                    $response['redirect'] = '../nutrikids/vendedor/inicio.php';
+                } 
+                elseif ($_SESSION['rol'] == 4 && $_SESSION['estate'] == 1) {
+                    $response['message'] = 'Login exitoso';
+                    $response['redirect'] = '../nutrikids/acudiente/inicio.php';
+                }
+                echo json_encode($response);
+                exit();
+            }
+            // Si el usuario existe, pero está inactivo
             if ($u && ($u["id_estado"] == 2)) {
-                echo '<script>alert("Usuario inactivo")</script>';
-                echo '<script>window.location = "../login.html"</script>';
+                $response['message'] = 'Usuario inactivo';
+                echo json_encode($response);
                 exit();
             }
-
-            // si el usuario existe, pero la contraseña no es correcta
+            // Si el usuario existe, pero la contraseña no es correcta
             if ($u && !password_verify($password_descr, $u["password"])) {
-                echo '<script>alert("La contraseña es incorrecta")</script>';
-                echo '<script>window.location = "../login.html"</script>';
+                $response['message'] = 'La contraseña es incorrecta';
+                echo json_encode($response);
                 exit();
             }
-            
-            // si el usuario no existe
-            if (!$u) {
-                echo '<script>alert("El usuario no existe")</script>';
-                echo '<script>window.location = "../login.html"</script>';
+            // Si el usuario no existe
+            else {
+                $response['message'] = 'El usuario no existe';
+                echo json_encode($response);
                 exit();
-            }   
+            }  
         }
+    }
+    else {
+        $response['message'] = 'Método no permitido';
+        echo json_encode($response);
     }
 ?>

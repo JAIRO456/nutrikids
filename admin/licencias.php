@@ -23,7 +23,6 @@
         <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center mb-3">Licencias</h2>
                     <div class="row mb-1">
                         <div class="col-md-6">
                             <a href="licencias/crear_licencia.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Licencia</a>
@@ -46,22 +45,29 @@
                             </form>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped text-center">
-                        <thead class="table-dark">
-                            <tr>
-                                <th class="d-none d-sm-table-cell">Code</th>
-                                <th>Nombre</th>
-                                <th>Fecha Inicio</th>
-                                <th>Fecha Fin</th>
-                                <th>Escuela</th>
-                                <!-- <th>Estado</th> -->
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
+                    <div class="card shadow mt-1">
+                        <div class="card-header">
+                            <h4 class='text-center'>Licencias</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table" id="table-licences">
+                                <thead class='text-center'>
+                                    <tr>
+                                        <th class="d-none d-sm-table-cell">Code</th>
+                                        <th>Nombre</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Fin</th>
+                                        <th>Escuela</th>
+                                        <!-- <th>Estado</th> -->
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body" class='text-center'>
 
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -12,8 +12,7 @@ $productos = [];
 $ventas = [];
 $calorias = [];
 
-$sql = $con->query("
-    SELECT p.nombre_prod, 
+$sql = $con->query("SELECT p.nombre_prod, 
            SUM(dpp.cantidad) AS total_vendidos,
            n.calorias
       FROM producto p

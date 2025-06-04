@@ -56,7 +56,7 @@ const state = (expres, input, x) => {
     document.querySelector(`#x_${x} i`).classList.remove('bi-exclamation-circle-fill');
     document.querySelector(`#x_${x} i`).classList.add('bi-check-circle-fill');
     document.querySelector(`#x_${x} .x_typerror`).classList.remove('x_typerror-block');
-    campos[x] = true;
+    campos[x] = false;
     } 
     else {
     document.getElementById(`x_${x}`).classList.add('x_grupo-incorrecto');
@@ -64,7 +64,7 @@ const state = (expres, input, x) => {
     document.querySelector(`#x_${x} i`).classList.add('bi-exclamation-circle-fill');
     document.querySelector(`#x_${x} i`).classList.remove('bi-check-circle-fill');
     document.querySelector(`#x_${x} .x_typerror`).classList.add('x_typerror-block');
-    campos[x] = false;
+    campos[x] = true;
     }
 }
 

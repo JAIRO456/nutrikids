@@ -6,12 +6,12 @@
     $con = $conex->conectar();
 
     include 'menu.php';
+    include 'carrito.php';
 
     $id_categoria = $_GET['id_categoria'];
-    $sqlProduts = $con -> prepare("SELECT id_producto, nombre_prod, precio, imagen_prod FROM producto
-    WHERE id_categoria = ?");
-    $sqlProduts -> execute([$id_categoria]);
-    $Produts = $sqlProduts -> fetchALL(PDO::FETCH_ASSOC);
+    $query_categoria = $con->prepare("SELECT categoria FROM categorias WHERE id_categoria = ?");
+    $query_categoria->execute([$id_categoria]);
+    $categoria = $query_categoria -> fetch();
 ?>
 
 <!DOCTYPE html>
@@ -24,69 +24,85 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        .container-products {
-            width: 200px;
-            height: 200px;
-            position: relative;
+        .product-card {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
         }
-        .container-name {
-            position: absolute;
-            top: 0%;
-            left: 0%;
-            width: 100%;
-            height: 100%;
-            background: none;
-            color: white;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
+        .product-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
         }
-        .container-products:hover .container-name {
-            background-color: rgba(0, 0, 0, 0.5);
-            transition: opacity 0.3s ease;
-            display: flex;
-            cursor: pointer;
+        .product-card h3 {
+            margin-top: 10px;
+            font-size: 18px;
         }
+        .product-card p {
+            font-size: 16px;
+        }
+
     </style>
 </head>
 <body>
-    <main class="container mt-4">
-        <?php if (empty($Produts)) { ?>
-            <div class="alert alert-info">No hay Productos para esta categoria</div>
-        <?php } else { ?>
-        <?= include 'carrito.php'; ?>
-        <div class="carrito mt-4" id="modal">
-            <button type="submit" class="btn btn-danger">
-                <i class="bi bi-cart-fill"></i>
-            </button>
+    <main class="container mt-2">
+        <a href="categorias.php" class="btn btn-secondary mb-1">Regresar</a>
+        <h3 class='text-center'>Productos de la categoría: <br><?= $categoria['categoria']; ?></h1>
+        <div class="row mb-1 justify-content-end">
+            <div class="col-md-6">
+                <form id="search-form" class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Buscar producto..." aria-label="Buscar" id="search-input">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+            </div>
         </div>
-        <div class="row">
-            <?php foreach ($Produts as $Produt) { ?>
-                <div class="col-md-3 mb-3" id="producto">
-                    <div class="container-products card">
-                        <img src="../img/products/<?= $Produt['imagen_prod']; ?>" class="card-img-top" alt="<?= $Produt['nombre_prod']; ?>" width="100%" height="100%">
-                        <div class="container-name card-body d-flex justify-content-center">
-                            <a href="productos.php?id_producto=<?= $Produt['id_producto']; ?>" class="btn">
-                                <h5 class="card-title"><?= $Produt['nombre_prod']; ?></h5>
-                                <h6 class="card-title"><?= $Produt['precio']; ?></h6>
-                            </a>
-                        </div>
-                        <button type="button" onclick="agregarProducto(<?= $Produt['id_producto']; ?>, '<?= $Produt['nombre_prod']; ?>', '<?= $Produt['precio']; ?>')" class="btn btn-primary">Agregar</button>
-                    </div>
-                </div>
-            <?php }} ?>
+        <div class="row justify-content-center" id='produts'>
+
         </div>
-    </main>
-</body>
-<html>
+        </main>
+    </body>
+    <html>
+    <!-- <p>No hay productos disponibles para esta categoría.</p> -->
 <script>
-    document.getElementById('modal').addEventListener('click', function () {
-            actualizarCarrito();
-            document.querySelector('.container-modal').style.display = 'block';
+    const urlParams = new URLSearchParams(window.location.search);
+    const id_categoria = urlParams.get('id_categoria');
+    
+    function getProdutos() {
+        fetch('../ajax/get_search_products.php?search=' + encodeURIComponent(document.getElementById('search-input').value) + 
+                '&id_categoria=' + id_categoria)
+            .then(response => response.json())
+            .then(data => {
+                const div = document.getElementById('produts');
+                div.innerHTML = '';
+
+                data.forEach(product => {
+                    const row = document.createElement('div');
+                    row.className = 'col-md-2';
+                    row.classList.add('product-card');
+                    row.style.width = '250px';
+                    row.innerHTML = `
+                        <a href="informacion_nutricional.php?id_producto=${product.id_producto}" style="text-decoration:none; color:inherit;">
+                            <img src="../img/products/${product.imagen_prod}" alt="${product.nombre_prod}">
+                            <h3>${product.nombre_prod}</h3>
+                            <p>${product.precio}</p>
+                        </a>
+                        <button type="button" onclick="agregarProducto(${product.id_producto}, '${product.nombre_prod}', '${product.precio}')" class="btn btn-primary">Agregar</button>
+                    `;
+                    div.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error al obtener los produtos:', error));
+    }
+    // Manejar el evento de búsqueda
+    document.getElementById('search-form').addEventListener('submit', function (e) {
+        e.preventDefault(); // Evitar el envío del formulario
+        getProdutos(); // Llamar a la función para obtener los produtos
     });
-    document.getElementById('close').addEventListener('click', function () {
-        document.querySelector('.container-modal').style.display = 'none';
+    // Cargar produtos al inicio
+    document.addEventListener('DOMContentLoaded', function () {
+        getProdutos();
     });
 </script>
 </html>

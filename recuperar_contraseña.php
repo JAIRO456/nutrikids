@@ -29,7 +29,7 @@
 
                 <div class="form1-buttons">
                     <button type="submit">ENVIAR</button>
-                    <button type="button" class="btn red" onclick="window.location.href='login.php'">CANCELAR</button>
+                    <button type="button" class="btn red" onclick="window.location.href='login.html'">CANCELAR</button>
                 </div>
             </form>
             <div style="text-align:center; margin-top: 18px;">

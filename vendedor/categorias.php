@@ -1,16 +1,15 @@
 <?php
     session_start();
     require_once('../conex/conex.php');
-    $conex = new Database;
+    require_once('../include/validate_sesion.php');
+    $conex =new Database;
     $con = $conex->conectar();
 
-    // Suponiendo que tienes una consulta para obtener las categorías
-    $categorias = [];
-    $stmt = $con->prepare("SELECT * FROM categorias");
-    $stmt->execute();
-    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     include 'menu.php';
+
+    $sqlCategories = $con -> prepare("SELECT * FROM categorias");
+    $sqlCategories -> execute();
+    $Categories = $sqlCategories -> fetchALL(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -18,85 +17,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriKids - Categorías</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        body {
-            font-family: 'Poppins', Arial, sans-serif; 
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa; 
-        }
-        .container-div-footer {
-            margin-top: 40px;
-        }
-        .login-card {
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            padding: 30px;
-            max-width: 900px;
-            margin: 40px auto;
-        }
-        .category-card {
-            margin-bottom: 30px;
-        }
-        .category-card button {
-            background: none;
-            border: none;
-            padding: 0;
-            width: 100%;
-            text-align: center;
-        }
-        .category-card img {
-            width: 100%;
-            max-width: 180px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            transition: transform 0.2s;
-        }
-        .category-card button:hover img {
-            transform: scale(1.05);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
-        }
-        .category-card h3 {
-            font-size: 1.2rem;
-            color: #4caf50;
-            margin-bottom: 0;
-        }
-        .btn-success {
-            background-color: #4caf50;
-            border: none;
-        }
-        .btn-success:hover {
-            background-color: #388e3c;
-        }
-    </style>
+    <!-- <title>Panel Admin</title> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
-    <div class="container mt-5 login-card">
-        <h1 class="mb-4">Categorías</h1>
-        <div class="mb-4">
-            <a href="crear_producto.php" class="btn btn-success">
-                <i class="bi bi-plus-circle"></i> Crear Producto
-            </a>
-        </div>
-        <form method="POST" action="productos.php">
-            <div class="row">
-                <?php foreach ($categorias as $categoria): ?>
-                    <div class="col-md-3 category-card">
-                        <button type="submit" name="id_categoria" value="<?php echo $categoria['id_categoria']; ?>" class="btn btn-link">
-                            <img src="../img/categories/<?php echo $categoria['imagen']; ?>" alt="<?php echo $categoria['categoria']; ?>">
-                            <h3><?php echo $categoria['categoria']; ?></h3>
-                        </button>
+    <main class="container mt-2">
+        <h1 class="mb-4 text-center">Categorías</h1>
+        <div class="row">
+            <?php foreach ($Categories as $Category) { ?>
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="../img/categories/<?= $Category['imagen']; ?>" class="card-img-top" alt="<?= $Category['categoria']; ?>" width="300" height="200">
+                        <div class="card-body d-flex justify-content-center">
+                            <a href="productos.php?id_categoria=<?= $Category['id_categoria']; ?>" class="btn btn-primary">
+                                <h5 class="card-title"><?= $Category['categoria']; ?></h5>
+                            </a>
+                        </div>
                     </div>
-                <?php endforeach; ?>
-            </div>
-        </form>
-    </div>
+                </div>
+            <?php } ?>
+        </div>
+    </main>
 </body>
 </html>

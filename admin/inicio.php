@@ -6,6 +6,11 @@
     $con = $conex->conectar();
 
     include 'menu.php';
+
+    $sqlInfoNutriconal = $con -> prepare("SELECT SUM(calorias) AS total_cal, SUM(proteinas) AS total_pro, SUM(carbohidratos) AS total_car,
+    SUM(grasas) AS total_gras, SUM(azucares) AS total_azu, SUM(sodio) AS total_sod FROM informacion_nutricional");
+    $sqlInfoNutriconal -> execute();
+    $InfoNutric = $sqlInfoNutriconal -> fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -15,14 +20,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INICIO</title>
     <link rel="stylesheet" href="../styles/inicio.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f3f4f6;
+        }
+    </style>
 </head>
 <body>
-    <main class="container mt-4">
+    <main class="container mt-2" style='background-color: #f3f4f6;'>
         <div class="row">
             <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
+                <div class="card text-white bg-danger shadow">
                     <div class="card-body">
                         <h5 class="card-title">Directores</h5>
                         <p class="card-text display-4" id='TotalUsers'>
@@ -32,7 +48,7 @@
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
+                <div class="card text-white bg-danger shadow">
                     <div class="card-body">
                         <h5 class="card-title">Licencias Activas</h5>
                         <p class="card-text display-4" id='TotalLicencias'>
@@ -42,7 +58,7 @@
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
+                <div class="card text-white bg-danger shadow">
                     <div class="card-body">
                         <h5 class="card-title">Escuelas</h5>
                         <p class="card-text display-4" id='TotalSchools'>
@@ -52,7 +68,7 @@
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
+                <div class="card text-white bg-danger shadow">
                     <div class="card-body">
                         <h5 class="card-title">Productos</h5>
                         <p class="card-text display-4" id='TotalProducts'>
@@ -62,7 +78,16 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="bg-white p-6 rounded-lg shadow mb-4">
+            <h2 class="text-2xl font-semibold mb-2">Reportes Nutricionales</h2>
+            <div class="flex space-x-4" style='width: 500px; height: 600px;'>
+                <div class="flex-1">
+                    <h4 class="text-lg font-semibold">Distribución de Nutrientes</h4>
+                    <canvas id="nutrientChart" class="mt-4"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow">
             <div class="card-header">
                 <h4>Licencias por expirar (próximos 30 días)</h4>
             </div>
@@ -109,46 +134,79 @@
                 <?php endif; ?>
             </div>
         </div>
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center">Usuarios Recientes</h2>
-                    <table class="table table-bordered table-striped" id="table-users">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th class="d-none d-sm-table-cell">Email</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
+        <div class="card shadow mt-4">
+            <div class="card-header">
+                <h4>Usuarios Recientes</h4>
+            </div>
+            <div class="card-body">
+                <table class="table" id="table-users">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
 
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center">Productos Recientes</h2>
-                    <table class="table table-bordered table-striped" id="table-products">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Categoria</th>
-                                <th>Precio</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
+        <div class="card shadow mt-4">
+            <div class="card-header">
+                <h4>Productos Recientes</h4>
+            </div>
+            <div class="card-body">
+                <table class="table" id="table-products">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Nombre</th>
+                            <th>Categoria</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
 
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modaleditar" id="modaleditar">
+            <div class="modal-content">>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                    </div>
+                    <div class="modal-body">
+                        <?php include 'modal_user.php'; ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary">Cancelar</button>
+                        <button type="button" class="btn btn-primary">Actualizar</button>
+                    </div>
             </div>
         </div>
     </main>
 </body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Nutrient Distribution Chart
+        const nutrientChart = new Chart(document.getElementById('nutrientChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Calorias', 'Proteínas', 'Carbohidratos', 'Grasas', 'Azucares', 'Sodio'],
+                datasets: [{
+                    data: [<?= $InfoNutric['total_cal'] ?>, <?= $InfoNutric['total_pro'] ?>,  <?= $InfoNutric['total_car'] ?>, <?= $InfoNutric['total_gras'] ?>, <?= $InfoNutric['total_azu'] ?>, <?= $InfoNutric['total_sod'] ?>],
+                    backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#36A2EB', '#FF6384', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
     <script>
         function updateCounts() {
             fetch('../ajax/get_counts.php')
@@ -163,7 +221,7 @@
         }
 
         function getUsers() {
-            fetch('../ajax/get_users.php')
+            fetch('../ajax/get_users_limit.php')
                 .then(response => response.json())
                 .then(users => {
                     const tbody = document.querySelector('#table-users tbody')
@@ -172,9 +230,13 @@
                     users.forEach(user => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${user.nombre}</td>
-                            <td>${user.apellido}</td>
+                            <td>${user.documento}</td>
+                            <td>${user.nombre} ${user.apellido}</td>
                             <td class="d-none d-sm-table-cell">${user.email}</td>
+                            <td>
+                                <a class='btn btn-primary' href="directores/update_admin.php?id=${user.documento}"><i class="bi bi-pencil-square"></i></a>
+                                <a class='btn btn-danger' href="directores/delete_admin.php?id=${user.documento}"><i class="bi bi-trash"></i></a>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -183,7 +245,7 @@
         }
 
         function getProducts() {
-            fetch('../ajax/get_products.php')
+            fetch('../ajax/get_products_limit.php')
                 .then(response => response.json())
                 .then(products => {
                     const tbody = document.querySelector('#table-products tbody')
@@ -192,9 +254,9 @@
                     products.forEach(product => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
+                            <td>${product.id_producto}</td>
                             <td>${product.nombre_prod}</td>
                             <td>${product.categoria}</td>
-                            <td>${product.precio}</td>
                         `;
                         tbody.appendChild(tr);
                     });

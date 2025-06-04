@@ -8,10 +8,16 @@
     include 'menu.php';
 
     $doc = $_SESSION['documento'];
-    $sqlStudent = $con -> prepare("SELECT estudiantes.nombre, estudiantes.apellido, estudiantes.documento_est, estudiantes.imagen FROM detalles_estudiantes_escuela INNER JOIN estudiantes ON detalles_estudiantes_escuela.documento_est = estudiantes.documento_est
+    $sqlStudent = $con -> prepare("SELECT estudiantes.nombre, estudiantes.apellido, estudiantes.documento_est, estudiantes.imagen FROM estudiantes 
     INNER JOIN usuarios ON estudiantes.documento = usuarios.documento WHERE usuarios.documento = ?");
     $sqlStudent -> execute([$doc]);
     $Students = $sqlStudent -> fetchAll(PDO::FETCH_ASSOC);
+
+    if (count($Students) === 1) {
+        $student = $Students[0];
+        header("Location: pedidos.php?id_estudiante=" . urlencode($student['documento_est']));
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>

@@ -6,6 +6,7 @@
     $con = $conex->conectar();
 
     include 'menu.php';
+    include 'carrito.php';
 
     $sqlCategories = $con -> prepare("SELECT * FROM categorias");
     $sqlCategories -> execute();
@@ -23,10 +24,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
-    <main class="container mt-4">
+    <main class="container mt-2">
         <?php if (empty($Categories)) { ?>
             <div class="alert alert-info">No hay Categorias disponibles</div>
         <?php } else { ?>
+            
         <div class="row">
             <?php foreach ($Categories as $Category) { ?>
                 <div class="col-md-4 mb-3">

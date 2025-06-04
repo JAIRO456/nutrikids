@@ -6,7 +6,6 @@
     $con = $conex->conectar();
 
     include '../menu.php';
-
     
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_producto = rand(100000000000, 999999999999);
@@ -26,7 +25,7 @@
         $sodio = $_POST['sodio'];
 
         if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../img/products/" . $imagen);
+            move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/products/" . $imagen);
         } 
         else {
             $imagen = null;
