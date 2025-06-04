@@ -26,6 +26,8 @@
                     <div class="row mb-1">
                         <div class="col-md-6">
                             <a href="escuelas/crear_escuela.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Escuela</a>
+                            <a href="escuelas/pdf.php" class='btn btn-danger'><i class="bi bi-file-earmark-pdf-fill"></i> PDF</a>
+                            <button onclick="window.location.href='escuelas/excel.php'" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i> Excel</button>
                         </div>
                         <div class="col-md-6">
                             <form id="search-form" class="d-flex">
@@ -49,27 +51,32 @@
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody id="table-body" class='text-center'>
-
-                                </tbody>
+                                <tbody id="table-body" class='text-center'></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+                <nav aria-label="Page navigation" class="mt-1">
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
+                </nav>
             </div>
         </div>
     </main>
 </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
     <script>
-        function getschools() {
-            fetch('../ajax/get_schools.php?search=' + encodeURIComponent(document.getElementById('search-input').value))
+        let currentPage = 1;
+        const perPage = 10; // Número de registros por página
+
+        function getschools(page = 1) {
+            const search = encodeURIComponent(document.getElementById('search-input').value);
+            fetch(`../ajax/get_schools.php?search=${search}&page=${page}&perPage=${perPage}`)
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('table-body');
                     tableBody.innerHTML = '';
 
-                    data.forEach(school => {
+                    data.data.forEach(school => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td class="d-none d-sm-table-cell"><img class="d-none d-sm-table-cell" src="../img/schools/${school.imagen_esc}" alt="Imagen" width="50" height="50"></td>
@@ -83,17 +90,46 @@
                         `;
                         tableBody.appendChild(row);
                     });
+                    // Generar la paginación dinámica
+                    renderPagination(data.totalPages, data.currentPage);
                 })
                 .catch(error => console.error('Error al cargar los datos:', error));
         }
+
+        function renderPagination(totalPages, currentPage) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            // Botón "Previous"
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="getAdmins(${currentPage - 1})">Previous</a>`;
+            pagination.appendChild(prevLi);
+
+            // Botones de páginas
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#" onclick="getAdmins(${i})">${i}</a>`;
+                pagination.appendChild(li);
+            }
+
+            // Botón "Next"
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="getAdmins(${currentPage + 1})">Next</a>`;
+            pagination.appendChild(nextLi);
+        }
+
         // Manejar el evento de búsqueda
         document.getElementById('search-form').addEventListener('submit', function (e) {
             e.preventDefault(); // Evitar el envío del formulario
-            getschools(); // Llamar a la función para obtener las escuelas
+            currentPage = 1; // Reiniciar a la primera página al buscar
+            getschools(currentPage); // Llamar a la función para obtener las escuelas
         });
         // Cargar la escuelas al inicio
         document.addEventListener('DOMContentLoaded', function () {
-            getschools();
+            getschools(currentPage);
         });
     </script>
 </html>

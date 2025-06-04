@@ -1,7 +1,5 @@
 <?php
-    require '../../PhpSpreadsheet/src/Spreadsheet.php';
-    require '../../PhpSpreadsheet/src/Writer/Xlsx.php';
-    require '../../PhpSpreadsheet/src/IOFactory.php';
+    require '../../libraries/PhpSpreadsheet/vendor/autoload.php';
 
     // Use the PhpSpreadsheet namespace
     use PhpOffice\PhpSpreadsheet\Spreadsheet;

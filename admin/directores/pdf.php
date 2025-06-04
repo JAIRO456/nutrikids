@@ -30,10 +30,9 @@
 // Include the main TCPDF library (search for installation path).
 session_start();
 require_once('../../conex/conex.php');
-require_once('../../TCPDF/tcpdf.php');
+require_once('../../libraries/TCPDF/tcpdf.php');
 $conex = new Database;
 $con = $conex->conectar();
-
 
 $sqlDirectores = $con->prepare("SELECT usuarios.imagen, usuarios.documento, usuarios.nombre, usuarios.apellido, usuarios.email, escuelas.nombre_escuela FROM usuarios 
 INNER JOIN roles ON usuarios.id_rol = roles.id_rol

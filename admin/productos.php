@@ -60,28 +60,33 @@
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody id="table-body" class='text-center'>
-
-                                </tbody>
+                                <tbody id="table-body" class='text-center'></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+                <nav aria-label="Page navigation" class="mt-1">
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
+                </nav>
             </div>
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
 </body>
     <script>
-        function getProdutos() {
-            fetch('../ajax/get_products.php?search=' + encodeURIComponent(document.getElementById('search-input').value) + 
-                '&category=' + encodeURIComponent(document.getElementById('category-select').value))
+        let currentPage = 1;
+        const perPage = 10; // Número de registros por página
+
+        function getProdutos(page = 1) {
+            const search = encodeURIComponent(document.getElementById('search-input').value);
+            const category = encodeURIComponent(document.getElementById('category-select').value);
+            fetch(`../ajax/get_products.php?search=${search}&category=${category}&page=${page}&perPage=${perPage}`)
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById('table-body');
                     tableBody.innerHTML = '';
 
-                    data.forEach(product => {
+                    data.data.forEach(product => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td class="d-none d-sm-table-cell">${product.id_producto}</td>
@@ -95,17 +100,46 @@
                         `;
                         tableBody.appendChild(row);
                     });
+                    // Generar la paginación dinámica
+                    renderPagination(data.totalPages, data.currentPage);
                 })
                 .catch(error => console.error('Error al obtener los produtos:', error));
         }
+
+        function renderPagination(totalPages, currentPage) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            // Botón "Previous"
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="getAdmins(${currentPage - 1})">Previous</a>`;
+            pagination.appendChild(prevLi);
+
+            // Botones de páginas
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#" onclick="getAdmins(${i})">${i}</a>`;
+                pagination.appendChild(li);
+            }
+
+            // Botón "Next"
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="getAdmins(${currentPage + 1})">Next</a>`;
+            pagination.appendChild(nextLi);
+        }
+
         // Manejar el evento de búsqueda
         document.getElementById('search-form').addEventListener('submit', function (e) {
             e.preventDefault(); // Evitar el envío del formulario
-            getProdutos(); // Llamar a la función para obtener los produtos
+            currentPage = 1; // Reiniciar a la primera página al buscar
+            getProdutos(currentPage); // Llamar a la función para obtener los produtos
         });
         // Cargar produtos al inicio
         document.addEventListener('DOMContentLoaded', function () {
-            getProdutos();
+            getProdutos(currentPage);
         });
 
         // setInterval(function () {

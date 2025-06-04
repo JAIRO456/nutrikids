@@ -83,7 +83,7 @@
             <div class="flex space-x-4" style='width: 500px; height: 600px;'>
                 <div class="flex-1">
                     <h4 class="text-lg font-semibold">Distribución de Nutrientes</h4>
-                    <canvas id="nutrientChart" class="mt-4"></canvas>
+                    <canvas id="nutrient" class="mt-4"></canvas>
                 </div>
             </div>
         </div>
@@ -174,26 +174,13 @@
                 </table>
             </div>
         </div>
-        <div class="modaleditar" id="modaleditar">
-            <div class="modal-content">>
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modal title</h5>
-                    </div>
-                    <div class="modal-body">
-                        <?php include 'modal_user.php'; ?>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Actualizar</button>
-                    </div>
-            </div>
-        </div>
+        
     </main>
 </body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Nutrient Distribution Chart
-        const nutrientChart = new Chart(document.getElementById('nutrientChart'), {
+        const nutrientChart = new Chart(document.getElementById('nutrient'), {
             type: 'pie',
             data: {
                 labels: ['Calorias', 'Proteínas', 'Carbohidratos', 'Grasas', 'Azucares', 'Sodio'],

@@ -26,6 +26,8 @@
                     <div class="row mb-1">
                         <div class="col-md-6">
                             <a href="licencias/crear_licencia.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Licencia</a>
+                            <a href="licencias/pdf.php" class='btn btn-danger'><i class="bi bi-file-earmark-pdf-fill"></i> PDF</a>
+                            <button onclick="window.location.href='licencias/excel.php'" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i> Excel</button>
                         </div>
                         <div class="col-md-6">
                             <form id="search-form" class="d-flex">

@@ -17,7 +17,7 @@
         <div class="login-card">
             <h1 class="title2">Recuperar Contraseña</h1>
             <p class="subtitle">Ingresa el número de documento asociado a tu cuenta y te enviaremos instrucciones para restablecer tu contraseña.</p>
-            <form action="PHPMailer-master/config/email_update_password.php" name="form1" id="form1" method="post" class="form1">
+            <form action="libraries/PHPMailer-master/config/email_update_password.php" name="form1" id="form1" method="post" class="form1">
                 <div class="x_grupo" id="x_email">
                     <label for="email">Correo electrónico</label>
                     <div class="x_input">
