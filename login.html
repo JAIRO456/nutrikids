@@ -47,6 +47,9 @@
             text-align: center;
             width: 300px;
         }
+        .spinner button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body onload="document.form1.documento.focus()">
@@ -124,16 +127,15 @@
         </div>
         <div class="loading" id="loading">
             <div class="spinner">
-                <p id="okMessage">
-                    
+                <p id="okMessage">        
                 </p>
             </div>
         </div>
-
+        
         <div id="errorModal" class="modal">
             <div class="modal-content">
                 <p id="errorMessage">
-
+                    <svg fill="hsl(228, 97%, 42%)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="12" r="3"><animate id="spinner_jObz" begin="0;spinner_vwSQ.end-0.25s" attributeName="r" dur="0.75s" values="3;.2;3"/></circle><circle cx="12" cy="12" r="3"><animate begin="spinner_jObz.end-0.6s" attributeName="r" dur="0.75s" values="3;.2;3"/></circle><circle cx="20" cy="12" r="3"><animate id="spinner_vwSQ" begin="spinner_jObz.end-0.45s" attributeName="r" dur="0.75s" values="3;.2;3"/></circle></svg>
                 </p>
                 <button onclick="closeModal()">Cerrar</button>
             </div>
@@ -162,7 +164,6 @@
         const errorModal = document.getElementById('errorModal');
         const errorMessage = document.getElementById('errorMessage');
         const loading = document.getElementById('loading');
-        const okMessage = document.getElementById('okMessage');
 
         document.getElementById('form1').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -213,10 +214,6 @@
         function showModal(message) {
             errorMessage.textContent = message;
             errorModal.style.display = 'flex';
-        }
-        function showModalok(messageok) {
-            okMessage.textContent = messageok;
-            loading.style.display = 'flex';
         }
         function closeModal() {
             errorModal.style.display = 'none';

@@ -42,23 +42,44 @@
                     $sqlEmail->execute([$usuario_id]);
                     $email = $sqlEmail->fetch(PDO::FETCH_ASSOC);
 
-                    require_once '../../PHPMailer-master/config/email_estado.php';
+                    require_once '../../libraries/PHPMailer-master/config/email_estado.php';
                     if (email_estado($email['email'], $email['nombre'], $email['apellido'])) {
-                        echo '<script>alert("El director ha sido activado y se le ha enviado un correo de notificación");</script>';
+                        echo "<script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    showModal('El director se actualizo exitosamente, se ha sido activado y se le ha enviado un correo de notificación.');
+                                });
+                            </script>";
+                        // echo '<script>alert("El director ha sido activado y se le ha enviado un correo de notificación");</script>';
                     } 
                     else {
-                        echo '<script>alert("El director ha sido activado, pero hubo un error al enviar el correo");</script>';
+                        echo "<script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    showModal('El director se actualizo exitosamente, se ha sido activado, pero hubo un error al enviar el correo.');
+                                });
+                            </script>";
+                        // echo '<script>alert("El director ha sido activado, pero hubo un error al enviar el correo");</script>';
                     }
                 }
-                echo '<script>alert("Director actualizado correctamente")</script>';
-                echo '<script>window.location.href="../directores.php"</script>';
+
+                // echo '<script>alert("Director actualizado correctamente")</script>';
+                // echo '<script>window.location.href="../directores.php"</script>';
             } 
             else {
-                echo '<script>alert("Error al actualizar la escuela del director")</script>';
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al actualizar a la nueva escuela del director.');
+                        });
+                    </script>";
+                // echo '<script>alert("Error al actualizar la escuela del director")</script>';
             }
         } 
         else {
-            echo '<script>alert("Error al actualizar el director")</script>';
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showModal('Error al actualizar el director.');
+                    });
+                </script>";
+            // echo '<script>alert("Error al actualizar el director")</script>';
         }
 
     }
@@ -73,6 +94,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <main class="container-main">
@@ -161,13 +213,32 @@
                     </form>
                 </div>
             </div>
+            <div id="msgModal" class="modal">
+                <div class="modal-content">
+                    <p id="Message">
+                        
+                    </p>
+                    <button onclick="closeModal()">Cerrar</button>
+                </div>
+            </div>
         </div>
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
     <script>
+        const msgModal = document.getElementById('msgModal');
+        const message = document.getElementById('Message');
+
+        function showModal(msg) {
+            message.textContent = msg;
+            msgModal.style.display = 'flex';
+        }
+        function closeModal() {
+            msgModal.style.display = 'none';
+        } 
+        
         function email_estado(email, nombre, apellido) {
-            fetch('../../PHPMailer-master/config/email_estado.php', {
+            fetch('../../libraries/PHPMailer-master/config/email_estado.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -33,8 +33,7 @@
                                 <select class="form-select me-2" id="category-select">
                                     <option value="">Todas las categorias</option>
                                     <?php
-                                        $sqlCategorias = $con->prepare("SELECT DISTINCT categorias.id_categoria, categoria FROM producto 
-                                        INNER JOIN categorias ON producto.id_categoria = categorias.id_categoria ORDER BY categoria");
+                                        $sqlCategorias = $con->prepare("SELECT id_categoria, categoria FROM categorias ORDER BY categoria");
                                         $sqlCategorias->execute();
                                         while ($row = $sqlCategorias->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<option value='{$row['id_categoria']}'>{$row['categoria']}</option>";

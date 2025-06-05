@@ -34,9 +34,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="estudiantes.php"><i class="bi bi-person"></i> Estudiantes</a>
                     </li>   
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="horarios.php"><i class="bi bi-clock"></i> Horarios</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="agregar.php"><i class="bi bi-person-plus"></i> Agregar</a>
                     </li>

@@ -7,7 +7,6 @@
 
     session_start();
     require_once('../../conex/conex.php');
-    require_once('../../libraries/TCPDF/tcpdf.php');
     $conex = new Database;
     $con = $conex->conectar();
 

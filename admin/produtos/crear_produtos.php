@@ -35,15 +35,33 @@
         if ($sqlInsertProduct->execute([$id_producto, $nombre_prod, $descripcion, $precio, $imagen, $id_categoria, $id_marca])) {
             $sqlInsertInfoNutricional = $con->prepare("INSERT INTO informacion_nutricional (id_producto, calorias, proteinas, carbohidratos, grasas, azucares, sodio) VALUES (?, ?, ?, ?, ?, ?, ?)");
             if ($sqlInsertInfoNutricional->execute([$id_producto, $calorias, $proteinas, $carbohidratos, $grasas, $azucares, $sodio])) {
-                echo '<script>alert("Producto creado exitosamente")</script>';
-                echo '<script>window.location = "../productos.php"</script>';
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Producto creado exitosamente.');
+                            setTimeout(() => {
+                                window.location = '../productos.php';
+                            }, 3000);
+                        });
+                    </script>";
+                // echo '<script>alert("Producto creado exitosamente")</script>';
+                // echo '<script>window.location = "../productos.php"</script>';
             } 
             else {
-                echo '<script>alert("Error al crear la informacion nutricional al Producto")</script>';
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al crear la informacion nutricional del Producto.');
+                        });
+                    </script>";
+                // echo '<script>alert("Error al crear la informacion nutricional al Producto")</script>';
             }
         } 
         else {
-            echo '<script>alert("Error al crear el Producto")</script>';
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showModal('Error al crear el Producto.');
+                    });
+                </script>";
+            // echo '<script>alert("Error al crear el Producto")</script>';
         }
     }
 ?>
@@ -58,8 +76,23 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="JsBarcode.all.min.js"></script>
+    <div id="msgModal" class="modal">
+                <div class="modal-content">
+                    <p id="Message">
+                        
+                    </p>
+                    <button onclick="closeModal()">Cerrar</button>
+                </div>
+            </div><div id="msgModal" class="modal">
+                <div class="modal-content">
+                    <p id="Message">
+                        
+                    </p>
+                    <button onclick="closeModal()">Cerrar</button>
+                </div>
+            </div>
 </head>
-<body onload="formCreateProducts.documento.focus()">
+<body onload="document.formCreateProducts.nombre_prod.focus()">
     <main class="container-main">
         <div class="container mt-4">
             <div class="row">
@@ -152,8 +185,28 @@
                     </form>
                 </div>
             </div>
+            <div id="msgModal" class="modal">
+                <div class="modal-content">
+                    <p id="Message">
+                        
+                    </p>
+                    <button onclick="closeModal()">Cerrar</button>
+                </div>
+            </div>
         </div>
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+<script>
+    const msgModal = document.getElementById('msgModal');
+    const message = document.getElementById('Message');
+
+    function showModal(msg) {
+        message.textContent = msg;
+        msgModal.style.display = 'flex';
+    }
+    function closeModal() {
+        msgModal.style.display = 'none';
+    }   
+</script>
 </html>

@@ -18,7 +18,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INICIO</title>
+    <title>Inicio</title>
     <link rel="stylesheet" href="../styles/inicio.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -244,6 +244,10 @@
                             <td>${product.id_producto}</td>
                             <td>${product.nombre_prod}</td>
                             <td>${product.categoria}</td>
+                            <td>
+                                <a href="produtos/update_producto.php?id=${product.id_producto}" class="btn btn-primary"><i class="bi bi-pencil"></i></a>
+                                <a href="produtos/delete_producto.php?id=${product.id_producto}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });

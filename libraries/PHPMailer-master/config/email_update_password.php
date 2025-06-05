@@ -4,9 +4,9 @@
     $conex =new Database;
     $con = $conex->conectar();
     
-    require_once '../src/Exception.php';
-    require_once '../src/PHPMailer.php';
-    require_once '../src/SMTP.php';
+    require_once '../../../libraries/PHPMailer-master/src/Exception.php';
+    require_once '../../../libraries/PHPMailer-master/src/PHPMailer.php';
+    require_once '../../../libraries/PHPMailer-master/src/SMTP.php';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
@@ -55,8 +55,65 @@
                     <p>El equipo de NUTRIKIDS</p>
                     <p><a href='https://nutrikids.com'>nutrikids.com | soporte@nutrikids.com</a></p>";
                 $mail->send();
-                echo '<script>alert("Se ha enviado un correo con la nueva contraseña")</script>';
-                echo '<script>window.location = "../../../login.html"</script>';
+                // echo '<script>alert("Se ha enviado un correo con la nueva contraseña")</script>';
+                // echo '<script>window.location = "../../../login.html"</script>';
+                echo "
+                    <style>
+                        .modal {
+                            display: none;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(0, 0, 0, 0.5);
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        .modal-content {
+                            background: white;
+                            padding: 20px;
+                            border-radius: 8px;
+                            text-align: center;
+                            width: 300px;
+                        }
+                        button {
+                            padding: 10px 20px;
+                            background: #007bff;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                        }
+                        button:hover {
+                            background: #0056b3;
+                        }
+                    </style>
+                    <div id='validateSesionModal' class='modal'>
+                        <div class='modal-content'>
+                            <p id='Message'></p>
+                            <button onclick='closeModal()'>Cerrar</button>
+                        </div>
+                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Se ha enviado un correo con la nueva contraseña.');
+                            setTimeout(() => {
+                                window.location = '../../../login.html';
+                            }, 3000);
+                        });
+                    
+                        const validateSesionModal = document.getElementById('validateSesionModal');
+                        const message = document.getElementById('Message');
+                    
+                        function showModal(msg) {
+                            message.textContent = msg;
+                            validateSesionModal.style.display = 'flex';
+                        }
+                        function closeModal() {
+                            validateSesionModal.style.display = 'none';
+                        }
+                    </script>";
             } 
             catch (Exception $e) {
                 error_log("Error al enviar correo: {$mail->ErrorInfo}");

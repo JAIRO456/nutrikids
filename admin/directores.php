@@ -36,7 +36,6 @@
                             </form>
                         </div>
                     </div>
-
                     <div class="card shadow mt-1">
                         <div class="card-header">
                             <h4 class='text-center'>Directores</h4>

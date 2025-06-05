@@ -1,10 +1,11 @@
 <?php
-    session_start();
-    unset($_SESSION['documento'], $_SESSION['rol'], $_SESSION['estate']);
-    session_destroy();
-    session_write_close();
+    if (!isset($_SESSION['documento'])) {
+        $_SESSION = array();
+        unset($_SESSION['documento'], $_SESSION['rol'], $_SESSION['estate']);
+        session_destroy();
 
-    echo "  <style>
+        echo "
+            <style>
                 .modal {
                     display: none;
                     position: fixed;
@@ -43,7 +44,7 @@
             </div>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    showModal('Sesión cerrada');
+                    showModal('Ingrese credenciales en el Login');
                     setTimeout(() => {
                         window.location = '../login.html';
                     }, 3000);
@@ -60,5 +61,6 @@
                     validateSesionModal.style.display = 'none';
                 }
             </script>";
-    exit();
+            exit();
+    }
 ?>

@@ -1,7 +1,7 @@
 <?php
-    require_once '../../../PHPMailer-master/src/Exception.php';
-    require_once '../../../PHPMailer-master/src/PHPMailer.php';
-    require_once '../../../PHPMailer-master/src/SMTP.php';
+    require_once '../../../libraries/PHPMailer-master/src/Exception.php';
+    require_once '../../../libraries/PHPMailer-master/src/PHPMailer.php';
+    require_once '../../../libraries/PHPMailer-master/src/SMTP.php';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
@@ -33,12 +33,12 @@
             $mail->Body = "<p>{$mensaje}</p>";
             $mail->send();
             echo '<script>alert("Correo enviando exitosamente")</script>';
-            echo '<script>window.location = "../../contacto.php"</script>';
+            echo '<script>window.location = "../../../contacto.php"</script>';
             exit();
         } 
         catch (Exception $e) {
             echo '<script>alert("Error al enviar correo.")</script>';
-            echo '<script>window.location = "../../contacto.php"</script>';
+            echo '<script>window.location = "../../../contacto.php"</script>';
             exit();
         }
     }

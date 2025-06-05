@@ -22,11 +22,14 @@
     <main class="container mt-2">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center mb-3">Usuarios</h2>
-                <div class="row mb-1 justify-content-end">
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <a href="usuarios/pdf.php" class='btn btn-danger'><i class="bi bi-file-earmark-pdf-fill"></i> PDF</a>
+                        <button onclick="window.location.href='usuarios/excel.php'" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i> Excel</button>
+                    </div>
                     <div class="col-md-6">
                         <form id="search-form" class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Buscar usuario..." aria-label="Buscar" id="search-input">
+                            <input class="form-control me-2" type="search" placeholder="Buscar usuarios..." aria-label="Buscar" id="search-input">
                             <select class="form-select me-2" id="rol-select">
                                 <option value="">Todas los roles</option>
                                 <?php
@@ -41,21 +44,26 @@
                         </form>
                     </div>
                 </div>
-                <table class="table table-bordered table-striped text-center" id="table-users">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="d-none d-sm-table-cell">Imagen</th>
-                            <th>Documento</th>
-                            <th>Nombre</th>
-                            <th>Rol</th>
-                            <th class="d-none d-sm-table-cell">Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
+                <div class="card shadow mt-1">
+                    <div class="card-header">
+                        <h4 class='text-center'>Usuarios</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="table-users">
+                            <thead class='text-center'>
+                                <tr>
+                                    <th class="d-none d-sm-table-cell">Imagen</th>
+                                    <th>Documento</th>
+                                    <th>Nombre</th>
+                                    <th>Rol</th>
+                                    <th class="d-none d-sm-table-cell">Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body" class='text-center'></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

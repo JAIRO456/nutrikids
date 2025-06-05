@@ -23,11 +23,21 @@
 
         $sqlUpdate = $con->prepare("UPDATE licencias SET fecha_inicio = ?, fecha_fin = ?, id_tipo = ?, id_escuela = ? WHERE id_licencia = ?");
         if ($sqlUpdate->execute([$fecha_inicio, $fecha_fin, $id_tipo, $id_escuela, $id_licencia])) {
-            echo '<script>alert("Licencia actualizada exitosamente")</script>';
-            echo '<script>window.location = "../licencias.php"</script>';
+            echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Producto actualizado exitosamente.');
+                        });
+                    </script>";
+            // echo '<script>alert("Licencia actualizada exitosamente")</script>';
+            // echo '<script>window.location = "../licencias.php"</script>';
         } 
         else {
-            echo '<script>alert("Error al actualizar la licencia")</script>';
+            echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Producto actualizado exitosamente.');
+                        });
+                    </script>";
+            // echo '<script>alert("Error al actualizar la licencia")</script>';
         }
     }
 ?>
@@ -43,6 +53,37 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <main class="container-main">
@@ -95,6 +136,14 @@
                     </form>
                 </div>
             </div>
+            <div id="msgModal" class="modal">
+                <div class="modal-content">
+                    <p id="Message">
+   
+                    </p>
+                    <button onclick="closeModal()">Cerrar</button>
+                </div>
+            </div>
         </div>
     </main>
 </body>
@@ -105,5 +154,16 @@
         height: 40,
         displayValue: true
     });
+
+    const msgModal = document.getElementById('msgModal');
+    const message = document.getElementById('Message');
+
+    function showModal(msg) {
+        message.textContent = msg;
+        msgModal.style.display = 'flex';
+    }
+    function closeModal() {
+        msgModal.style.display = 'none';
+    } 
 </script>
 </html>

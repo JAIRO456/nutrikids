@@ -1,11 +1,11 @@
 <?php
     session_start();
-    require_once('../../conex/conex.php');
-    require_once('../../include/validate_sesion.php');
+    require_once('../conex/conex.php');
+    require_once('../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
-    include '../menu.php';
+    include 'menu.php';
 
     $usuario_id = $_GET['id'];
     $sqlUsuarios = $con -> prepare("SELECT * FROM usuarios 
@@ -17,20 +17,12 @@
     $sqlUsuarios -> execute([$usuario_id]);
     $usuarios = $sqlUsuarios -> fetch();
 
-    $sqlEstudiantes = $con -> prepare("SELECT * FROM estudiantes 
-    INNER JOIN detalles_estudiantes_escuela ON estudiantes.documento_est = detalles_estudiantes_escuela.documento_est
-    INNER JOIN escuelas ON detalles_estudiantes_escuela.id_escuela = escuelas.id_escuela
-    WHERE documento = ?");
-    $sqlEstudiantes -> execute([$usuario_id]);
-    $estudiantes = $sqlEstudiantes -> fetch();
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $telefono = $_POST['telefono'];
         $id_rol = $_POST['id_rol'];
         $id_estado = $_POST['id_estado'];
 
-        $telefono_est = $_POST['telefono_est'];
-        $id_estado_est = $_POST['id_estado_est'];
+        $estado_old = $usuarios['id_estado'];
 
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
             $fileTmp = $_FILES['imagen']['tmp_name'];
@@ -49,43 +41,49 @@
                 if (move_uploaded_file($fileTmp, $newruta)) {
                     $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
                     if ($sqlUpdate->execute([$telefono, $fileName, $id_rol, $id_estado, $usuario_id])) {
-                        $sqlUpdateEstudiante = $con->prepare("UPDATE estudiantes SET ");
-                } 
-                else {
-                    echo '<script>alert("Error al subir la imagen. Inténtelo de nuevo.")</script>';
+                        if ($estado_old != $id_estado && $id_estado == 1) {
+                            $sqlEmail = $con->prepare("SELECT email, nombre, apellido FROM usuarios WHERE documento = ?");
+                            $sqlEmail->execute([$usuario_id]);
+                            $email = $sqlEmail->fetch(PDO::FETCH_ASSOC);
+
+                            require_once '../../libraries/PHPMailer-master/config/email_estado.php';
+                            if (email_estado($email['email'], $email['nombre'], $email['apellido'])) {
+                                echo "<script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            showModal('El usuario se actualizo exitosamente, se ha sido activado y se le ha enviado un correo de notificación.');
+                                        });
+                                    </script>";
+                            } else {
+                                echo "<script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            showModal('El usuario se actualizo exitosamente, se ha sido activado, pero hubo un error al enviar el correo.');
+                                        });
+                                    </script>";
+                            }
+                        }
+                    }
+                } else {
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                showModal('Formato de imagen no válido.');
+                            });
+                        </script>";
+                    // echo '<script>alert("Formato de imagen no válido.")</script>';
                 }
             } else {
-                echo '<script>alert("Formato de imagen no válido.")</script>';
+                // Si no se sube una nueva imagen, se mantiene la existente
+                $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
+                $sqlUpdate->execute([$telefono, $id_rol, $id_estado, $usuario_id]);
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Usuario actualizado exitosamente.');
+                        });
+                    </script>";
+                // echo '<script>alert("Usuario actualizado exitosamente")</script>';
+                // echo '<script>window.location = "../usuarios.php"</script>';
             }
-        } else {
-            // Si no se sube una nueva imagen, se mantiene la existente
-            $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
-            $sqlUpdate->execute([$telefono, $id_rol, $id_estado, $usuario_id]);
-            echo '<script>alert("Usuario actualizado exitosamente")</script>';
-            echo '<script>window.location = "../usuarios.php"</script>';
         }
     }
-
-
-    // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //     $imagen = $_FILES['imagen']['name'];
-    //     $telefono = $_POST['telefono'];
-    //     $id_rol = $_POST['id_rol'];
-    //     $id_estado = $_POST['id_estado'];
-    //     $id_escuela = $usuarios['id_escuela'];
-
-    //     if (!empty($imagen)) {
-    //         move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/users/" . $imagen);
-    //     } 
-    //     else {
-    //         $imagen = $usuarios['imagen'];
-    //     }
-
-    //     $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
-    //     $sqlUpdate->execute([$telefono, $imagen, $id_rol, $id_estado, $usuario_id]);
-    //     echo '<script>alert("Usuario actualizado exitosamente")</script>';
-    //     echo '<script>window.location = "../usuarios.php"</script>';
-    // }
 ?>
 
 <!DOCTYPE html>
@@ -97,15 +95,46 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
 </head>
-<body onload="form.documento.focus()">
+<body onload="document.form.documento.focus()">
     <main class="container-main">
-        <div class="container mt-4">
+        <div class="container mt-2">
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="text-center">Actualizar Usuario</h2>
                     <form id="form" method="POST" action="" enctype="multipart/form-data">
-                        <h3 class="text-center mb-4">Información del Usuario</h3>
+                        <h3 class="mb-2">Información del Usuario</h3>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="documento" class="form-label">Documento</label>
@@ -142,7 +171,7 @@
                                 <select class="form-select" id="id_rol" name="id_rol" required>
                                     <option value="<?php echo $usuarios['id_rol']; ?>"><?php echo $usuarios['rol']; ?></option>
                                     <?php
-                                        $sqlRoles = $con->prepare("SELECT * FROM roles WHERE id_rol != ?");
+                                        $sqlRoles = $con->prepare("SELECT * FROM roles WHERE id_rol > 2 AND id_rol != ?");
                                         $sqlRoles->execute([$usuarios['id_rol']]);
                                         $roles = $sqlRoles->fetchAll();
                                         foreach ($roles as $rol) {
@@ -167,14 +196,52 @@
                             </div>
                             <div class="mb-3 text-center">
                                 <button type="submit" class="btn btn-danger mt-3">Actualizar Usuario</button>
-                                <a href="../usuarios.php" class="btn btn-secondary mt-3">Cancelar</a>
+                                <a href="usuarios.php" class="btn btn-secondary mt-3">Cancelar</a>
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+            <div id="msgModal" class="modal">
+                <div class="modal-content">
+                    <p id="Message">
+                        
+                    </p>
+                    <button onclick="closeModal()">Cerrar</button>
                 </div>
             </div>
         </div>
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+    <script>
+        const msgModal = document.getElementById('msgModal');
+        const message = document.getElementById('Message');
+
+        function showModal(msg) {
+            message.textContent = msg;
+            msgModal.style.display = 'flex';
+        }
+        function closeModal() {
+            msgModal.style.display = 'none';
+        } 
+        
+        function email_estado(email, nombre, apellido) {
+            fetch('../../libraries/PHPMailer-master/config/email_estado.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, nombre, apellido })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } 
+                else {
+                    throw new Error('Error en la solicitud');
+                }
+            })
+        }
+    </script>
 </html>

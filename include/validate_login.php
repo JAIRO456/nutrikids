@@ -42,7 +42,7 @@
                 } 
                 elseif ($_SESSION['rol'] == 2 && $_SESSION['estate'] == 1) {
                     $response['message'] = 'Login exitoso';
-                    $response['redirect'] = '../nutrikids/coordinador/inicio.php';
+                    $response['redirect'] = '../nutrikids/director/inicio.php';
                 } 
                 elseif ($_SESSION['rol'] == 3 && $_SESSION['estate'] == 1) {
                     $response['message'] = 'Login exitoso';

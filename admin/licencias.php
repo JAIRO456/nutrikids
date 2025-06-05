@@ -35,8 +35,7 @@
                                 <select class="form-select me-2" id="tipo-select">
                                     <option value="">Todas las licencias</option>
                                     <?php
-                                        $sqlCategorias = $con->prepare("SELECT DISTINCT tipo_licencia.id_tipo, tipo_licencia.tipo FROM licencias 
-                                        INNER JOIN tipo_licencia ON licencias.id_tipo = tipo_licencia.id_tipo ORDER BY id_tipo");
+                                        $sqlCategorias = $con->prepare("SELECT tipo_licencia.id_tipo, tipo_licencia.tipo FROM tipo_licencia ORDER BY id_tipo");
                                         $sqlCategorias->execute();
                                         while ($row = $sqlCategorias->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<option value='{$row['id_tipo']}'>{$row['tipo']}</option>";
