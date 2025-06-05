@@ -23,11 +23,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row mb-1">
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-1">
                         <a href="usuarios/pdf.php" class='btn btn-danger'><i class="bi bi-file-earmark-pdf-fill"></i> PDF</a>
                         <button onclick="window.location.href='usuarios/excel.php'" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i> Excel</button>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-1">
                         <form id="search-form" class="d-flex">
                             <input class="form-control me-2" type="search" placeholder="Buscar usuarios..." aria-label="Buscar" id="search-input">
                             <select class="form-select me-2" id="rol-select">
@@ -87,8 +87,8 @@
                             <td>${user.rol}</td>
                             <td class="d-none d-sm-table-cell">${user.estado}</td>
                             <td>
-                                <a class='btn btn-primary' href="update_users.php?id=${user.documento}"><i class="bi bi-pencil-square"></i></a>
-                                <a class='btn btn-danger' href="delete_users.php?id=${user.documento}"><i class="bi bi-trash"></i></a>
+                                <a class='btn btn-primary' href='usuarios/update_users.php?id=${user.documento}'><i class='bi bi-pencil-square'></i></a>
+                                <a class='btn btn-danger' href='usuarios/delete_users.php?id=${user.documento}'><i class='bi bi-trash'></i></a>
                             </td>
                         `;
                         tbody.appendChild(tr);

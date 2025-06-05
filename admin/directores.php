@@ -24,12 +24,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row mb-1">
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-1">
                             <a href="directores/crear_admin.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Director</a>
                             <a href="directores/pdf.php" class='btn btn-danger'><i class="bi bi-file-earmark-pdf-fill"></i> PDF</a>
                             <button onclick="window.location.href='directores/excel.php'" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i> Excel</button>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-1">
                             <form id="search-form" class="d-flex">
                                 <input class="form-control me-2" type="search" placeholder="Buscar directores..." aria-label="Buscar" id="search-input">
                                 <button class="btn btn-outline-success" type="submit">Buscar</button>
@@ -46,8 +46,7 @@
                                     <tr>
                                         <th class="d-none d-sm-table-cell">Imagen</th>
                                         <th>Documento</th>
-                                        <th>Nombres</th>
-                                        <th>Apellidos</th>
+                                        <th>Nombre</th>
                                         <th class="d-none d-sm-table-cell">Correo</th>
                                         <th>Escuela</th>
                                         <th>Acciones</th>
@@ -84,8 +83,7 @@
                         row.innerHTML = `
                             <td class="d-none d-sm-table-cell"><img class="d-none d-sm-table-cell" src="../users/${admin.imagen}" alt="Imagen" width="50"></td>
                             <td>${admin.documento}</td>
-                            <td>${admin.nombre}</td>
-                            <td>${admin.apellido}</td>
+                            <td>${admin.nombre}<br>${admin.apellido}</br>
                             <td class="d-none d-sm-table-cell">${admin.email}</td>
                             <td>${admin.nombre_escuela}</td>
                             <td>

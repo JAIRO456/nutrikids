@@ -2,6 +2,7 @@
     session_start();
     require_once('../conex/conex.php');
     require_once('../include/validate_sesion.php');
+    // require_once('../time.php');
     $conex =new Database;
     $con = $conex->conectar();
 

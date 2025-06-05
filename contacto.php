@@ -12,7 +12,7 @@
     <title>NUTRIKIDS</title>
 </head>
 <body>
-    <main class="container my-5">
+    <main class="container mt-2">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <h2 class="text-center mb-4">Contacto</h2>
@@ -45,7 +45,7 @@
                             </div>
                             <!-- Formulario -->
                             <div class="col-md-7">
-                                <form action='PHPMailer-master/config/email_contacto.php' method="post">
+                                <form action='libraries/PHPMailer-master/config/email_contacto.php' method="post">
                                     <div class="mb-3">
                                         <label for="nombre" class="form-label">Nombre y Apellido</label>
                                         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Escribe tu nombre y primer apellido" required>

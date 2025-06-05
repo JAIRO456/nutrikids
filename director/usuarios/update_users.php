@@ -1,11 +1,11 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
-    require_once('../include/validate_sesion.php');
+    require_once('../../conex/conex.php');
+    require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
-    include 'menu.php';
+    include '../menu.php';
 
     $usuario_id = $_GET['id'];
     $sqlUsuarios = $con -> prepare("SELECT * FROM usuarios 
@@ -21,67 +21,78 @@
         $telefono = $_POST['telefono'];
         $id_rol = $_POST['id_rol'];
         $id_estado = $_POST['id_estado'];
-
         $estado_old = $usuarios['id_estado'];
+        $fileName = $usuarios['imagen'];
 
+        // Si se sube una imagen nueva
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
             $fileTmp = $_FILES['imagen']['tmp_name'];
-            $fileName = $_FILES['imagen']['name'];
-            $fileSize = $_FILES['imagen']['size'];
-            $fileType = $_FILES['imagen']['type'];
-
-            $ruta = '../../img/users/';
-            // Remplazar los espacios en blanco
-            $fileName = str_replace(' ', '_', $fileName);
-            $newruta = $ruta . basename($fileName);
-            $formatType = array("jpg", "jpeg", "png");
+            $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $formatType = array("jpg", "jpeg", "png");
+            $ruta = '../../img/users/';
+            $newruta = $ruta . basename($fileName);
 
-            if (in_array($fileExtension, $formatType)) {
-                if (move_uploaded_file($fileTmp, $newruta)) {
-                    $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
-                    if ($sqlUpdate->execute([$telefono, $fileName, $id_rol, $id_estado, $usuario_id])) {
-                        if ($estado_old != $id_estado && $id_estado == 1) {
-                            $sqlEmail = $con->prepare("SELECT email, nombre, apellido FROM usuarios WHERE documento = ?");
-                            $sqlEmail->execute([$usuario_id]);
-                            $email = $sqlEmail->fetch(PDO::FETCH_ASSOC);
+            if (!in_array($fileExtension, $formatType)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Formato de imagen no válido.');
+                        });
+                    </script>";
+                exit;
+            }
+            if (!move_uploaded_file($fileTmp, $newruta)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al subir la imagen.');
+                        });
+                    </script>";
+                exit;
+            }
+            // Eliminar la imagen anterior si no es la predeterminada
+            if ($usuarios['imagen'] && $usuarios['imagen'] != 'default.png') {
+                $oldImagePath = $ruta . $usuarios['imagen'];
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+        }
 
-                            require_once '../../libraries/PHPMailer-master/config/email_estado.php';
-                            if (email_estado($email['email'], $email['nombre'], $email['apellido'])) {
-                                echo "<script>
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            showModal('El usuario se actualizo exitosamente, se ha sido activado y se le ha enviado un correo de notificación.');
-                                        });
-                                    </script>";
-                            } else {
-                                echo "<script>
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            showModal('El usuario se actualizo exitosamente, se ha sido activado, pero hubo un error al enviar el correo.');
-                                        });
-                                    </script>";
-                            }
-                        }
-                    }
+        // Actualizar usuario (con o sin imagen nueva)
+        $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
+        if ($sqlUpdate->execute([$telefono, $fileName, $id_rol, $id_estado, $usuario_id])) {
+            if ($estado_old != $id_estado && $id_estado == 1) {
+                $sqlEmail = $con->prepare("SELECT email, nombre, apellido FROM usuarios WHERE documento = ?");
+                $sqlEmail->execute([$usuario_id]);
+                $email = $sqlEmail->fetch(PDO::FETCH_ASSOC);
+
+                require_once '../../libraries/PHPMailer-master/config/email_estado.php';
+                if (email_estado($email['email'], $email['nombre'], $email['apellido'])) {
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                showModal('El usuario se actualizó exitosamente, se ha sido activado y se le ha enviado un correo de notificación.');
+                            });
+                        </script>";
                 } else {
                     echo "<script>
                             document.addEventListener('DOMContentLoaded', function() {
-                                showModal('Formato de imagen no válido.');
+                                showModal('El usuario se actualizó exitosamente, se ha sido activado, pero hubo un error al enviar el correo.');
                             });
                         </script>";
-                    // echo '<script>alert("Formato de imagen no válido.")</script>';
                 }
             } else {
-                // Si no se sube una nueva imagen, se mantiene la existente
-                $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
-                $sqlUpdate->execute([$telefono, $id_rol, $id_estado, $usuario_id]);
                 echo "<script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            showModal('Usuario actualizado exitosamente.');
-                        });
-                    </script>";
-                // echo '<script>alert("Usuario actualizado exitosamente")</script>';
-                // echo '<script>window.location = "../usuarios.php"</script>';
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showModal('El usuario se actualizó exitosamente.');
+                    });
+                </script>";
             }
+        } else {
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showModal('Error al actualizar el usuario.');
+                    });
+                </script>";
         }
     }
 ?>
@@ -196,7 +207,7 @@
                             </div>
                             <div class="mb-3 text-center">
                                 <button type="submit" class="btn btn-danger mt-3">Actualizar Usuario</button>
-                                <a href="usuarios.php" class="btn btn-secondary mt-3">Cancelar</a>
+                                <a href="../usuarios.php" class="btn btn-secondary mt-3">Cancelar</a>
                             </div>
                         </div>
                     </form>

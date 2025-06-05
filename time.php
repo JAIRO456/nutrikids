@@ -1,5 +1,5 @@
 <?php
-    $time_max = 15; 
+    $time_max = 30; 
 
     if (isset($_SESSION['documento'])) {
         if (isset($_SESSION['last_activity'])) {

@@ -76,8 +76,8 @@
         else {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
-                        showModal('Error al actualizar el director.');
-                    });
+                            showModal('Error al actualizar el director.');
+                        });
                 </script>";
             // echo '<script>alert("Error al actualizar el director")</script>';
         }
