@@ -74,8 +74,8 @@
                             <td>${student.nombre} ${student.apellido}</td>
                             <td class="d-none d-sm-table-cell">${student.estado}</td>
                             <td>
-                                <a class='btn btn-primary' href="usuarios/update_students.php?id=${student.documento_est}"><i class="bi bi-pencil-square"></i></a>
-                                <a class='btn btn-danger' href="usuarios/delete_students.php?id=${student.documento_est}"><i class="bi bi-trash"></i></a>
+                                <a class='btn btn-primary' href="estudiantes/update_estudiantes.php?id=${student.documento_est}"><i class="bi bi-pencil-square"></i></a>
+                                <a class='btn btn-danger' href="estudiantes/delete_estudiantes.php?id=${student.documento_est}"><i class="bi bi-trash"></i></a>
                             </td>
                         `;
                         tbody.appendChild(tr);

@@ -14,7 +14,7 @@
     INNER JOIN roles ON usuarios.id_rol = roles.id_rol
     INNER JOIN detalles_usuarios_escuela ON usuarios.documento = detalles_usuarios_escuela.documento 
     INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela 
-    WHERE roles.id_rol = 2 AND usuarios.id_estado = 1 ORDER BY usuarios.documento ASC");
+    WHERE roles.id_rol = 2 ORDER BY usuarios.documento ASC");
     $sqlDirectores->execute();
     $results = $sqlDirectores->fetchAll(PDO::FETCH_ASSOC);
 

@@ -28,7 +28,7 @@
             $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             $formatType = array("jpg", "jpeg", "png");
-            $ruta = '../../img/users/';
+            $ruta = '../../img/products/';
             $newruta = $ruta . basename($fileName);
 
             if (!in_array($fileExtension, $formatType)) {

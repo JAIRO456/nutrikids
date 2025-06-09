@@ -14,23 +14,26 @@
 
     // Obtener el conteo de usuarios
     $doc = $_SESSION['documento'];
-    $sqlRoles = $con->prepare("SELECT usuarios.documento FROM usuarios INNER JOIN detalles_usuarios_escuela ON usuarios.documento = detalles_usuarios_escuela.documento
+    $sqlRoles = $con->prepare("SELECT * FROM usuarios INNER JOIN detalles_usuarios_escuela ON usuarios.documento = detalles_usuarios_escuela.documento
     INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela WHERE usuarios.documento = ?");
     if ($sqlRoles->execute([$doc])) {
         $u = $sqlRoles->fetch();
-        $sqlSchools = $con->prepare("SELECT COUNT(*) AS TotalEstudiantes FROM escuelas 
-        INNER JOIN detalles_estudiantes_escuela ON escuelas.id_escuela = detalles_estudiantes_escuela.id_escuela
+        $sqlUsers = $con->prepare("SELECT COUNT(*) AS TotalUsers FROM usuarios 
+        INNER JOIN detalles_usuarios_escuela ON usuarios.documento = detalles_usuarios_escuela.documento
+        INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela
         WHERE escuelas.id_escuela = ?");
-        $sqlSchools->execute([$u['id_escuela']]);
-        $s = $sqlSchools->fetch();
-        $response['TotalEstudiantes'] = $s['TotalEstudiantes'];
-    } 
+        $sqlUsers->execute([$u['id_escuela']]);
+        $s = $sqlUsers->fetch();
+        $response['TotalUsers'] = $s['TotalUsers'];
 
-    // Obtener el conteo de estudiantes
-    $sqlEstudiantes = $con->prepare("SELECT COUNT(*) AS TotalEstudiantes FROM estudiantes");
-    $sqlEstudiantes->execute();
-    $e = $sqlEstudiantes->fetch();
-    $response['TotalEstudiantes'] = $e['TotalEstudiantes'];
+        $sqlEstudiantes = $con->prepare("SELECT COUNT(*) AS TotalEstudiantes FROM estudiantes 
+        INNER JOIN detalles_estudiantes_escuela ON estudiantes.documento_est = detalles_estudiantes_escuela.documento_est
+        INNER JOIN escuelas ON detalles_estudiantes_escuela.id_escuela = escuelas.id_escuela
+        WHERE escuelas.id_escuela = ?");
+        $sqlEstudiantes->execute([$u['id_escuela']]);
+        $s = $sqlEstudiantes->fetch();
+        $response['TotalEstudiantes'] = $s['TotalEstudiantes'];
+    }
 
     // Devolver la respuesta en formato JSON
     header('Content-Type: application/json');

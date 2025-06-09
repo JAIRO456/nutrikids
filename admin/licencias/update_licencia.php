@@ -25,7 +25,7 @@
         if ($sqlUpdate->execute([$fecha_inicio, $fecha_fin, $id_tipo, $id_escuela, $id_licencia])) {
             echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            showModal('Producto actualizado exitosamente.');
+                            showModal('Licencia actualizado exitosamente.');
                         });
                     </script>";
             // echo '<script>alert("Licencia actualizada exitosamente")</script>';
@@ -34,7 +34,7 @@
         else {
             echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            showModal('Producto actualizado exitosamente.');
+                            showModal('Error al actualizar la licencia.');
                         });
                     </script>";
             // echo '<script>alert("Error al actualizar la licencia")</script>';
@@ -47,7 +47,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Actualizar Licencia</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">

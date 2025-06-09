@@ -60,8 +60,6 @@
             }
         }
 
-        $estado_old = $usuarios['id_estado'];
-
         $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
         if ($sqlUpdate->execute([$telefono, $fileName, $id_rol, $id_estado, $usuario_id])) {
             $sqlUpdateDetails = $con->prepare("UPDATE detalles_usuarios_escuela SET id_escuela = ? WHERE documento = ?");
@@ -134,6 +132,7 @@
             background: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
+            z-index: 9999;
         }
         .modal-content {
             background: white;

@@ -11,7 +11,7 @@
     // Consulta: suma de ventas por mes
     $meses = [];
     $totales = [];
-    $sql = $con->query("SELECT MONTH(pedidos) as mes, SUM(total_pedido) as total 
+    $sql = $con->query("SELECT MONTH(fecha_ini) as mes, SUM(total_pedido) as total 
                         FROM pedidos 
                         GROUP BY mes 
                         ORDER BY mes");

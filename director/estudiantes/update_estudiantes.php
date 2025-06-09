@@ -18,7 +18,6 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $telefono = $_POST['telefono'];
-        $id_rol = $_POST['id_rol'];
         $id_estado = $_POST['id_estado'];
         $estado_old = $estudiantes['id_estado'];
         $fileName = $estudiantes['imagen'];
@@ -58,21 +57,13 @@
         }
 
         // Actualizar usuario (con o sin imagen nueva)
-        $sqlUpdate = $con->prepare("UPDATE estudiantes SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
-        if ($sqlUpdate->execute([$telefono, $fileName, $id_rol, $id_estado, $usuario_id])) {
-            if ($estado_old != $id_estado && $id_estado == 1) {
-                echo "<script>
+        $sqlUpdate = $con->prepare("UPDATE estudiantes SET telefono = ?, imagen = ?, id_estado = ? WHERE documento_est = ?");
+        if ($sqlUpdate->execute([$telefono, $fileName, $id_estado, $usuario_id])) {
+            echo "<script>
                         document.addEventListener('DOMContentLoaded',function() {
-                            showModal('El Estudiante se actualizóexitosamente.');
+                            showModal('El Estudiante se actualizó exitosamente.');
                         });
                     </script>";
-            } else {
-                echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        showModal('Error al actualizar el Estudiante.');
-                    });
-                </script>";
-            }
         } else {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
@@ -164,20 +155,6 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="id_rol" class="form-label">Rol</label>
-                                <select class="form-select" id="id_rol" name="id_rol" required>
-                                    <option value="<?php echo $estudiantes['id_rol']; ?>"><?php echo $estudiantes['rol']; ?></option>
-                                    <?php
-                                        $sqlRoles = $con->prepare("SELECT * FROM roles WHERE id_rol > 2 AND id_rol != ?");
-                                        $sqlRoles->execute([$estudiantes['id_rol']]);
-                                        $roles = $sqlRoles->fetchAll();
-                                        foreach ($roles as $rol) {
-                                            echo "<option value='{$rol['id_rol']}'>{$rol['rol']}</option>";
-                                        }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
                                 <label for="id_estado" class="form-label">Estado</label>
                                 <select class="form-select" id="id_estado" name="id_estado" required>
                                     <option value="<?php echo $estudiantes['id_estado']; ?>"><?php echo $estudiantes['estado']; ?></option>
@@ -192,7 +169,7 @@
                                 </select>
                             </div>
                             <div class="mb-3 text-center">
-                                <button type="submit" class="btn btn-danger mt-3">Actualizar Usuario</button>
+                                <button type="submit" class="btn btn-danger mt-3">Actualizar Estudiante</button>
                                 <a href="../estudiantes.php" class="btn btn-secondary mt-3">Cancelar</a>
                             </div>
                         </div>

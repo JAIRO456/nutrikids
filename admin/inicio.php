@@ -8,7 +8,14 @@
 
     include 'menu.php';
 
-    $sqlInfoNutriconal = $con -> prepare("SELECT SUM(calorias) AS total_cal, SUM(proteinas) AS total_pro, SUM(carbohidratos) AS total_car, SUM(grasas) AS total_gras, SUM(azucares) AS total_azu, SUM(sodio) AS total_sod FROM informacion_nutricional");
+    $sqlInfoNutriconal = $con -> prepare("SELECT SUM(informacion_nutricional.calorias * detalles_pedidos_producto.cantidad) AS total_cal, 
+    SUM(informacion_nutricional.proteinas * detalles_pedidos_producto.cantidad) AS total_pro, 
+    SUM(informacion_nutricional.carbohidratos * detalles_pedidos_producto.cantidad) AS total_car, 
+    SUM(informacion_nutricional.grasas * detalles_pedidos_producto.cantidad) AS total_gras, 
+    SUM(informacion_nutricional.azucares * detalles_pedidos_producto.cantidad) AS total_azu, 
+    SUM(informacion_nutricional.sodio * detalles_pedidos_producto.cantidad) AS total_sod FROM informacion_nutricional 
+    INNER JOIN producto ON informacion_nutricional.id_producto = producto.id_producto
+    INNER JOIN detalles_pedidos_producto ON producto.id_producto = detalles_pedidos_producto.id_producto");
     $sqlInfoNutriconal -> execute();
     $InfoNutric = $sqlInfoNutriconal -> fetch(PDO::FETCH_ASSOC);
 ?>
@@ -78,20 +85,22 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow mb-2">
+        <div class="bg-white p-3 rounded shadow mb-2">
             <div class="justify-content-center align-items-center mb-2">
                 <h2 class="text-center font-semibold mb-2">Reportes Nutricionales</h2>
             </div>
-            <div class="flex space-x-4" style='width: 500px; height: 600px;'>
-                <div class="d-flex gap-2 mt-2">
+            <div class="row">
+                <div class="d-flex justify-content-center">
                     <input type="date" id="fecha_ini" class="form-control" style="width: 300px;">
                     <input type="date" id="fecha_fin" class="form-control" style="width: 300px;">
                     <button onclick="filtrarGrafica()" class="btn btn-danger">Filtrar</button>
                     <button onclick="resetFiltros()" class="btn btn-secondary">Reset</button>
                 </div>
-                <div class="flex-1">
+                <div class="col-12 mt-2">
                     <h4 class="text-center font-semibold mt-2">Distribución de Nutrientes</h4>
-                    <canvas id="nutrient" class="mt-2"></canvas>
+                    <div style="height:350px;" class="d-flex justify-content-center">
+                        <canvas id="nutrient" class="mt-2 text-center"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -271,8 +280,8 @@
                             <td>${user.nombre} ${user.apellido}</td>
                             <td class="d-none d-sm-table-cell">${user.email}</td>
                             <td>
-                                <a class='btn btn-primary' href="directores/update_admin.php?id=${user.documento}"><i class="bi bi-pencil-square"></i></a>
-                                <a class='btn btn-danger' href="directores/delete_admin.php?id=${user.documento}"><i class="bi bi-trash"></i></a>
+                                <a class='btn btn-primary' href="directores/update_director.php?id=${user.documento}"><i class="bi bi-pencil-square"></i></a>
+                                <a class='btn btn-danger' href="directores/delete_director.php?id=${user.documento}"><i class="bi bi-trash"></i></a>
                             </td>
                         `;
                         tbody.appendChild(tr);

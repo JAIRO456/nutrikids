@@ -23,25 +23,21 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card shadow mt-1">
-                    <div class="card-header">
-                        <h4 class='text-center'>Menus</h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table" id="table-menus">
-                            <thead class='text-center'>
-                                <tr>
-                                    <th>Documento</th>
-                                    <th>Estudiante</th>
-                                    <th class="d-none d-sm-table-cell">Menu</th>
-                                    <th>Estado</th>
-                                    <th>Accion</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-body" class='text-center'></tbody>
-                        </table>
-                    </div>
-                </div>
+                    <h2 class="text-center">Menus</h2>
+                    <table class="table table-bordered table-striped text-center" id="table-menus">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Estudiante</th>
+                                <th class="d-none d-sm-table-cell">Menu</th>
+                                <th>Estado</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -59,7 +55,7 @@
                     data.forEach(menu => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${menu.documento_est}</td>
+                            <td>${menu.id_menu}</td>
                             <td>${menu.nombre} ${menu.apellido}</td>
                             <td class="d-none d-sm-table-cell">${menu.nombre_menu}</td>
                             <td>${menu.estado}</td>
@@ -72,8 +68,8 @@
                 })
             .catch(error => console.error('Error al obtener los Menus:', error));
         }
-        document.addEventListener('DOMContentLoaded', function () {
+        setInterval(function () {
             getMenus();
-        });
+        }, 3000);
     </script>
 </html>

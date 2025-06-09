@@ -12,7 +12,7 @@
 
     if ($sqlUserNew -> execute([$documento])) {
         $u = $sqlUserNew -> fetch();
-        $sqlSchools = $con->prepare("SELECT nombre, apellido, email FROM estudiantes
+        $sqlSchools = $con->prepare("SELECT estudiantes.documento_est, estudiantes.nombre, estudiantes.apellido, estudiantes.email FROM estudiantes
         INNER JOIN detalles_estudiantes_escuela ON estudiantes.documento_est = detalles_estudiantes_escuela.documento_est
         INNER JOIN escuelas ON detalles_estudiantes_escuela.id_escuela = escuelas.id_escuela
         WHERE escuelas.id_escuela = ?");

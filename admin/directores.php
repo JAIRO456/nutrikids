@@ -25,7 +25,7 @@
                 <div class="col-md-12">
                     <div class="row mb-1">
                         <div class="col-md-6 mb-1">
-                            <a href="directores/crear_admin.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Director</a>
+                            <a href="directores/crear_director.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Director</a>
                             <a href="directores/pdf.php" class='btn btn-danger'><i class="bi bi-file-earmark-pdf-fill"></i> PDF</a>
                             <button onclick="window.location.href='directores/excel.php'" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i> Excel</button>
                         </div>
@@ -81,14 +81,14 @@
                     data.data.forEach(admin => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td class="d-none d-sm-table-cell"><img class="d-none d-sm-table-cell" src="../users/${admin.imagen}" alt="Imagen" width="50"></td>
+                            <td class="d-none d-sm-table-cell"><img class="d-none d-sm-table-cell" src="../img/users/${admin.imagen}" alt="Imagen" width="50"></td>
                             <td>${admin.documento}</td>
                             <td>${admin.nombre}<br>${admin.apellido}</br>
                             <td class="d-none d-sm-table-cell">${admin.email}</td>
                             <td>${admin.nombre_escuela}</td>
                             <td>
-                                <a class='btn btn-primary' href="directores/update_admin.php?id=${admin.documento}"><i class="bi bi-pencil-square"></i></a>
-                                <a class='btn btn-danger' href="directores/delete_admin.php?id=${admin.documento}"><i class="bi bi-trash"></i></a>
+                                <a class='btn btn-primary' href="directores/update_director.php?id=${admin.documento}"><i class="bi bi-pencil-square"></i></a>
+                                <a class='btn btn-danger' href="directores/delete_director.php?id=${admin.documento}"><i class="bi bi-trash"></i></a>
                             </td>
                         `;
                         tableBody.appendChild(row);

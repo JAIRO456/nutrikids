@@ -53,11 +53,18 @@
                     </tfoot>
                 </table>
 
-                <form method="POST" action="../ajax/update_menu.php">
+                <form id="estadoForm" method="POST" action="../ajax/update_menu.php">
                     <input type="hidden" name="id_estudiante" value="<?php echo $_GET['id_estudiante']; ?>">
-                    <input type="submit" name="entregado" class="btn btn-success" value="Entregado">
-                    <input type="submit" name="cancelado" class="btn btn-danger" value="No Entregado">
+                    <input type="hidden" name="estado" id="estado">
+                    <button type="button" class="btn btn-success" onclick="actualizarEstado(2)">Entregado</button>
+                    <button type="button" class="btn btn-danger" onclick="actualizarEstado(3)">No Entregado</button>
                 </form>
+                <script>
+                function actualizarEstado(estado) {
+                    document.getElementById('estado').value = estado;
+                    document.getElementById('estadoForm').submit();
+                }
+                </script>
             </div>
         </div>
     </main>

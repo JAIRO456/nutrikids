@@ -8,14 +8,15 @@
     include '../menu.php';
 
     $id_escuela = $_GET['id'];
-    $sqlUsuarios = $con -> prepare("SELECT * FROM escuelas WHERE id_escuela = ?");
-    $sqlUsuarios -> execute([$id_escuela]);
-    $usuarios = $sqlUsuarios -> fetch();
+    $sqlescuelas = $con -> prepare("SELECT * FROM escuelas WHERE id_escuela = ?");
+    $sqlescuelas -> execute([$id_escuela]);
+    $escuelas = $sqlescuelas -> fetch();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre_escuela = $_POST['nombre_escuela'];
         $telefono = $_POST['telefono_esc'];
         $email = $_POST['email_esc'];
+        $fileName = $escuelas['imagen_esc'];
 
         // Si se sube una imagen nueva
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
@@ -23,7 +24,7 @@
             $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             $formatType = array("jpg", "jpeg", "png");
-            $ruta = '../../img/users/';
+            $ruta = '../../img/schools/';
             $newruta = $ruta . basename($fileName);
 
             if (!in_array($fileExtension, $formatType)) {
@@ -43,8 +44,8 @@
                 exit;
             }
             // Eliminar la imagen anterior si no es la predeterminada
-            if ($usuarios['imagen'] && $usuarios['imagen'] != 'default.png') {
-                $oldImagePath = $ruta . $usuarios['imagen'];
+            if ($escuelas['imagen_esc'] && $escuelas['imagen_esc'] != 'default.png') {
+                $oldImagePath = $ruta . $escuelas['imagen_esc'];
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
@@ -77,7 +78,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Actualizar Escuela</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -122,15 +123,15 @@
                     <form action="" method="POST" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="nombre_escuela" class="form-label">Nombre de la Escuela</label>
-                            <input type="text" class="form-control" id="nombre_escuela" name="nombre_escuela" value="<?php echo $usuarios['nombre_escuela']; ?>" required>
+                            <input type="text" class="form-control" id="nombre_escuela" name="nombre_escuela" value="<?php echo $escuelas['nombre_escuela']; ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="email_esc" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="email_esc" name="email_esc" value="<?php echo $usuarios['email_esc']; ?>" required>
+                            <input type="email" class="form-control" id="email_esc" name="email_esc" value="<?php echo $escuelas['email_esc']; ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="telefono_esc" class="form-label">Teléfono</label>
-                            <input type="number" class="form-control" id="telefono_esc" name="telefono_esc" value="<?php echo $usuarios['telefono_esc']; ?>" required>
+                            <input type="number" class="form-control" id="telefono_esc" name="telefono_esc" value="<?php echo $escuelas['telefono_esc']; ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="imagen" class="form-label">Imagen</label>
@@ -138,7 +139,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="imagen_actual" class="form-label">Imagen Actual</label><br>
-                            <img src="../../img/schools/<?= $usuarios['imagen_esc']; ?>" alt="<?= $usuarios['nombre_escuela']; ?>" class="img-thumbnail" width="200">
+                            <img src="../../img/schools/<?= $escuelas['imagen_esc']; ?>" alt="<?= $escuelas['nombre_escuela']; ?>" class="img-thumbnail" width="200">
                         </div>
                         <div class="mb-3 text-center">
                             <button type="submit" class="btn btn-danger">Actualizar Escuela</button>

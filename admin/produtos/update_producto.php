@@ -22,8 +22,7 @@
         $precio = $_POST['precio'];
         $id_categoria = $_POST['id_categoria'];
         $descripcion = $_POST['descripcion'];
-        $imagen = $_FILES['imagen']['name'];
-        $temp = $_FILES['imagen']['tmp_name'];
+        $fileName = $producto['imagen_prod'];
 
         $calorias = $_POST['calorias'];
         $proteinas = $_POST['proteinas'];
@@ -38,7 +37,7 @@
             $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             $formatType = array("jpg", "jpeg", "png");
-            $ruta = '../../img/users/';
+            $ruta = '../../img/products/';
             $newruta = $ruta . basename($fileName);
 
             if (!in_array($fileExtension, $formatType)) {
@@ -103,7 +102,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
+    <title>Actualizar Productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">

@@ -87,19 +87,21 @@
             </div>
         </div>
         <div class="bg-white p-3 rounded shadow mb-2">
-            <div class="d-flex justify-content-center align-items-center mb-2">
-                <h2 class="text-center fw-semibold mb-2">Reportes Nutricionales</h2>
+            <div class="justify-content-center align-items-center mb-2">
+                <h2 class="text-center font-semibold mb-2">Reportes Nutricionales</h2>
             </div>
-            <div class="row" style='height: 600px;'>
-                <div class="d-flex gap-2 mt-2">
+            <div class="row">
+                <div class="d-flex justify-content-center">
                     <input type="date" id="fecha_ini" class="form-control" style="width: 300px;">
                     <input type="date" id="fecha_fin" class="form-control" style="width: 300px;">
                     <button onclick="filtrarGrafica()" class="btn btn-danger">Filtrar</button>
                     <button onclick="resetFiltros()" class="btn btn-secondary">Reset</button>
                 </div>
-                <div class="col-12 mt-3">
-                    <h4 class="text-center fw-semibold mt-2">Distribución de Nutrientes</h4>
-                    <canvas id="nutrient" class="mt-2" height="300"></canvas>
+                <div class="col-12 mt-2">
+                    <h4 class="text-center font-semibold mt-2">Distribución de Nutrientes</h4>
+                    <div style="height:350px;" class="d-flex justify-content-center">
+                        <canvas id="nutrient" class="mt-2 text-center"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -227,9 +229,14 @@
                     users.forEach(user => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
+                            <td>${user.documento}</td>
                             <td>${user.nombre}</td>
                             <td>${user.apellido}</td>
                             <td>${user.email}</td>
+                            <td>
+                                <a class='btn btn-primary' href='usuarios/update_users.php?id=${user.documento}'><i class='bi bi-pencil-square'></i></a>
+                                <a class='btn btn-danger' href='usuarios/delete_users.php?id=${user.documento}'><i class='bi bi-trash'></i></a>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -247,9 +254,14 @@
                     users.forEach(student => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
+                            <td>${student.documento_est}</td>
                             <td>${student.nombre}</td>
                             <td>${student.apellido}</td>
                             <td>${student.email}</td>
+                            <td>
+                                <a class='btn btn-primary' href="estudiantes/update_estudiantes.php?id=${student.documento_est}"><i class="bi bi-pencil-square"></i></a>
+                                <a class='btn btn-danger' href="estudiantes/delete_estudiantes.php?id=${student.documento_est}"><i class="bi bi-trash"></i></a>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
