@@ -22,7 +22,7 @@
             INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela
             INNER JOIN roles ON usuarios.id_rol = roles.id_rol
             INNER JOIN estados ON usuarios.id_estado = estados.id_estado
-            WHERE usuarios.documento != ? AND detalles_usuarios_escuela.id_escuela = ? AND (usuarios.documento LIKE ? OR usuarios.nombre LIKE ? OR usuarios.apellido LIKE ? OR roles.rol LIKE ?) ORDER BY documento ASC");
+            WHERE usuarios.documento != ? AND usuarios.id_rol > 2 AND detalles_usuarios_escuela.id_escuela = ? AND (usuarios.documento LIKE ? OR usuarios.nombre LIKE ? OR usuarios.apellido LIKE ? OR roles.rol LIKE ?) ORDER BY documento ASC");
             $sqlUsuarios->execute([$documento, $u['id_escuela'], $searchLike, $searchLike, $searchLike, $searchLike]);
         }
         elseif (!empty($rol)) {
@@ -31,7 +31,7 @@
             INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela
             INNER JOIN roles ON usuarios.id_rol = roles.id_rol
             INNER JOIN estados ON usuarios.id_estado = estados.id_estado
-            WHERE usuarios.documento != ? AND detalles_usuarios_escuela.id_escuela = ? AND roles.id_rol = ? ORDER BY documento ASC");
+            WHERE usuarios.documento != ? AND usuarios.id_rol > 2 AND detalles_usuarios_escuela.id_escuela = ? AND roles.id_rol = ? ORDER BY documento ASC");
             $sqlUsuarios->execute([$documento, $u['id_escuela'], $rol]);
         } 
         else {
@@ -40,7 +40,7 @@
             INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela
             INNER JOIN roles ON usuarios.id_rol = roles.id_rol
             INNER JOIN estados ON usuarios.id_estado = estados.id_estado
-            WHERE usuarios.documento != ? AND detalles_usuarios_escuela.id_escuela = ? ORDER BY documento ASC");
+            WHERE usuarios.documento != ? AND usuarios.id_rol > 2 AND detalles_usuarios_escuela.id_escuela = ? ORDER BY documento ASC");
             $sqlUsuarios->execute([$documento, $u['id_escuela']]);
         }
 

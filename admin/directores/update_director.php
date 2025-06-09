@@ -22,19 +22,48 @@
         $telefono = $_POST['telefono'];
         $id_rol = $_POST['id_rol'];
         $id_estado = $_POST['id_estado'];
+        $estado_old = $usuarios['id_estado'];
+        $fileName = $usuarios['imagen'];
         $id_escuela = $_POST['id_escuela'];
 
-        if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/users/" . $imagen);
-        } 
-        else {
-            $imagen = $usuarios['imagen'];
+        // Si se sube una imagen nueva
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+            $fileTmp = $_FILES['imagen']['tmp_name'];
+            $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
+            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $formatType = array("jpg", "jpeg", "png");
+            $ruta = '../../img/users/';
+            $newruta = $ruta . basename($fileName);
+
+            if (!in_array($fileExtension, $formatType)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Formato de imagen no válido.');
+                        });
+                    </script>";
+                exit;
+            }
+            if (!move_uploaded_file($fileTmp, $newruta)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al subir la imagen.');
+                        });
+                    </script>";
+                exit;
+            }
+            // Eliminar la imagen anterior si no es la predeterminada
+            if ($usuarios['imagen'] && $usuarios['imagen'] != 'default.png') {
+                $oldImagePath = $ruta . $usuarios['imagen'];
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
         }
 
         $estado_old = $usuarios['id_estado'];
 
         $sqlUpdate = $con->prepare("UPDATE usuarios SET telefono = ?, imagen = ?, id_rol = ?, id_estado = ? WHERE documento = ?");
-        if ($sqlUpdate->execute([$telefono, $imagen, $id_rol, $id_estado, $usuario_id])) {
+        if ($sqlUpdate->execute([$telefono, $fileName, $id_rol, $id_estado, $usuario_id])) {
             $sqlUpdateDetails = $con->prepare("UPDATE detalles_usuarios_escuela SET id_escuela = ? WHERE documento = ?");
             if ($sqlUpdateDetails->execute([$id_escuela, $usuario_id])) {
                 if ($estado_old != $id_estado && $id_estado == 1) {

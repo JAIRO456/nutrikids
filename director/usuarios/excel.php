@@ -22,7 +22,7 @@
     INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela
     INNER JOIN roles ON usuarios.id_rol = roles.id_rol
     INNER JOIN estados ON usuarios.id_estado = estados.id_estado
-    WHERE usuarios.documento != ? AND detalles_usuarios_escuela.id_escuela = ? ORDER BY usuarios.documento ASC");
+    WHERE usuarios.documento != ? AND usuarios.id_rol > 2 AND detalles_usuarios_escuela.id_escuela = ? ORDER BY usuarios.documento ASC");
     $sqlUsuarios->execute([$documento, $u['id_escuela']]);
     $results = $sqlUsuarios->fetchAll(PDO::FETCH_ASSOC);
 

@@ -11,18 +11,39 @@
         $nombre = $_POST['nombre'];
         $email = $_POST['email'];
         $telefono = $_POST['telefono'];
-        $imagen = $_FILES['imagen']['name'];
-        $temp = $_FILES['imagen']['tmp_name'];
 
-        if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/schools/" . $imagen);
-        } 
+        // Si se sube una imagen nueva
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+            $fileTmp = $_FILES['imagen']['tmp_name'];
+            $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
+            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $formatType = array("jpg", "jpeg", "png");
+            $ruta = '../../img/users/';
+            $newruta = $ruta . basename($fileName);
+
+            if (!in_array($fileExtension, $formatType)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Formato de imagen no válido.');
+                        });
+                    </script>";
+                exit;
+            }
+            if (!move_uploaded_file($fileTmp, $newruta)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al subir la imagen.');
+                        });
+                    </script>";
+                exit;
+            }
+        }
         else {
-            $imagen = null;
+            $fileName = 'default.png';
         }
 
         $sqlInsertSchool = $con->prepare("INSERT INTO escuelas (nombre_escuela, email_esc, telefono_esc, imagen_esc) VALUES (?, ?, ?, ?)");
-        if ($sqlInsertSchool->execute([$nombre, $email, $telefono, $imagen])) {
+        if ($sqlInsertSchool->execute([$nombre, $email, $telefono, $fileName])) {
             echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
                             showModal('Escuela creada exitosamente.');
@@ -138,6 +159,24 @@
     }
     function closeModal() {
         msgModal.style.display = 'none';
-    }   
+    }  
+    
+    function email_password(email, nombre, apellido, documento, password_code) {
+        fetch('../../PHPMailer-master/config/email_password.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, nombre, apellido })
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } 
+            else {
+                throw new Error('Error en la solicitud');
+            }
+        })
+    }
 </script>
 </html>

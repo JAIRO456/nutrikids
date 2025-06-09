@@ -7,7 +7,6 @@
 
     include '../menu.php';
 
-
     $id_escuela = $_GET['id'];
     $sqlUsuarios = $con -> prepare("SELECT * FROM escuelas WHERE id_escuela = ?");
     $sqlUsuarios -> execute([$id_escuela]);
@@ -17,18 +16,43 @@
         $nombre_escuela = $_POST['nombre_escuela'];
         $telefono = $_POST['telefono_esc'];
         $email = $_POST['email_esc'];
-        $imagen = $_FILES['imagen']['name'];
-        $temp = $_FILES['imagen']['tmp_name'];
 
-        if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/schools/" . $imagen);
-        } 
-        else {
-            $imagen = $usuarios['imagen_esc'];
+        // Si se sube una imagen nueva
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+            $fileTmp = $_FILES['imagen']['tmp_name'];
+            $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
+            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $formatType = array("jpg", "jpeg", "png");
+            $ruta = '../../img/users/';
+            $newruta = $ruta . basename($fileName);
+
+            if (!in_array($fileExtension, $formatType)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Formato de imagen no válido.');
+                        });
+                    </script>";
+                exit;
+            }
+            if (!move_uploaded_file($fileTmp, $newruta)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al subir la imagen.');
+                        });
+                    </script>";
+                exit;
+            }
+            // Eliminar la imagen anterior si no es la predeterminada
+            if ($usuarios['imagen'] && $usuarios['imagen'] != 'default.png') {
+                $oldImagePath = $ruta . $usuarios['imagen'];
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
         }
 
         $sqlUpdate = $con->prepare("UPDATE escuelas SET nombre_escuela = ?, telefono_esc = ?, email_esc = ?, imagen_esc = ? WHERE id_escuela = ?");
-        if ($sqlUpdate->execute([$nombre_escuela, $telefono, $email, $imagen, $id_escuela])) {
+        if ($sqlUpdate->execute([$nombre_escuela, $telefono, $email, $fileName, $id_escuela])) {
             echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
                             showModal('Escuela actualizada exitosamente.');
@@ -145,6 +169,24 @@
     }
     function closeModal() {
         msgModal.style.display = 'none';
-    }   
+    }  
+    
+    function email_password(email, nombre, apellido, documento, password_code) {
+        fetch('../../PHPMailer-master/config/email_password.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, nombre, apellido })
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } 
+            else {
+                throw new Error('Error en la solicitud');
+            }
+        })
+    }
 </script>
 </html>

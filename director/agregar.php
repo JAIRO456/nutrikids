@@ -6,22 +6,6 @@
     $con = $conex->conectar();
 
     include 'menu.php';
-
-    if (isset($_GET['id'])) {
-        $id_pedido = addslashes($_GET['id']);
-
-        if (isset($_POST['dias'])) {
-            $idPedido = $_GET['pedidos'];
-            $sqlPedidos = $con->prepare("SELECT * FROM detalles_pedidos_producto
-            INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
-            INNER JOIN estudiantes ON detalles_pedidos_producto.documento_est = estudiantes.documento_est
-            INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
-            INNER JOIN producto ON detalles_pedidos_producto.id_producto = producto.id_producto
-            INNER JOIN estados ON pedidos.id_estado = estados.id_estado WHERE pedidos.id_pedidos = ?");
-            $sqlPedidos->execute([$idPedido]);
-            $Pedidos = $sqlPedidos->fetchAll(PDO::FETCH_ASSOC);
-        }
-    }
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +24,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">
                     <div class="card-body text-center">
-                        <a class="nav-link" href="crear_vendedores.php" class="text-white">
+                        <a class="nav-link" href="usuarios/crear_vendedores.php" class="text-white">
                             <h5 class="card-title">Vendedor</h5> 
                             <i class="bi bi-person-fill"></i>
                         </a>
@@ -50,7 +34,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">
                     <div class="card-body text-center">
-                        <a class="nav-link" href="crear_acudientes.php" class="text-white">
+                        <a class="nav-link" href="usuarios/crear_acudientes.php" class="text-white">
                             <h5 class="card-title">Acudientes</h5> 
                             <i class="bi bi-person-fill"></i>
                         </a>
@@ -60,7 +44,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card text-white bg-danger">
                     <div class="card-body text-center">
-                        <a class="nav-link" href="crear_estudiantes.php" class="text-white">
+                        <a class="nav-link" href="estudiantes/crear_estudiantes.php" class="text-white">
                             <h5 class="card-title">Estudiantes</h5>
                             <i class="bi bi-person-fill"></i>
                         </a>

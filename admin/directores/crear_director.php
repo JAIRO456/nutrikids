@@ -16,18 +16,39 @@
         $password_code = rand(1000, 9999);
         $password = password_hash($password_code, PASSWORD_DEFAULT);
         $id_escuela = $_POST['escuela'];
-        $imagen = $_FILES['imagen']['name'];
-        $temp = $_FILES['imagen']['tmp_name'];
 
-        if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/users/" . $imagen);
-        } 
+        // Si se sube una imagen nueva
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+            $fileTmp = $_FILES['imagen']['tmp_name'];
+            $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
+            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $formatType = array("jpg", "jpeg", "png");
+            $ruta = '../../img/users/';
+            $newruta = $ruta . basename($fileName);
+
+            if (!in_array($fileExtension, $formatType)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Formato de imagen no válido.');
+                        });
+                    </script>";
+                exit;
+            }
+            if (!move_uploaded_file($fileTmp, $newruta)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al subir la imagen.');
+                        });
+                    </script>";
+                exit;
+            }
+        }
         else {
-            $imagen = null;
+            $fileName = 'default.png';
         }
 
         $sqlInsertDirector = $con->prepare("INSERT INTO usuarios (documento, nombre, apellido, email, telefono, password, imagen, id_rol, id_estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $imagen, 2, 2])) {
+        if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $fileName, 2, 2])) {
             $sqlInsertDetails = $con->prepare("INSERT INTO detalles_usuarios_escuela (documento, id_escuela) VALUES (?, ?)");
             if ($sqlInsertDetails->execute([$documento, $id_escuela])) {
                 $sqlEmailPassword = $con->prepare("SELECT email, nombre, apellido, documento, password FROM usuarios WHERE documento = ?");

@@ -32,16 +32,42 @@
         $azucares = $_POST['azucares'];
         $sodio = $_POST['sodio'];
 
+        // Si se sube una imagen nueva
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+            $fileTmp = $_FILES['imagen']['tmp_name'];
+            $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
+            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $formatType = array("jpg", "jpeg", "png");
+            $ruta = '../../img/users/';
+            $newruta = $ruta . basename($fileName);
 
-        if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../../img/products/" . $imagen);
-        } 
-        else {
-            $imagen = $producto['imagen_prod'];
+            if (!in_array($fileExtension, $formatType)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Formato de imagen no válido.');
+                        });
+                    </script>";
+                exit;
+            }
+            if (!move_uploaded_file($fileTmp, $newruta)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al subir la imagen.');
+                        });
+                    </script>";
+                exit;
+            }
+            // Eliminar la imagen anterior si no es la predeterminada
+            if ($usuarios['imagen'] && $usuarios['imagen'] != 'default.png') {
+                $oldImagePath = $ruta . $usuarios['imagen'];
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
         }
 
         $sqlUpdateProduct = $con->prepare("UPDATE producto SET nombre_prod=?, descripcion=?, precio=?, imagen_prod=?, id_categoria=?, id_marca=? WHERE id_producto=?");
-        if ($sqlUpdateProduct->execute([$nombre_prod, $descripcion, $precio, $imagen, $id_categoria, $id_marca, $id_producto])) {
+        if ($sqlUpdateProduct->execute([$nombre_prod, $descripcion, $precio, $fileName, $id_categoria, $id_marca, $id_producto])) {
             $sqlUpdateInfoNutricional = $con->prepare("UPDATE informacion_nutricional SET calorias=?, proteinas=?, carbohidratos=?, grasas=?, azucares=?, sodio=? WHERE id_producto=?");
             if ($sqlUpdateInfoNutricional->execute([$calorias, $proteinas, $carbohidratos, $grasas, $azucares, $sodio, $id_producto])) {
                 echo "<script>
@@ -230,13 +256,6 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
 <script>
-    JsBarcode("#barcode-<?= $producto['id_producto']; ?>", "<?= $producto['id_producto']; ?>", {
-        format: "CODE128",
-        width: 2,
-        height: 40,
-        displayValue: true
-    });
-
     const msgModal = document.getElementById('msgModal');
     const message = document.getElementById('Message');
 
@@ -246,6 +265,32 @@
     }
     function closeModal() {
         msgModal.style.display = 'none';
-    } 
+    }  
+    
+    function email_password(email, nombre, apellido, documento, password_code) {
+        fetch('../../PHPMailer-master/config/email_password.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, nombre, apellido })
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } 
+            else {
+                throw new Error('Error en la solicitud');
+            }
+        })
+    }
+</script>
+<script>
+    JsBarcode("#barcode-<?= $producto['id_producto']; ?>", "<?= $producto['id_producto']; ?>", {
+        format: "CODE128",
+        width: 2,
+        height: 40,
+        displayValue: true
+    });
 </script>
 </html>

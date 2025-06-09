@@ -1,11 +1,11 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
-    require_once('../include/validate_sesion.php');
+    require_once('../../conex/conex.php');
+    require_once('../../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
 
-    include 'menu.php';
+    include '../menu.php';
 
     $documento = $_SESSION['documento'];
     $sql = $con->prepare("SELECT * FROM usuarios 
@@ -23,29 +23,82 @@
         $telefono = $_POST['telefono'];
         $password = password_hash(rand(1000, 9999), PASSWORD_DEFAULT);
         $id_escuela = $u['id_escuela'];
-        $imagen = $_FILES['imagen']['name'];
-        $temp = $_FILES['imagen']['tmp_name'];
 
-        if (!empty($imagen)) {
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "../img/users/" . $imagen);
-        } 
+        // Si se sube una imagen nueva
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+            $fileTmp = $_FILES['imagen']['tmp_name'];
+            $fileName = str_replace(' ', '_', $_FILES['imagen']['name']);
+            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $formatType = array("jpg", "jpeg", "png");
+            $ruta = '../../img/users/';
+            $newruta = $ruta . basename($fileName);
+
+            if (!in_array($fileExtension, $formatType)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Formato de imagen no válido.');
+                        });
+                    </script>";
+                exit;
+            }
+            if (!move_uploaded_file($fileTmp, $newruta)) {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showModal('Error al subir la imagen.');
+                        });
+                    </script>";
+                exit;
+            }
+        }
         else {
-            $imagen = null;
+            $fileName = 'default.png';
         }
 
         $sqlInsertDirector = $con->prepare("INSERT INTO usuarios (documento, nombre, apellido, email, telefono, password, imagen, id_rol, id_estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $imagen, 4, 2])) {
+        if ($sqlInsertDirector->execute([$documento, $nombre, $apellido, $email, $telefono, $password, $fileName, 4, 2])) {
             $sqlInsertDetails = $con->prepare("INSERT INTO detalles_usuarios_escuela (documento, id_escuela) VALUES (?, ?)");
             if ($sqlInsertDetails->execute([$documento, $id_escuela])) {
-                echo '<script>alert("Acudiente creado exitosamente")</script>';
-                echo '<script>window.location = "agregar.php"</script>';
-            } 
+                $sqlEmailPassword = $con->prepare("SELECT email, nombre, apellido, documento, password FROM usuarios WHERE documento = ?");
+                $sqlEmailPassword->execute([$documento]);
+                $email = $sqlEmailPassword->fetch(PDO::FETCH_ASSOC);
+
+                require_once '../../libraries/PHPMailer-master/config/email_password.php';
+                if (email_password($email['email'], $email['nombre'], $email['apellido'], $email['documento'], $password_code)) {
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                showModal('El Acudiente se creado exitosamente, se le ha enviado un correo de notificación.');
+                                setTimeout(() => {
+                                    window.location = '../directores.php';
+                                }, 3000);
+                            });
+                        </script>";
+                    // echo '<script>alert("El director ha sido activado y se le ha enviado un correo de notificación");</script>';
+                } 
+                else {
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                showModal('El Acudiente se creado exitosamente, pero hubo un error al enviar el correo.');
+                            });
+                        </script>";
+                    // echo '<script>alert("El director se creado exitosamente, pero hubo un error al enviar el correo");</script>';
+                }
+
+                // echo '<script>window.location.href="../directores.php"</script>';
+            }
             else {
-                echo '<script>alert("Error al asignar la escuela al Acudiente")</script>';
+                echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showModal('Error al asignar la escuela al Acudiente.');
+                    });
+                </script>";
             }
         } 
         else {
-            echo '<script>alert("Error al crear el Acudiente")</script>';
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showModal('Error al registrar al Acudiente.');
+                    });
+                </script>";
         }
     }
 ?>
@@ -93,13 +146,51 @@
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-danger">Crear Acudiente</button>
-                            <a href="agregar.php" class="btn btn-secondary">Cancelar</a>
+                            <a href="../agregar.php" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </form>
+                </div>
+            </div>
+            <div id="msgModal" class="modal">
+                <div class="modal-content">
+                    <p id="Message">
+                        
+                    </p>
+                    <button onclick="closeModal()">Cerrar</button>
                 </div>
             </div>
         </div>
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+<script>
+    const msgModal = document.getElementById('msgModal');
+    const message = document.getElementById('Message');
+
+    function showModal(msg) {
+        message.textContent = msg;
+        msgModal.style.display = 'flex';
+    }
+    function closeModal() {
+        msgModal.style.display = 'none';
+    }  
+    
+    function email_password(email, nombre, apellido, documento, password_code) {
+        fetch('../../PHPMailer-master/config/email_password.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, nombre, apellido })
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } 
+            else {
+                throw new Error('Error en la solicitud');
+            }
+        })
+    }
+</script>
 </html>
