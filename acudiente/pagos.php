@@ -11,18 +11,15 @@
         $documento = $_SESSION['documento'];
         $id_menu = $_POST['id_menu'];
         $documento_est = $_POST['documento_est'];
-        $dias = isset($_POST['dia']) ? $_POST['dia'] : [];
+        $dias = !empty($_POST['dias']) ? json_decode($_POST['dias'], true) : [];
         $fecha_ini = $_POST['fecha_ini'];
         $fecha_fin = $_POST['fecha_fin'];
         // $monto = $_POST['monto'];
         $metodo_pago = $_POST['metodo_pago'];
-        $productos = isset($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
+        $productos = $productos = !empty($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
 
         if (empty($id_menu) || empty($documento_est) || empty($dias) || empty($fecha_ini) || empty($fecha_fin) || empty($metodo_pago)) {
             $mensaje = "Por favor complete todos los campos requeridos.";
-        } 
-        else if (count($dias) == 0) {
-            $mensaje = "Seleccione al menos un día.";
         } 
         else if (count($productos) == 0) {
             $mensaje = "No hay productos seleccionados.";
@@ -52,6 +49,8 @@
                             $sqlInsertDetsMenu = $con->prepare("INSERT INTO detalles_pedidos_producto (id_pedido, documento_est, id_menu, id_producto, cantidad, subtotal)
                             VALUES (?, ?, ?, ?, ?, ?)");
                             $sqlInsertDetsMenu->execute([$id_pedido, $documento_est, $id_menu, $id_producto, $cantidad, $subtotal]);
+                            echo "<script>alert('Pedido registrado exitosamente');</script>";
+                            echo "<script>location.href='pagos.php';</script>";
                         } 
                         else {
                             throw new Exception("Product with ID $id_producto not found.");
@@ -127,25 +126,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="container card mb-3 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">Selección de Días</h5>
-                            <div class="row g-3">
-                                <?php
-                                $days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
-                                foreach ($days as $day) {
-                                    echo "
-                                    <div class='col-md-6'>
-                                        <div class='form-check'>
-                                            <input type='checkbox' class='form-check-input dia' id='dia-$day' name='dia[]' value='$day'>
-                                            <label class='form-check-label' for='dia-$day'>" . ucfirst($day) . "</label>
-                                        </div>
-                                    </div>";
-                                }
-                                ?>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="fecha_ini" class="form-label">Fecha Inicio</label>
@@ -181,6 +161,7 @@
             <div class="card mb-4">
                 <div class="card-header">Detalles del Menú Seleccionado</div>
                 <input type="hidden" name="productos" id="productos">
+                <input type="hidden" name="dias" id="dias">
                 <div class="card-body">
                     <table class="table table-bordered table-striped" id="table-pedidos">
                         <thead class="table-dark">
@@ -208,18 +189,27 @@
     </main>
 </body>
 <script>
-    let listaProductos = [];
-    // Función para obtener los detalles del menú seleccionado
-    document.getElementById('id_menu').addEventListener('change', function () {
+    let selectedProducts = [];
+    let selectedDays = [];
+
+    document.getElementById('id_menu').addEventListener('change', function() {
         const id_menu = this.value;
-        listaProductos = [];
+        selectedProducts = [];
+        selectedDays = [];
+        
         if (id_menu) {
-            fetch(`../ajax/get_det_menu.php?id_menu=${id_menu}`)
+            fetch(`../ajax/get_det_menu.php?id_menu=${encodeURIComponent(id_menu)}`)
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.getElementById('det_menu');
                     tbody.innerHTML = '';
                     let total = 0;
+
+                    if (data.error) {
+                        tbody.innerHTML = `<tr><td colspan="3">${data.error}</td></tr>`;
+                        return;
+                    }
+
                     data.pedidos.forEach(pedido => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
@@ -230,23 +220,31 @@
                         tbody.appendChild(tr);
                         total += parseFloat(pedido.subtotal);
 
-                        listaProductos.push({
+                        selectedProducts.push({
                             id_producto: pedido.id_producto,
                             nombre_prod: pedido.nombre_prod,
-                            precio: pedido.precio,
-                            cantidad: pedido.cantidad
+                            precio: parseFloat(pedido.precio),
+                            cantidad: parseInt(pedido.cantidad)
                         });
+
+                        if (pedido.days) {
+                            selectedDays.push(pedido.days);
+                        }
                     });
+
                     document.getElementById('total-pedidos').textContent = total.toFixed(2);
-                    document.getElementById('productos').value = JSON.stringify(listaProductos);
-                    
+                    document.getElementById('products').value = JSON.stringify(selectedProducts);
+                    document.getElementById('days').value = JSON.stringify(selectedDays);
                 })
-                .catch(error => console.error('Error:', error));
-        } 
-        else {
-            const tbody = document.getElementById('det_menu');
-            tbody.innerHTML = '<tr><td colspan="3">Seleccione un menú para ver los detalles</td></tr>';
-            document.getElementById('total-pedidos').textContent = '';
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('det_menu').innerHTML = '<tr><td colspan="3">Error al cargar los detalles</td></tr>';
+                });
+        } else {
+            document.getElementById('det_menu').innerHTML = '<tr><td colspan="3">Seleccione un menú para ver los detalles</td></tr>';
+            document.getElementById('total-pedido').textContent = '';
+            document.getElementById('products').value = '';
+            document.getElementById('days').value = '';
         }
     });
 </script>

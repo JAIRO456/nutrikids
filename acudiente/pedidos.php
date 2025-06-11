@@ -32,7 +32,6 @@
                         <option value="viernes">Viernes</option>
                     </select>
                 </form>
-
                 <table class="table table-bordered table-striped mt-4" id="table-pedidos">
                     <thead class="table-dark">
                         <tr>

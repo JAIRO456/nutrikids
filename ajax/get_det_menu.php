@@ -5,7 +5,26 @@
     $conex = new Database;
     $con = $conex->conectar();
 
+    header('Content-Type: application/json');
+
+    $documento = $_SESSION['documento'];
+    $days = [];
+    $selectdays = $_GET['dias'];
+    $days[] = $selectdays;
     $id_menu = $_GET['id_menu'];
+
+    if (!$id_menu || !$documento) {
+        echo json_encode(['error' => 'ID de menú o usuario no válido.']);
+        exit;
+    }
+    
+    // Verificar que el menú pertenece al usuario
+    $sqlMenu = $con->prepare("SELECT id_menu FROM menus WHERE id_menu = ? AND documento = ?");
+    $sqlMenu->execute([$id_menu, $documento]);
+    if (!$sqlMenu->fetch(PDO::FETCH_ASSOC)) {
+        echo json_encode(['error' => 'Menú no encontrado o no autorizado.']);
+        exit;
+    }
 
     if (empty($id_menu)) {
         echo json_encode(['error' => 'ID de menú no proporcionado.']);
@@ -25,12 +44,12 @@
         $subtotal = $pedido['precio'] * $pedido['cantidad'];
         $total += $subtotal;
         $response[] = [
+            'days' => implode(',', $days),
             'nombre_prod' => $pedido['nombre_prod'],
             'cantidad' => $pedido['cantidad'],
             'subtotal' => number_format($subtotal, 2),
-            
             'precio' => $pedido['precio'],
-            'id_producto' => $pedido['id_producto'],
+            'id_producto' => $pedido['id_producto']
         ];
     }
     if (empty($response)) {

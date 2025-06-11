@@ -42,6 +42,25 @@
                                     <label for="nombre_menu" class="form-label">Nombre del Menu</label>
                                     <textarea type="varchar" class="form-control" id="nombre_menu" name="nombre_menu" required></textarea>
                                 </div>
+                                <div class="container card mb-3 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-3">Selección de Días</h5>
+                                        <div class="row g-3">
+                                            <?php
+                                            $days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+                                            foreach ($days as $day) {
+                                                echo "
+                                                <div class='col-md-6'>
+                                                    <div class='form-check'>
+                                                        <input type='checkbox' class='form-check-input dia' id='dia-$day' name='dia[]' value='$day'>
+                                                        <label class='form-check-label' for='dia-$day'>" . ucfirst($day) . "</label>
+                                                    </div>
+                                                </div>";
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="productos" id="productos">
                                 <table class="table cart-table">
                                     <thead class='text-center'>
@@ -76,32 +95,51 @@
     </div>
     <script>
         let listaProductos = [];
-
-        // Cargar productos desde localStorage al iniciar
+        let selectedDays = [];
+                                            
+        // Cargar productos y días desde localStorage al iniciar
         function cargarProductos() {
             const productosGuardados = localStorage.getItem('carrito');
             if (productosGuardados) {
                 listaProductos = JSON.parse(productosGuardados);
             }
+            const diasGuardados = localStorage.getItem('selectedDays');
+            if (diasGuardados) {
+                selectedDays = JSON.parse(diasGuardados);
+                // Actualizar los checkboxes según los días guardados
+                document.querySelectorAll('.dia').forEach(checkbox => {
+                    checkbox.checked = selectedDays.includes(checkbox.value);
+                });
+            }
             actualizarCarrito();
         }
+    
+        // Guardar productos y días en localStorage
         function guardarProductos() {
             localStorage.setItem('carrito', JSON.stringify(listaProductos));
+            localStorage.setItem('selectedDays', JSON.stringify(selectedDays));
         }
-
+    
+        // Actualizar los días seleccionados
+        function actualizarDias() {
+            selectedDays = [];
+            document.querySelectorAll('.dia:checked').forEach(checkbox => {
+                selectedDays.push(checkbox.value);
+            });
+            guardarProductos();
+        }
+    
         function agregarProducto(id_producto, nombre_prod, precio) {
             const productoExistente = listaProductos.find(p => p.id_producto === id_producto);
             if (productoExistente) {
                 productoExistente.cantidad += 1;
-            } 
-            else {
+            } else {
                 listaProductos.push({ id_producto, nombre_prod, precio, cantidad: 1 });
             }
-            guardarProductos(); // Guardar en localStorage
+            guardarProductos();
             actualizarCarrito();
-            getMenu();
         }
-
+    
         function eliminarProducto(id_producto) {
             if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
                 listaProductos = listaProductos.filter(p => p.id_producto !== id_producto);
@@ -109,15 +147,19 @@
                 actualizarCarrito();
             }
         }
-
+    
         function vaciarCarrito() {
             if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
                 listaProductos = [];
+                selectedDays = [];
+                document.querySelectorAll('.dia').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
                 guardarProductos();
                 actualizarCarrito();
             }
         }
-
+    
         function actualizarCarrito() {
             const tableBody = document.getElementById('table-body');
             const cartCount = document.getElementById('cart-count');
@@ -135,12 +177,21 @@
                 total += parseFloat(producto.precio) * producto.cantidad;
             });
             document.getElementById('total-pedidos').textContent = total.toFixed(2);
-            cartCount.textContent = listaProductos.reduce((sum, p) => sum + p.cantidad, 0); // Actualizar contador
+            cartCount.textContent = listaProductos.reduce((sum, p) => sum + p.cantidad, 0);
         }
+    
+        // Actualizar el campo oculto de días y productos al enviar el formulario
         document.getElementById('menuForm').addEventListener('submit', function(e) {
+            actualizarDias();
             document.getElementById('productos').value = JSON.stringify(listaProductos);
-        })
-
-        // Cargar productos al iniciar la página
+            document.getElementById('dias').value = JSON.stringify(selectedDays);
+        });
+    
+        // Escuchar cambios en los checkboxes de días
+        document.querySelectorAll('.dia').forEach(checkbox => {
+            checkbox.addEventListener('change', actualizarDias);
+        });
+    
+        // Cargar productos y días al iniciar la página
         window.addEventListener('load', cargarProductos);
     </script>
