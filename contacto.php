@@ -39,7 +39,14 @@
                                     </li>
                                     <li>
                                         <i class="bi bi-telephone-fill me-2"></i>
-                                        <strong>Por teléfono:</strong> 3244845451 / 3138492816
+                                        <strong>Por teléfono:</strong>
+                                        <a href="https://wa.me/573244845451?text=Hola%20quiero%20más%20información" target="_blank" style="text-decoration:none;">
+                                            3244845451 <i class="bi bi-whatsapp text-success"></i>
+                                        </a>
+                                        /
+                                        <a href="https://wa.me/573138492816?text=Hola%20quiero%20más%20información" target="_blank" style="text-decoration:none;">
+                                            3138492816 <i class="bi bi-whatsapp text-success"></i>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
