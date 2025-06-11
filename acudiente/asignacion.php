@@ -19,10 +19,12 @@
         $productos = $productos = !empty($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
 
         if (empty($id_menu) || empty($documento_est) || empty($dias) || empty($fecha_ini) || empty($fecha_fin) || empty($metodo_pago)) {
-            $mensaje = "Por favor complete todos los campos requeridos.";
+            echo "<script>alert('Por favor complete todos los campos requeridos.');</script>";
+            echo "<script>location.href='pagos.php';</script>";
         } 
         else if (count($productos) == 0) {
-            $mensaje = "No hay productos seleccionados.";
+            echo "<script>alert('No hay productos seleccionados.');</script>";
+            echo "<script>location.href='pagos.php';</script>";
         }
         else {
             try {
@@ -79,15 +81,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <main class="container">
-        <h1 class="mb-4">Gestión de Pagos de Menús</h1>
-
-        <?php if (isset($mensaje)): ?>
-            <div class="alert alert-<?php echo strpos($mensaje, 'exitosamente') !== false ? 'success' : 'danger'; ?>">
-                <?php echo $mensaje; ?>
-            </div>
-        <?php endif; ?>
-
+    <main class="container mt-2">
+        <h1 class="mb-2">Gestión de Pagos de Menús</h1>
         <form id="menuForm" method="POST" action="">
             <div class="card mb-4">
                 <div class="card-header">Registrar Nuevo Pago</div>
@@ -192,13 +187,29 @@
     let selectedProducts = [];
     let selectedDays = [];
 
+    window.addEventListener('DOMContentLoaded', function() {
+        // Si hay días guardados en localStorage, los pone en el campo oculto
+        const diasGuardados = localStorage.getItem('selectedDays');
+        if (diasGuardados) {
+            document.getElementById('dias').value = diasGuardados;
+        }
+    });
+
     document.getElementById('id_menu').addEventListener('change', function() {
         const id_menu = this.value;
+        const diasInput = document.getElementById('dias').value;
+        let dias = [];
+        try {
+            dias = JSON.parse(diasInput);
+        } catch (e) {
+            dias = [];
+        }
+        const diasString = dias.join(',');
+
         selectedProducts = [];
-        selectedDays = [];
         
         if (id_menu) {
-            fetch(`../ajax/get_det_menu.php?id_menu=${encodeURIComponent(id_menu)}`)
+            fetch(`../ajax/get_det_menu.php?id_menu=${encodeURIComponent(id_menu)}&dias=${encodeURIComponent(diasString)}`)
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.getElementById('det_menu');
@@ -226,15 +237,10 @@
                             precio: parseFloat(pedido.precio),
                             cantidad: parseInt(pedido.cantidad)
                         });
-
-                        if (pedido.days) {
-                            selectedDays.push(pedido.days);
-                        }
                     });
 
                     document.getElementById('total-pedidos').textContent = total.toFixed(2);
-                    document.getElementById('products').value = JSON.stringify(selectedProducts);
-                    document.getElementById('days').value = JSON.stringify(selectedDays);
+                    document.getElementById('productos').value = JSON.stringify(selectedProducts);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -242,9 +248,9 @@
                 });
         } else {
             document.getElementById('det_menu').innerHTML = '<tr><td colspan="3">Seleccione un menú para ver los detalles</td></tr>';
-            document.getElementById('total-pedido').textContent = '';
-            document.getElementById('products').value = '';
-            document.getElementById('days').value = '';
+            document.getElementById('total-pedidos').textContent = '';
+            document.getElementById('productos').value = '';
+            document.getElementById('dias').value = '';
         }
     });
 </script>

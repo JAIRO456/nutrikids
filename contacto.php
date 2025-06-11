@@ -31,11 +31,24 @@
                                 <ul class="list-unstyled">
                                     <li class="mb-3">
                                         <i class="bi bi-envelope-fill me-2"></i>
-                                        <strong>Vía E-mail:</strong> nutrikids.fj@gmail.com
+                                        <strong>Vía E-mail:</strong> 
+                                        <a href="mailto:nutrikids.fj@gmail.com" class="text-decoration-none" target="_blank">
+                                            nutrikids.fj@gmail.com
+                                        </a>
                                     </li>
                                     <li class="mb-3">
                                         <i class="bi bi-instagram me-2"></i>
-                                        <strong>Nuestras redes sociales:</strong> @nutrikids
+                                        <strong>Instagram:</strong>
+                                        <a href="https://instagram.com/nutrikids.fj" class="text-decoration-none" target="_blank">
+                                            @nutrikids.fj
+                                        </a>
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="bi bi-facebook me-2"></i>
+                                        <strong>Facebook:</strong>
+                                        <a href="https://facebook.com/NutrikidsFJ" class="text-decoration-none" target="_blank">
+                                            Nutrikids FJ
+                                        </a>
                                     </li>
                                     <li>
                                         <i class="bi bi-telephone-fill me-2"></i>

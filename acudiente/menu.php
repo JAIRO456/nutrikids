@@ -35,7 +35,7 @@
                         <a class="nav-link" href="horarios.php"><i class="bi bi-clock"></i> Horarios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pagos.php"><i class="bi bi-person-plus"></i> Pagos</a>
+                        <a class="nav-link" href="asignacion.php"><i class="bi bi-person-plus"></i> Asignación</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="historial.php"><i class="bi bi-bar-chart"></i> Historial</a>
@@ -43,12 +43,25 @@
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <li class="nav-item">
-                            <a class="nav-link" href="cuenta.php"><i class="bi bi-person-circle"></i> <?= $u['rol']; ?>, <?= $u['nombre']; ?> <?= $u['apellido']; ?>.</a>
-                        </li>
-                        <li class="nav-item">   
-                            <a class="nav-link" href="../include/logout.php"><i class="bi bi-box-arrow-right"></i> Salir</a>
-                        </li>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center justify-content-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <?= $u['rol']; ?>, <?= $u['nombre']; ?> <?= $u['apellido']; ?>.
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item text-center" href="cuenta.php">
+                                    <i class="bi bi-person"></i> Ver cuenta
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-center" href="../include/logout.php">
+                                    <i class="bi bi-box-arrow-right"></i> Salir
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>

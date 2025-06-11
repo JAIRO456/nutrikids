@@ -42,23 +42,19 @@
                                     <label for="nombre_menu" class="form-label">Nombre del Menu</label>
                                     <textarea type="varchar" class="form-control" id="nombre_menu" name="nombre_menu" required></textarea>
                                 </div>
-                                <div class="container card mb-3 shadow-sm">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-3">Selección de Días</h5>
-                                        <div class="row g-3">
-                                            <?php
-                                            $days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
-                                            foreach ($days as $day) {
-                                                echo "
-                                                <div class='col-md-6'>
-                                                    <div class='form-check'>
-                                                        <input type='checkbox' class='form-check-input dia' id='dia-$day' name='dia[]' value='$day'>
-                                                        <label class='form-check-label' for='dia-$day'>" . ucfirst($day) . "</label>
-                                                    </div>
-                                                </div>";
+                                <div class="row mb-3">
+                                    <label class="form-label">Días</label>
+                                    <input type="hidden" name="dias" id="dias">
+                                    <div class="col-12">
+                                        <?php
+                                            $dias_semana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+                                            foreach ($dias_semana as $dia) {
+                                                echo "<div class='form-check form-check-inline'>
+                                                        <input class='form-check-input dia dia-checkbox' type='checkbox' id='dia_$dia' value='$dia'>
+                                                        <label class='form-check-label' for='dia_$dia'>" . ucfirst($dia) . "</label>
+                                                    </div>";
                                             }
-                                            ?>
-                                        </div>
+                                        ?>
                                     </div>
                                 </div>
                                 <input type="hidden" name="productos" id="productos">

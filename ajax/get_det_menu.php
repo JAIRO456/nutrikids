@@ -9,10 +9,12 @@
 
     $documento = $_SESSION['documento'];
     $days = [];
-    $selectdays = $_GET['dias'];
-    $days[] = $selectdays;
-    $id_menu = $_GET['id_menu'];
+    if (isset($_GET['dias'])) {
+        $selectdays = $_GET['dias'];
+        $days = explode(',', $selectdays);
+    }
 
+    $id_menu = $_GET['id_menu'];
     if (!$id_menu || !$documento) {
         echo json_encode(['error' => 'ID de menú o usuario no válido.']);
         exit;
@@ -44,7 +46,7 @@
         $subtotal = $pedido['precio'] * $pedido['cantidad'];
         $total += $subtotal;
         $response[] = [
-            'days' => implode(',', $days),
+            'days' => $days,
             'nombre_prod' => $pedido['nombre_prod'],
             'cantidad' => $pedido['cantidad'],
             'subtotal' => number_format($subtotal, 2),

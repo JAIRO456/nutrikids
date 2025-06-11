@@ -50,42 +50,56 @@
                         </tr>
                     </tfoot>
                 </table>
+                <div class="mb-3 text-center">
+                    <button type="button" id="btn-activo" class="btn btn-danger" value="1">Activo</button>
+                    <button type="button" id="btn-inactivo" class="btn btn-success" value="2">Inactivo</button>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        document.getElementById('dia').addEventListener('change', function () {
-            // obtenemos el valor del día seleccionado y el id del estudiante
-            const dia = this.value;
+        let id_estado = 1;
+
+        document.getElementById('btn-activo').addEventListener('click', function () {
+            id_estado = 1;
+            cargarPedidos();
+        });
+        document.getElementById('btn-inactivo').addEventListener('click', function () {
+            id_estado = 2;
+            cargarPedidos();
+        });
+
+        document.getElementById('dia').addEventListener('change', cargarPedidos);
+
+        function cargarPedidos() {
+            const dia = document.getElementById('dia').value;
             const urlParams = new URLSearchParams(window.location.search);
             const id_estudiante = urlParams.get('id_estudiante');
-
-            // verificamos si el día y el id del estudiante están definidos
+        
             if (dia && id_estudiante) {
-                getPedidos(dia, id_estudiante);
-            } 
-            else {
+                getPedidos(dia, id_estudiante, id_estado);
+            } else {
                 const tbody = document.querySelector('#table-pedidos tbody');
                 tbody.innerHTML = '<tr><td colspan="3">Seleccione un día para ver los pedidos</td></tr>';
                 document.getElementById('total-pedidos').textContent = '';
             }
-        });
+        }
 
-        function getPedidos(dia, id_estudiante) {
-            fetch(`../ajax/get_horarios.php?id_estudiante=${id_estudiante}&dia=${dia}`)
+        function getPedidos(dia, id_estudiante, id_estado) {
+            fetch(`../ajax/get_horarios.php?id_estudiante=${id_estudiante}&dia=${dia}&id_estado=${id_estado}`)
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.querySelector('#table-pedidos tbody');
                     tbody.innerHTML = '';
                     let total = 0;
-
+                
                     if (data.error) {
                         tbody.innerHTML = `<tr><td colspan="3">${data.error}</td></tr>`;
                         document.getElementById('total-pedidos').textContent = '';
                         return;
                     }
-
+                
                     data.pedidos.forEach(pedido => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
@@ -96,7 +110,7 @@
                         tbody.appendChild(tr);
                         total += parseFloat(pedido.subtotal);
                     });
-
+                
                     document.getElementById('total-pedidos').textContent = total.toFixed(2);
                 })
                 .catch(error => console.error('Error al obtener los pedidos:', error));
