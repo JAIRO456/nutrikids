@@ -7,7 +7,7 @@
     use PHPMailer\PHPMailer\Exception;
     use PHPMailer\PHPMailer\SMTP;
 
-    function email_menu_estado($email, $nombre_usu, $apellido_usu, $nombre_est, $apellido_est, $nombre_menu, $estado, $con) {
+    function email_menu_estado($email, $nombre_usu, $apellido_usu, $nombre_est, $apellido_est, $nombre_menu, $id_estado, $con) {
 
         $documento = $_SESSION['documento'];
         $sqlSchools = $con->prepare("SELECT escuelas.nombre_escuela FROM escuelas
@@ -17,10 +17,15 @@
         $school = $sqlSchools->fetch(PDO::FETCH_ASSOC);
 
         $fecha_actual = date('d/m/Y');
+
+        $MenuEntregado = '';
+        $estado = '';
         
-        if ($estado === '3') {
-            $MenuEntregado = '<p>El menú fue entregado satisfactoriamente al estudiante durante el horario establecido.</p>';
+        if ($id_estado == 3) {
+            $estado = 'Entregado';
+            $MenuEntregado = '<p>El menú fue entregado satisfactoriamente al estudiante durante el horario establecido.</p>';  
         } else {
+            $estado = 'No Entregado';
             $MenuEntregado = '<p>Lamentablemente, no fue posible entregar el menú al estudiante durante el horario establecido, debido a que el estudiante no se presentó en el horario establecido.</p>';
         }
 

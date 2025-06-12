@@ -61,7 +61,11 @@
         $sqlUpdateMenu = $con->prepare("UPDATE detalles_menu SET id_estado = ? WHERE id_menu = ?");
         $sqlUpdateMenu->execute([$estado, $id_menu]);
         
-        $sql = $con->prepare("SELECT menus.id_menu, menus.nombre_menu, estudiantes.nombre AS nombre_est, estudiantes.apellido AS apellido_est, usuarios.nombre AS nombre_usu, usuarios.apellido AS apellido_usu, usuarios.email, estados.estado
+        $sql = $con->prepare("SELECT menus.id_menu, menus.nombre_menu, estudiantes.nombre AS nombre_est, 
+        estudiantes.apellido AS apellido_est, 
+        usuarios.nombre AS nombre_usu, 
+        usuarios.apellido AS apellido_usu, 
+        usuarios.email, detalles_menu.id_estado
         FROM detalles_menu
         INNER JOIN menus ON detalles_menu.id_menu = menus.id_menu
         INNER JOIN estados ON detalles_menu.id_estado = estados.id_estado
@@ -82,7 +86,7 @@
                 $email_data['nombre_est'],
                 $email_data['apellido_est'],
                 $email_data['nombre_menu'],
-                $email_data['estado'],
+                $email_data['id_estado'],
                 $con
             )) {
                 echo json_encode(['success' => 'El correo se ha enviado correctamente.']);

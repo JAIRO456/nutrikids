@@ -17,8 +17,7 @@
     $sqlUsuarios -> execute([$usuario_id]);
     $usuarios = $sqlUsuarios -> fetch();
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $imagen = $_FILES['imagen']['name'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {;
         $telefono = $_POST['telefono'];
         $id_rol = $_POST['id_rol'];
         $id_estado = $_POST['id_estado'];

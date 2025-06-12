@@ -46,7 +46,7 @@
                         <p class="card-text">Documento: <?php echo $student['documento_est']; ?></p>
                         <a href="pedidos.php?id_estudiante=<?php echo $student['documento_est']; ?>" class="btn btn-primary">Ver Pedidos</a>
                     </div>
-                </div>
+                </div>  
             </div>
             <?php }} ?>
         </div>

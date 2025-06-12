@@ -29,7 +29,7 @@
                         <a class="nav-link" href="inicio.php"><i class="bi bi-speedometer2"></i> Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="categoria.php"><i class="bi bi-basket"></i> Categorias</a>
+                        <a class="nav-link" href="categorias.php"><i class="bi bi-basket"></i> Categorias</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="horarios.php"><i class="bi bi-clock"></i> Horarios</a>

@@ -6,68 +6,198 @@
     $con = $conex->conectar();
 
     include 'menu.php';
+
+    $hoy = date('Y-m-d');
+    $doc = $_SESSION['documento'];
+    $sqlStudent = $con -> prepare("SELECT estudiantes.nombre, estudiantes.apellido, estudiantes.documento_est, estudiantes.imagen FROM estudiantes 
+    INNER JOIN usuarios ON estudiantes.documento = usuarios.documento WHERE usuarios.documento = ?");
+    $sqlStudent -> execute([$doc]);
+    $Students = $sqlStudent -> fetchAll(PDO::FETCH_ASSOC);
+
+    $nutrientes_est = [];
+    foreach ($Students as $estudiante) {
+        $documento_est = $estudiante['documento_est'];
+        $sqlNutrientes = $con -> prepare("SELECT SUM(informacion_nutricional.calorias * detalles_pedidos_producto.cantidad), 
+        SUM(informacion_nutricional.proteinas * detalles_pedidos_producto.cantidad), 
+        SUM(informacion_nutricional.carbohidratos * detalles_pedidos_producto.cantidad), 
+        SUM(informacion_nutricional.grasas * detalles_pedidos_producto.cantidad), 
+        SUM(informacion_nutricional.azucares * detalles_pedidos_producto.cantidad), 
+        SUM(informacion_nutricional.sodio * detalles_pedidos_producto.cantidad), 
+        detalles_pedidos_producto.cantidad
+        FROM informacion_nutricional 
+        INNER JOIN producto ON informacion_nutricional.id_producto = producto.id_producto
+        INNER JOIN detalles_pedidos_producto ON producto.id_producto = detalles_pedidos_producto.id_producto
+        INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
+        WHERE detalles_pedidos_producto.documento_est = ? AND pedidos.id_pedidos = 6
+        AND pedidos.fecha_ini <= ? AND pedidos.fecha_fin >= ?
+        AND FIND_IN_SET(LOWER(DAYNAME(?)), LOWER(pedidos.dia))");
+        $sqlNutrientes -> execute([$documento_est, $hoy, $hoy, $hoy]);
+
+        $nutrientes = [
+            'calorias' => 0,
+            'proteinas' => 0,
+            'carbohidratos' => 0,
+            'grasas' => 0,
+            'azucares' => 0,
+            'sodio' => 0
+        ];
+
+        $row = $sqlNutrientes->fetch(PDO::FETCH_NUM);
+        if ($row) {
+            $nutrientes['calorias'] = $row[0] ?? 0;
+            $nutrientes['proteinas'] = $row[1] ?? 0;
+            $nutrientes['carbohidratos'] = $row[2] ?? 0;
+            $nutrientes['grasas'] = $row[3] ?? 0;
+            $nutrientes['azucares'] = $row[4] ?? 0;
+            $nutrientes['sodio'] = $row[5] ?? 0;
+        }
+
+        $nutrientes_est[] = [
+            'nombre' => $estudiante['nombre'] . ' ' . $estudiante['apellido'],
+            'nutrientes' => $nutrientes
+        ];
+    }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INICIO</title>
-    <link rel="stylesheet" href="../styles/inicio.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Dashboard Acudiente - NutriKids</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .estudiantes {
+            margin-bottom: 20px;
+        }
+        .estudiante {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
 </head>
 <body>
-    <main class="container mt-2">
-        <div class="row">
-            <div class="col-md-12">
-                <h2 class="text-center">Estudiantes</h2>
-                <table class="table table-bordered table-striped" id="table-students">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Documento</th>
-                            <th>Apellidos</th>
-                            <th>Nombre</th>
-                            <th class="d-none d-sm-table-cell">Correo</th>
-                            <th>Accion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
+    <div class="container">
+        <h1>Bienvenido, Acudiente</h1>
+        <div class="estudiantes">
+            <h2>Tus Estudiantes</h2>
+            <?php foreach ($Students as $estudiante): ?>
+                <div class="estudiante">
+                    <?php echo htmlspecialchars($estudiante['nombre'] . ' ' . $estudiante['apellido']); ?>
+                </div>
+            <?php endforeach; ?>
         </div>
-    </main>
-</body>
+        <h2>Nutrientes Consumidos Hoy (<?php echo date('d/m/Y'); ?>)</h2>
+        <canvas id="nutrientesChart"></canvas>
+    </div>
+
     <script>
-        function getStudents() {
-            fetch('../ajax/get_estudiantes.php')
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.querySelector('#table-students tbody')
-                    tbody.innerHTML = '';
-            
-                    data.forEach(student => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${student.documento_est}</td>
-                            <td>${student.apellido}</td>
-                            <td>${student.nombre}</td>
-                            <td class="d-none d-sm-table-cell">${student.email}</td>
-                            <td>
-                                <a class='btn btn-primary' href="estudiantes/update_students.php?id=${student.documento_est}"><i class="bi bi-pencil-square"></i></a>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                })
-                .catch(error => console.error('Error al obtener los Estudiantes:', error));
-        }
-        setInterval(function () {
-            getStudents();
-        }, 3000);
+        const nutrientesData = <?php echo json_encode($nutrientes_est); ?>;
+        
+        const ctx = document.getElementById('nutrientesChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: nutrientesData.map(est => est.nombre),
+                datasets: [
+                    {
+                        label: 'Calorías (kcal)',
+                        data: nutrientesData.map(est => est.nutrientes.calorias),
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Proteínas (g)',
+                        data: nutrientesData.map(est => est.nutrientes.proteinas),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Carbohidratos (g)',
+                        data: nutrientesData.map(est => est.nutrientes.carbohidratos),
+                        backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Grasas (g)',
+                        data: nutrientesData.map(est => est.nutrientes.grasas),
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Azúcares (g)',
+                        data: nutrientesData.map(est => est.nutrientes.azucares),
+                        backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Sodio (mg)',
+                        data: nutrientesData.map(est => est.nutrientes.sodio),
+                        backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Consumo de Nutrientes por Estudiante - Hoy'
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: false
+                    },
+                    y: {
+                        stacked: false,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Cantidad'
+                        }
+                    }
+                },
+                responsive: true,
+                
+            }
+        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+</body>
 </html>
