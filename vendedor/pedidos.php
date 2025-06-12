@@ -52,69 +52,89 @@
                         </tr>
                     </tfoot>
                 </table>
-
-                <form id="estadoForm" method="POST" action="../ajax/update_menu.php">
-                    <input type="hidden" name="id_estudiante" value="<?php echo $_GET['id_estudiante']; ?>">
-                    <input type="hidden" name="estado" id="estado">
-                    <button type="button" class="btn btn-success" onclick="actualizarEstado(2)">Entregado</button>
-                    <button type="button" class="btn btn-danger" onclick="actualizarEstado(3)">No Entregado</button>
-                </form>
-                <script>
-                function actualizarEstado(estado) {
-                    document.getElementById('estado').value = estado;
-                    document.getElementById('estadoForm').submit();
-                }
-                </script>
+                <div class="mb-3 text-center">
+                    <button type="button" id="btn-entregado" class="btn btn-success" value="3">Entregado</button>
+                    <button type="button" id="btn-no-entregado" class="btn btn-danger" value="4">No Entregado</button>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        document.getElementById('dia').addEventListener('change', function () {
-            // obtenemos el valor del día seleccionado y el id del estudiante
-            const dia = this.value;
+        let id_estado = null;
+
+        document.getElementById('btn-entregado').addEventListener('click', function () {
+            id_estado = 3;
+            cargarPedidos();
+        });
+        document.getElementById('btn-no-entregado').addEventListener('click', function () {
+            id_estado = 4;
+            cargarPedidos();
+        });
+
+        document.getElementById('dia').addEventListener('change', function() {
+            id_estado = null;
+            cargarPedidos();
+        });
+
+        function cargarPedidos() {
+            const dia = document.getElementById('dia').value;
             const urlParams = new URLSearchParams(window.location.search);
             const id_estudiante = urlParams.get('id_estudiante');
-
-            // verificamos si el día y el id del estudiante están definidos
+        
             if (dia && id_estudiante) {
-                getPedidos(dia, id_estudiante);
-            } 
-            else {
+                getPedidos(dia, id_estudiante, id_estado);
+            } else {
                 const tbody = document.querySelector('#table-pedidos tbody');
                 tbody.innerHTML = '<tr><td colspan="3">Seleccione un día para ver los pedidos</td></tr>';
                 document.getElementById('total-pedidos').textContent = '';
             }
-        });
+        }
 
-        function getPedidos(dia, id_estudiante) {
-            fetch(`../ajax/get_horarios.php?id_estudiante=${id_estudiante}&dia=${dia}`)
+        function getPedidos(dia, id_estudiante, id_estado) {
+            let url = `../ajax/get_horarios_vendedor.php?id_estudiante=${id_estudiante}&dia=${dia}`;
+            if (id_estado !== null) {
+                url += `&id_estado=${id_estado}`;
+            }
+            
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.querySelector('#table-pedidos tbody');
                     tbody.innerHTML = '';
                     let total = 0;
-
+                
                     if (data.error) {
-                        tbody.innerHTML = `<tr><td colspan="3">${data.error}</td></tr>`;
-                        document.getElementById('total-pedidos').textContent = '';
+                        tbody.innerHTML = `<tr><td colspan="3" class="text-center text-danger">${data.error}</td></tr>`;
+                        document.getElementById('total-pedidos').textContent = '0.00';
                         return;
                     }
-
+                
+                    if (!data.pedidos || data.pedidos.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="3" class="text-center">No hay pedidos para mostrar</td></tr>';
+                        document.getElementById('total-pedidos').textContent = '0.00';
+                        return;
+                    }
+                
                     data.pedidos.forEach(pedido => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                             <td>${pedido.nombre_prod}</td>
-                            <td>${pedido.cantidad}</td>
-                            <td>${pedido.subtotal}</td>
+                            <td class="text-center">${pedido.cantidad}</td>
+                            <td class="text-end">$${pedido.subtotal}</td>
                         `;
                         tbody.appendChild(tr);
-                        total += parseFloat(pedido.subtotal);
+                        total += parseFloat(pedido.subtotal.replace(/,/g, ''));
                     });
-
-                    document.getElementById('total-pedidos').textContent = total.toFixed(2);
+                
+                    document.getElementById('total-pedidos').textContent = `$${total.toFixed(2)}`;
                 })
-                .catch(error => console.error('Error al obtener los pedidos:', error));
+                .catch(error => {
+                    console.error('Error al obtener los pedidos:', error);
+                    const tbody = document.querySelector('#table-pedidos tbody');
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger">Error al cargar los pedidos</td></tr>';
+                    document.getElementById('total-pedidos').textContent = '0.00';
+                });
         }
     </script>
 </body>

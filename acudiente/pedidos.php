@@ -25,11 +25,12 @@
                 <form method="GET" action="">
                     <select name="dia" id="dia" class="form-select mb-3" required>
                         <option value="">Seleccione un Día</option>
-                        <option value="lunes">Lunes</option>
-                        <option value="martes">Martes</option>
-                        <option value="miercoles">Miércoles</option>
-                        <option value="jueves">Jueves</option>
-                        <option value="viernes">Viernes</option>
+                        <?php
+                        $listdays = array("lunes", "martes", "miercoles", "jueves", "viernes");
+                        foreach ($listdays as $day) {
+                            echo "<option value='$day'>$day</option>";
+                        }
+                        ?>
                     </select>
                 </form>
                 <table class="table table-bordered table-striped mt-4" id="table-pedidos">
