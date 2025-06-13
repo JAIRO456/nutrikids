@@ -87,40 +87,61 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f3f4f6;
             padding-top: 80px; /* Añadido para compensar el navbar fijo */
         }
         .container {
-            max-width: 1200px;
+            max-width: 100%;
             margin: auto;
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 5px 40px 5px 40px;
         }
         h1 {
             text-align: center;
             color: #333;
         }
         .estudiantes {
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background-color:rgb(255, 255, 255);
             margin-bottom: 20px;
         }
         .estudiante {
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            align-items: center;
+            justify-content: center;
+            place-items: center;
+            width: 100%;
+            height: 50px;
         }
-        canvas {
-            max-width: 100%;
-            height: auto;
+        .estudiante-nutrientes {
+            margin-top: 20px;
+            width: 100%;
+            height: 350px;
+            place-items: center;
+        }
+        .estudiante-nutrientes canvas {
+            width: 100%;
+            height: 300px;
         }
         .estudiantes-grid {
+            padding-top: 20px;
+            width: 700px;
+            height: 250px;
+            place-items: center;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
         .estudiante-card {
+            border-radius: 10px;
+            border: 1px solid #ddd;
             background: #fff;
+            padding: 5px;
+            width: 250px;
+            height: 250px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             overflow: hidden;
@@ -133,8 +154,21 @@
         
         .estudiante-imagen {
             width: 100%;
-            height: 200px;
+            height: 120px;
             overflow: hidden;
+        }
+        .estudiante-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .estudiante-info {
+            margin-top: 10px;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .estudiante-imagen img {
@@ -150,6 +184,7 @@
         .estudiante-info h3 {
             margin: 0 0 10px 0;
             color: #333;
+            font-size: 18px;
         }
         
         .estudiante-info p {
@@ -161,15 +196,14 @@
 <body>
     <?php include 'menu.php'; ?>
     <div class="container">
-        <h1>Bienvenido, Acudiente</h1>
         <div class="estudiantes-grid">
             <?php foreach ($Students as $estudiante): ?>
                 <div class="estudiante-card">
                     <div class="estudiante-imagen">
                         <?php if(!empty($estudiante['imagen'])): ?>
-                            <img src="../img/estudiantes/<?= $estudiante['imagen']; ?>" alt="Foto estudiante">
+                            <img src="../img/users/<?= $estudiante['imagen']; ?>" alt="Foto estudiante">
                         <?php else: ?>
-                            <img src="../img/estudiantes/default.png" alt="Foto por defecto">
+                            <img src="../img/users/default.png" alt="Foto por defecto">
                         <?php endif; ?>
                     </div>
                     <div class="estudiante-info">
@@ -187,8 +221,10 @@
                     <?= $estudiante['nombre'] . ' ' . $estudiante['apellido']; ?>
                 </div>
             <?php endforeach; ?>
-            <h2>Nutrientes Consumidos Hoy (<?php echo date('d/m/Y'); ?>)</h2>
-            <canvas id="nutrientesChart"></canvas>
+            <div class="estudiante-nutrientes">
+                <h2>Nutrientes Consumidos Hoy (<?php echo date('d/m/Y'); ?>)</h2>
+                <canvas id="nutrientesChart"></canvas>
+            </div>
         </div>
     <div class="pagos-recientes shadow-lg p-3 mb-5 bg-white rounded">
         <h2>Historial de Pagos Recientes</h2>
@@ -266,13 +302,15 @@
             const apellido = document.getElementById('apellido').value;
             const telefono = document.getElementById('telefono').value;
             const email = document.getElementById('email').value;
+            const imagen = document.getElementById('imagen').value;
 
             const data = {
                 documento_est: documento_est,
                 nombre: nombre,
                 apellido: apellido,
                 telefono: telefono,
-                email: email
+                email: email,
+                imagen: imagen
             };
 
             fetch('../ajax/update_estudiante.php', {

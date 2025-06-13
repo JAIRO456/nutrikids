@@ -14,48 +14,201 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedidos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding: 100px;
+            background: white;
+            place-content: center;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: #007bff;
+            border-radius: 2px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+            font-weight: 500;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+            transition: background 0.3s ease;
+        }
+
+        tfoot td {
+            font-weight: bold;
+            background: #f8f9fa;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        #btn-activo {
+            background: #28a745;
+            color: white;
+        }
+
+        #btn-inactivo {
+            background: #dc3545;
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            th, td {
+                padding: 0.75rem;
+            }
+
+            button {
+                padding: 10px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <main class="container mt-4">
-        <div class="row">
-            <div class="col-md-12">
-                <h2 class="text-center">Pedidos</h2>
-                <form method="GET" action="">
-                    <select name="dia" id="dia" class="form-select mb-3" required>
-                        <option value="">Seleccione un Día</option>
-                        <?php
-                        $listdays = array("lunes", "martes", "miercoles", "jueves", "viernes");
-                        foreach ($listdays as $day) {
-                            echo "<option value='$day'>$day</option>";
-                        }
-                        ?>
-                    </select>
-                </form>
-                <table class="table table-bordered table-striped mt-4" id="table-pedidos">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Productos</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td colspan="3">Seleccione un día para ver los pedidos</td></tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="2" class="text-end fw-bold">Total:</td>
-                            <td id="total-pedidos" class="fw-bold"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class="mb-3 text-center">
-                    <button type="button" id="btn-activo" class="btn btn-danger" value="1">Activo</button>
-                    <button type="button" id="btn-inactivo" class="btn btn-success" value="2">Inactivo</button>
-                </div>
-            </div>
+    <main class="container">
+        <h2>Pedidos</h2>
+        <form method="GET" action="">
+            <select name="dia" id="dia" required>
+                <option value="">Seleccione un Día</option>
+                <?php
+                $listdays = array("lunes", "martes", "miercoles", "jueves", "viernes");
+                foreach ($listdays as $day) {
+                    echo "<option value='$day'>$day</option>";
+                }
+                ?>
+            </select>
+        </form>
+        <div class="table-container">
+            <table id="table-pedidos">
+                <thead>
+                    <tr>
+                        <th>Productos</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="3">Seleccione un día para ver los pedidos</td></tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" style="text-align: right;">Total:</td>
+                        <td id="total-pedidos"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="button-container">
+            <button type="button" id="btn-activo" value="1">Activo</button>
+            <button type="button" id="btn-inactivo" value="2">Inactivo</button>
         </div>
     </main>
 

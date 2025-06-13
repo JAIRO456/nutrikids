@@ -27,92 +27,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../img/logo-nutrikids2.png" type="image/png">
     <title>Inicio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        :root {
+            --primary-color: #dc3545;
+            --secondary-color: #6c757d;
+            --background-color: #f3f4f6;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
+
         body {
-            background-color: #f3f4f6;
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 100px;
+            padding: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-speed);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h5 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            animation: countUp 1s ease-out;
+        }
+
+        table {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-speed);
+            overflow: hidden;
+        }
+
+        .report-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .input-date {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color var(--transition-speed);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .input-date {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <main class="container mt-2" style='background-color: #f3f4f6;'>
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger shadow">
-                    <div class="card-body">
-                        <h5 class="card-title">Directores</h5>
-                        <p class="card-text display-4" id='TotalUsers'>
-                            <i class="bi bi-person-fill"></i> 
-                        </p>
-                    </div>
-                </div>
+    <main class="container">
+        <div class="grid">
+            <div class="stat-card">
+                <h5>Directores</h5>
+                <p class="number" id="TotalUsers">
+                    <i class="bi bi-person-fill"></i>
+                </p>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger shadow">
-                    <div class="card-body">
-                        <h5 class="card-title">Licencias Activas</h5>
-                        <p class="card-text display-4" id='TotalLicencias'>
-                            <i class="bi bi-file-earmark-check-fill"></i> 
-                        </p>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <h5>Licencias Activas</h5>
+                <p class="number" id="TotalLicencias">
+                    <i class="bi bi-file-earmark-check-fill"></i>
+                </p>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger shadow">
-                    <div class="card-body">
-                        <h5 class="card-title">Escuelas</h5>
-                        <p class="card-text display-4" id='TotalSchools'>
-                            <i class="bi bi-house-fill"></i> 
-                        </p>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <h5>Escuelas</h5>
+                <p class="number" id="TotalSchools">
+                    <i class="bi bi-house-fill"></i>
+                </p>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger shadow">
-                    <div class="card-body">
-                        <h5 class="card-title">Productos</h5>
-                        <p class="card-text display-4" id='TotalProducts'>
-                            <i class="bi bi-basket"></i>
-                        </p>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <h5>Productos</h5>
+                <p class="number" id="TotalProducts">
+                    <i class="bi bi-basket"></i>
+                </p>
             </div>
         </div>
-        <div class="bg-white p-3 rounded shadow mb-2">
-            <div class="justify-content-center align-items-center mb-2">
-                <h2 class="text-center font-semibold mb-2">Reportes Nutricionales</h2>
+
+        <div class="report-section">
+            <h2>Reportes Nutricionales</h2>
+            <div class="filter-controls">
+                <input type="date" id="fecha_ini" class="input-date">
+                <input type="date" id="fecha_fin" class="input-date">
+                <button onclick="filtrarGrafica()" class="btn btn-primary">Filtrar</button>
+                <button onclick="resetFiltros()" class="btn btn-secondary">Reset</button>
             </div>
-            <div class="row">
-                <div class="d-flex justify-content-center">
-                    <input type="date" id="fecha_ini" class="form-control" style="width: 300px;">
-                    <input type="date" id="fecha_fin" class="form-control" style="width: 300px;">
-                    <button onclick="filtrarGrafica()" class="btn btn-danger">Filtrar</button>
-                    <button onclick="resetFiltros()" class="btn btn-secondary">Reset</button>
-                </div>
-                <div class="col-12 mt-2">
-                    <h4 class="text-center font-semibold mt-2">Distribución de Nutrientes</h4>
-                    <div style="height:350px;" class="d-flex justify-content-center">
-                        <canvas id="nutrient" class="mt-2 text-center"></canvas>
-                    </div>
-                </div>
+            <h4>Distribución de Nutrientes</h4>
+            <div style="height:350px;">
+                <canvas id="nutrient"></canvas>
             </div>
         </div>
-        <div class="card shadow mt-4">
-            <div class="card-header">
-                <h4 class="text-center">Licencias por expirar (próximos 30 días)</h4>
-            </div>
-            <div class="card-body">
-                <?php
+            <?php
                 $hoy = date('Y-m-d');
                 $treinta_dias = date('Y-m-d', strtotime('+30 days'));
-
                 $sqlDias = $con->query("SELECT licencias.id_licencia, licencias.fecha_fin, escuelas.nombre_escuela FROM licencias
                 INNER JOIN escuelas ON licencias.id_escuela = escuelas.id_escuela
                 INNER JOIN estados ON licencias.id_estado = estados.id_estado
@@ -140,42 +269,40 @@
                                 <td><?= date('d/m/Y', strtotime($licencia['fecha_fin'])) ?></td>
                                 <td><?= $dias_restantes ?></td>
                                 <td>
-                                    <a href="licencias/update_licencia.php?id=<?= $licencia['id_licencia'] ?>" class="btn btn-sm btn-warning">Renovar</a>
+                                    <a href="licencias/update_licencia.php?id=<?= $licencia['id_licencia'] ?>" class="btn btn-primary">Renovar</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 <?php else: ?>
-                    <div class="alert alert-success">No hay licencias por expirar en los próximos 30 días.</div>
+                    <div class="alert">No hay licencias por expirar en los próximos 30 días.</div>
                 <?php endif; ?>
             </div>
         </div>
-        <div class="card shadow mt-4">
-            <div class="card-header">
-                <h4 class='text-center'>Directores Recientes</h4>
-            </div>
-            <div class="card-body">
-                <table class="table" id="table-users">
-                    <thead class="text-center">
+
+        <div class="report-section">
+            <h4>Directores Recientes</h4>
+            <div class="table-container">
+                <table id="table-users">
+                    <thead>
                         <tr>
                             <th>Documento</th>
                             <th>Nombre</th>
-                            <th class="d-none d-sm-table-cell">Correo</th>
+                            <th>Correo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="text-center"></tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
-        <div class="card shadow mt-4">
-            <div class="card-header">
-                <h4 class="text-center">Productos Recientes</h4>
-            </div>
-            <div class="card-body">
-                <table class="table" id="table-products">
-                    <thead class="text-center">
+
+        <div class="report-section">
+            <h4>Productos Recientes</h4>
+            <div class="table-container">
+                <table id="table-products">
+                    <thead>
                         <tr>
                             <th>Code</th>
                             <th>Nombre</th>
@@ -183,7 +310,7 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="text-center"></tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -320,5 +447,5 @@
             getProducts();
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
+</body>
 </html>

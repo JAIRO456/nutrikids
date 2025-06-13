@@ -76,21 +76,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INICIO</title>
-    <link rel="stylesheet" href="../styles/inicio.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 80px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2em;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .total-row {
+            font-weight: bold;
+            background: #f8f9fa;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            padding: 10px;
+            background: #fde8e8;
+            border-radius: 5px;
+            margin: 10px 0;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
 </head>
 <body>
-    <main class="container mt-2">
-        <h1 class="mb-2">Gestión de Pagos de Menús</h1>
+    <main class="container">
+        <h1>Gestión de Pagos de Menús</h1>
         <form id="menuForm" method="POST" action="">
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-header">Registrar Nuevo Pago</div>
                 <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="id_menu" class="form-label">Menú</label>
-                            <select class="form-select" id="id_menu" name="id_menu" required>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="id_menu">Menú</label>
+                            <select id="id_menu" name="id_menu" required>
                                 <option value="">Seleccione un menú</option>
                                 <?php
                                     $documento = $_SESSION['documento'];
@@ -104,9 +252,9 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label for="documento_est" class="form-label">Estudiante</label>
-                            <select class="form-select" id="documento_est" name="documento_est" required>
+                        <div class="form-col">
+                            <label for="documento_est">Estudiante</label>
+                            <select id="documento_est" name="documento_est" required>
                                 <option value="">Seleccione un estudiante</option>
                                 <?php
                                     $documento = $_SESSION['documento'];
@@ -121,24 +269,24 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="fecha_ini" class="form-label">Fecha Inicio</label>
-                            <input type="date" class="form-control" id="fecha_ini" name="fecha_ini" required>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="fecha_ini">Fecha Inicio</label>
+                            <input type="date" id="fecha_ini" name="fecha_ini" required>
                         </div>
-                        <div class="col-md-6">
-                            <label for="fecha_fin" class="form-label">Fecha Fin</label>
-                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required>
+                        <div class="form-col">
+                            <label for="fecha_fin">Fecha Fin</label>
+                            <input type="date" id="fecha_fin" name="fecha_fin" required>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="monto" class="form-label">Monto</label>
-                            <input type="number" step="0.01" class="form-control" id="monto" name="monto">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="monto">Monto</label>
+                            <input type="number" step="0.01" id="monto" name="monto">
                         </div>
-                        <div class="col-md-6">
-                            <label for="metodo_pago" class="form-label">Método de Pago</label>
-                            <select class="form-select" id="metodo_pago" name="metodo_pago" required>
+                        <div class="form-col">
+                            <label for="metodo_pago">Método de Pago</label>
+                            <select id="metodo_pago" name="metodo_pago" required>
                                 <option value="">Seleccione un método de pago</option>
                                 <?php
                                     $sqlMetodos = $con->prepare("SELECT * FROM metodos_pago ORDER BY metodo ASC");
@@ -150,16 +298,16 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Registrar Pago</button>
+                    <button type="submit">Registrar Pago</button>
                 </div>
             </div>
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-header">Detalles del Menú Seleccionado</div>
                 <input type="hidden" name="productos" id="productos">
                 <input type="hidden" name="dias" id="dias">
                 <div class="card-body">
-                    <table class="table table-bordered table-striped" id="table-pedidos">
-                        <thead class="table-dark">
+                    <table id="table-pedidos">
+                        <thead>
                             <tr>
                                 <th>Productos</th>
                                 <th>Cantidad</th>
@@ -172,9 +320,9 @@
                             </tr>
                         </tbody>
                         <tfoot>
-                            <tr>
-                                <td colspan="2" class="text-end fw-bold">Total:</td>
-                                <td id="total-pedidos" class="fw-bold"></td>
+                            <tr class="total-row">
+                                <td colspan="2" style="text-align: right;">Total:</td>
+                                <td id="total-pedidos"></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -188,7 +336,6 @@
     let selectedDays = [];
 
     window.addEventListener('DOMContentLoaded', function() {
-        // Si hay días guardados en localStorage, los pone en el campo oculto
         const diasGuardados = localStorage.getItem('selectedDays');
         if (diasGuardados) {
             document.getElementById('dias').value = diasGuardados;
