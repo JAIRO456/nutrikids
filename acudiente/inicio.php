@@ -9,7 +9,18 @@
 
     $hoy = date('Y-m-d');
     $doc = $_SESSION['documento'];
-    $sqlStudent = $con -> prepare("SELECT estudiantes.nombre, estudiantes.apellido, estudiantes.documento_est, estudiantes.imagen FROM estudiantes 
+    
+    $sqlPedidos = $con -> prepare("SELECT * FROM pedidos 
+    INNER JOIN usuarios ON pedidos.documento = usuarios.documento
+    INNER JOIN detalles_pedidos_producto ON pedidos.id_pedidos = detalles_pedidos_producto.id_pedido
+    INNER JOIN estudiantes ON detalles_pedidos_producto.documento_est = estudiantes.documento_est
+    INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
+    INNER JOIN estados ON pedidos.id_estado = estados.id_estado
+    WHERE pedidos.documento = ? ORDER BY pedidos.id_pedidos DESC LIMIT 5");
+    $sqlPedidos -> execute([$doc]);
+    $pedidos = $sqlPedidos -> fetchAll(PDO::FETCH_ASSOC);
+
+    $sqlStudent = $con -> prepare("SELECT estudiantes.nombre, estudiantes.apellido, estudiantes.documento_est, estudiantes.imagen, estudiantes.telefono, estudiantes.email FROM estudiantes 
     INNER JOIN usuarios ON estudiantes.documento = usuarios.documento WHERE usuarios.documento = ?");
     $sqlStudent -> execute([$doc]);
     $Students = $sqlStudent -> fetchAll(PDO::FETCH_ASSOC);
@@ -65,13 +76,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Acudiente - NutriKids</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #f4f4f4;
+            padding-top: 80px; /* Añadido para compensar el navbar fijo */
         }
         .container {
             max-width: 1200px;
@@ -96,31 +113,188 @@
             max-width: 100%;
             height: auto;
         }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
-            h1 {
-                font-size: 1.5em;
-            }
+        .estudiantes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .estudiante-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .estudiante-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .estudiante-imagen {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .estudiante-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .estudiante-info {
+            padding: 15px;
+        }
+        
+        .estudiante-info h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .estudiante-info p {
+            margin: 0;
+            color: #666;
         }
     </style>
 </head>
 <body>
+    <?php include 'menu.php'; ?>
     <div class="container">
         <h1>Bienvenido, Acudiente</h1>
-        <div class="estudiantes">
-            <h2>Tus Estudiantes</h2>
+        <div class="estudiantes-grid">
             <?php foreach ($Students as $estudiante): ?>
-                <div class="estudiante">
-                    <?php echo htmlspecialchars($estudiante['nombre'] . ' ' . $estudiante['apellido']); ?>
+                <div class="estudiante-card">
+                    <div class="estudiante-imagen">
+                        <?php if(!empty($estudiante['imagen'])): ?>
+                            <img src="../img/estudiantes/<?= $estudiante['imagen']; ?>" alt="Foto estudiante">
+                        <?php else: ?>
+                            <img src="../img/estudiantes/default.png" alt="Foto por defecto">
+                        <?php endif; ?>
+                    </div>
+                    <div class="estudiante-info">
+                        <h3><?= $estudiante['nombre'] . ' ' . $estudiante['apellido']; ?></h3>
+                        <p>Documento: <?= $estudiante['documento_est']; ?></p>
+                        <button type="button" class="btn btn-primary" onclick="showUpdateForm(<?= $estudiante['documento_est']; ?>)">Actualizar</button>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
-        <h2>Nutrientes Consumidos Hoy (<?php echo date('d/m/Y'); ?>)</h2>
-        <canvas id="nutrientesChart"></canvas>
+        <div class="estudiantes shadow-lg p-3 mb-5 bg-white rounded">
+            <h2>Tus Estudiantes</h2>
+            <?php foreach ($Students as $estudiante): ?>
+                <div class="estudiante">
+                    <?= $estudiante['nombre'] . ' ' . $estudiante['apellido']; ?>
+                </div>
+            <?php endforeach; ?>
+            <h2>Nutrientes Consumidos Hoy (<?php echo date('d/m/Y'); ?>)</h2>
+            <canvas id="nutrientesChart"></canvas>
+        </div>
+    <div class="pagos-recientes shadow-lg p-3 mb-5 bg-white rounded">
+        <h2>Historial de Pagos Recientes</h2>
+        <div class="tabla-pagos">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Estudiante</th>
+                        <th>Concepto</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if(!empty($pedidos)): ?>
+                        <?php foreach($pedidos as $pedido): ?>
+                            <tr>
+                                <td><?= date('d/m/Y', strtotime($pedido['fecha_ini'])) ?></td>
+                                <td><?= $pedido['nombre'] . ' ' . $pedido['apellido'] ?></td>
+                                <td><?= $pedido['nombre_menu'] ?></td>
+                                <td>$<?= number_format($pedido['total_pedido'], 2, ',', '.') ?></td>
+                                <td><span class="badge <?= $pedido['estado'] == 'Pagado' ? 'badge-success' : 'badge-warning' ?>"><?= $pedido['estado'] ?></span></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5" class="text-center">No hay pagos recientes para mostrar</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
+    </div>
+    <div id="updateForm" style="display: none;">
+        <h2>Actualizar Información</h2>
+        <span id="closeForm" onclick="closeUpdateForm()">X</span>
+        <form id="updateForm">
+            <input type="hidden" id="documento_est" name="documento_est">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" value="<?= $estudiante['nombre'] ?>">
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido" class="form-control" value="<?= $estudiante['apellido'] ?>">
+            </div>
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="text" id="telefono" name="telefono" class="form-control" value="<?= $estudiante['telefono'] ?>">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" value="<?= $estudiante['email'] ?>">
+            </div>
+            <div class="form-group">
+                <label for="imagen">Imagen</label>
+                <input type="file" id="imagen" name="imagen" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+    <script>
+        function showUpdateForm(documento_est) {
+            document.getElementById('updateForm').style.display = 'block';
+            document.getElementById('documento_est').value = documento_est;
+        }
+        function closeUpdateForm() {
+            document.getElementById('updateForm').style.display = 'none';
+        }
+        function updateEstudiante() {
+            const documento_est = document.getElementById('documento_est').value;
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const telefono = document.getElementById('telefono').value;
+            const email = document.getElementById('email').value;
 
+            const data = {
+                documento_est: documento_est,
+                nombre: nombre,
+                apellido: apellido,
+                telefono: telefono,
+                email: email
+            };
+
+            fetch('../ajax/update_estudiante.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        document.getElementById('updateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateEstudiante();
+        });
+    </script>
     <script>
         const nutrientesData = <?php echo json_encode($nutrientes_est); ?>;
         
