@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Login</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -50,9 +59,57 @@
         .spinner button {
             margin-top: 10px;
         }
+        .container-main {
+            padding: 1rem;
+        }
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn {
+            width: 100%;
+            padding: 5px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .btn.green {
+            background-color: #77b885;
+            color: white;
+        }
+        .btn.red {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container-header {
+                padding: 1rem;
+            }
+            .container-main {
+                padding: 1rem;
+            }
+            .login-card {
+                padding: 1rem;
+            }
+            .title2 {
+                font-size: 1.5rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+            .x_grupo {
+                margin-bottom: 1rem;
+            }
+            .form-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
-<body onload="document.form1.documento.focus()">
+<body onload="document.form.documento.focus()">
     <header class="container-header">
         <div class="container-logo-header">
             <a href="index.php"><img class="logo" src="img/logo-nutrikids2.png" alt=""></a>
@@ -65,7 +122,7 @@
             <p class="subtitle">
                 "Elige sabiamente para garantizar el bienestar y el futuro de tus hijos, tomando decisiones que les brinden un ambiente seguro, amoroso y lleno de oportunidades para su desarrollo integral."
             </p>
-            <form action="" method="post" name="form1" id="form1" class="form1" autocomplete="on">
+            <form action="" method="post" name="form" id="form" class="form" autocomplete="on">
                 <div class="x_grupo" id="x_documento">
                     <label for="documento">Usuario</label>
                     <div class="x_input">
@@ -112,8 +169,8 @@
                     </p>
                 </div>
 
-                <div class="form1-buttons">
-                    <button type="submit" name="enviar" id="botton">ENVIAR</button>
+                <div class="form-buttons">
+                    <button type="submit" name="enviar" id="botton" class="btn green">ENVIAR</button>
                     <button type="button" class="btn red" onclick="window.location.href='index.php'">REGRESAR</button>
                 </div>
 
@@ -165,7 +222,7 @@
         const errorMessage = document.getElementById('errorMessage');
         const loading = document.getElementById('loading');
 
-        document.getElementById('form1').addEventListener('submit', async (e) => {
+        document.getElementById('form').addEventListener('submit', async (e) => {
             e.preventDefault();
             loading.style.display = 'none'; 
             const documento = document.getElementById('documento').value.trim();
@@ -206,8 +263,7 @@
                 }
             } 
             catch (error) {
-                showErrorModal('Error de conexión. Por favor, intenta de nuevo.');
-                loading.style.display = 'none';
+                showModal('Error de conexión. Por favor, intentalo de nuevo.');
             }
         });
 

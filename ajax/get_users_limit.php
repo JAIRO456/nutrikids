@@ -1,10 +1,10 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     $conex = new Database;
     $con = $conex->conectar();
 
-    $sqlUserNew = $con -> prepare("SELECT documento, nombre, apellido, email FROM usuarios ORDER BY documento ASC LIMIT 10");
+    $sqlUserNew = $con -> prepare("SELECT documento, nombre, apellido, email FROM usuarios ORDER BY documento ASC LIMIT 5");
     $sqlUserNew -> execute();
 
     $listUsers = [];

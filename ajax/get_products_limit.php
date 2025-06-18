@@ -1,12 +1,12 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     $conex = new Database;
     $con = $conex->conectar();
 
     $sqlProducts = $con->prepare("SELECT id_producto, nombre_prod, categoria FROM producto
     INNER JOIN categorias ON producto.id_categoria = categorias.id_categoria
-    ORDER BY producto.id_producto ASC LIMIT 10");
+    ORDER BY producto.id_producto ASC LIMIT 5");
     $sqlProducts->execute();
 
     $listProducts = [];

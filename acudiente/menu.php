@@ -151,6 +151,9 @@
 }
 
 @media (max-width: 768px) {
+    .menu {
+        height: 10%;
+    }
     .menu-toggle {
         display: flex;
     }
@@ -164,6 +167,14 @@
         background:rgb(42, 46, 51);
         flex-direction: column;
         padding: 20px;
+    }
+
+    .menu-list li, .menu-user li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        place-items: center;
     }
 
     .menu-content.active {

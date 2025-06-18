@@ -7,8 +7,8 @@
     use PHPMailer\PHPMailer\Exception;
     use PHPMailer\PHPMailer\SMTP;
 
-    function email_password($email, $nombre, $apellido, $documento, $password_code) {
-        $password_desencriptado = $password_code;
+    function email_password($email, $nombre, $apellido, $documento, $contrasena_original) {
+        $password_desencriptado = $contrasena_original;
         $mail = new PHPMailer(true);
 
         try {

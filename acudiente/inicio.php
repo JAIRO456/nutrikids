@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
@@ -10,7 +10,7 @@
     $hoy = date('Y-m-d');
     $doc = $_SESSION['documento'];
     
-    $sqlPedidos = $con -> prepare("SELECT * FROM pedidos 
+    $sqlPedidos = $con -> prepare("SELECT DISTINCT menus.id_menu, pedidos.id_pedidos, pedidos.fecha_ini, pedidos.fecha_fin, estados.estado, menus.nombre_menu, pedidos.id_estado FROM pedidos 
     INNER JOIN usuarios ON pedidos.documento = usuarios.documento
     INNER JOIN detalles_pedidos_producto ON pedidos.id_pedidos = detalles_pedidos_producto.id_pedido
     INNER JOIN estudiantes ON detalles_pedidos_producto.documento_est = estudiantes.documento_est
@@ -28,43 +28,31 @@
     $nutrientes_est = [];
     foreach ($Students as $estudiante) {
         $documento_est = $estudiante['documento_est'];
-        $sqlNutrientes = $con -> prepare("SELECT SUM(informacion_nutricional.calorias * detalles_pedidos_producto.cantidad), 
-        SUM(informacion_nutricional.proteinas * detalles_pedidos_producto.cantidad), 
-        SUM(informacion_nutricional.carbohidratos * detalles_pedidos_producto.cantidad), 
-        SUM(informacion_nutricional.grasas * detalles_pedidos_producto.cantidad), 
-        SUM(informacion_nutricional.azucares * detalles_pedidos_producto.cantidad), 
-        SUM(informacion_nutricional.sodio * detalles_pedidos_producto.cantidad), 
-        detalles_pedidos_producto.cantidad
-        FROM informacion_nutricional 
-        INNER JOIN producto ON informacion_nutricional.id_producto = producto.id_producto
-        INNER JOIN detalles_pedidos_producto ON producto.id_producto = detalles_pedidos_producto.id_producto
-        INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
-        WHERE detalles_pedidos_producto.documento_est = ? AND pedidos.id_pedidos = 6
-        AND pedidos.fecha_ini <= ? AND pedidos.fecha_fin >= ?
-        AND FIND_IN_SET(LOWER(DAYNAME(?)), LOWER(pedidos.dia))");
-        $sqlNutrientes -> execute([$documento_est, $hoy, $hoy, $hoy]);
-
-        $nutrientes = [
-            'calorias' => 0,
-            'proteinas' => 0,
-            'carbohidratos' => 0,
-            'grasas' => 0,
-            'azucares' => 0,
-            'sodio' => 0
-        ];
-
-        $row = $sqlNutrientes->fetch(PDO::FETCH_NUM);
-        if ($row) {
-            $nutrientes['calorias'] = $row[0] ?? 0;
-            $nutrientes['proteinas'] = $row[1] ?? 0;
-            $nutrientes['carbohidratos'] = $row[2] ?? 0;
-            $nutrientes['grasas'] = $row[3] ?? 0;
-            $nutrientes['azucares'] = $row[4] ?? 0;
-            $nutrientes['sodio'] = $row[5] ?? 0;
-        }
-
+        $sqlNutrientes = $con -> prepare("SELECT 
+            SUM(i.calorias * d.cantidad) as calorias,
+            SUM(i.proteinas * d.cantidad) as proteinas,
+            SUM(i.carbohidratos * d.cantidad) as carbohidratos,
+            SUM(i.grasas * d.cantidad) as grasas,
+            SUM(i.azucares * d.cantidad) as azucares,
+            SUM(i.sodio * d.cantidad) as sodio
+        FROM 
+            informacion_nutricional i
+        INNER JOIN 
+            producto p ON i.id_producto = p.id_producto
+        INNER JOIN 
+            detalles_pedidos_producto d ON p.id_producto = d.id_producto
+        INNER JOIN 
+            pedidos ped ON d.id_pedido = ped.id_pedidos
+        WHERE d.documento_est = ? AND ped.id_estado = 6
+        AND ped.fecha_ini = ? AND ped.fecha_fin = ?");
+        $sqlNutrientes -> execute([$documento_est, $hoy, $hoy]);
+        $nutrientes = $sqlNutrientes -> fetch(PDO::FETCH_ASSOC);
+        
         $nutrientes_est[] = [
-            'nombre' => $estudiante['nombre'] . ' ' . $estudiante['apellido'],
+            'estudiante' => [
+                'nombre' => $estudiante['nombre'],
+                'apellido' => $estudiante['apellido']
+            ],
             'nutrientes' => $nutrientes
         ];
     }
@@ -75,130 +63,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Acudiente - NutriKids</title>
+    <title>Inicio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary-color: #dc3545;
+            --secondary-color: #6c757d;
+            --background-color: #f3f4f6;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f3f4f6;
-            padding-top: 80px; /* Añadido para compensar el navbar fijo */
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
+
+        body {
+            background-color: var(--background-color);
+            padding-top: 80px;
+        }
+
         .container {
-            max-width: 100%;
-            margin: auto;
-            background: white;
-            padding: 5px 40px 5px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
         }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        .estudiantes {
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            background-color:rgb(255, 255, 255);
-            margin-bottom: 20px;
-        }
-        .estudiante {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            align-items: center;
-            justify-content: center;
-            place-items: center;
-            width: 100%;
-            height: 50px;
-        }
-        .estudiante-nutrientes {
-            margin-top: 20px;
-            width: 100%;
-            height: 350px;
-            place-items: center;
-        }
-        .estudiante-nutrientes canvas {
-            width: 100%;
-            height: 300px;
-        }
-        .estudiantes-grid {
-            padding-top: 20px;
-            width: 700px;
-            height: 250px;
-            place-items: center;
+
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
-        .estudiante-card {
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            background: #fff;
-            padding: 5px;
-            width: 250px;
-            height: 250px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease;
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            transition: transform var(--transition-speed);
         }
-        
-        .estudiante-card:hover {
+
+        .card:hover {
             transform: translateY(-5px);
         }
-        
-        .estudiante-imagen {
-            width: 100%;
-            height: 120px;
-            overflow: hidden;
-        }
-        .estudiante-imagen img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .estudiante-info {
-            margin-top: 10px;
-            width: 100%;
-            height: 100px;
+
+        .estudiante-card {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
-        
+
+        .estudiante-imagen {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
         .estudiante-imagen img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .estudiante-info {
-            padding: 15px;
+            margin-top: 1rem;
         }
-        
-        .estudiante-info h3 {
-            margin: 0 0 10px 0;
-            color: #333;
-            font-size: 18px;
+
+        .btn-action {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.5rem;
+            text-decoration: none;
+            display: inline-block;
         }
-        
-        .estudiante-info p {
-            margin: 0;
-            color: #666;
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        .notificaciones {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .pedidos-recientes {
+            margin-top: 2rem;
+        }
+
+        .pedido-item {
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+        }
+
+        .pedido-item:last-child {
+            border-bottom: none;
+        }
+
+        .estado-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .estado-activo {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .estado-pendiente {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .estado-cancelado {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            background-color: #fff;
+            color: #212529;
+            font-size: 0.9rem;
+        }
+
+        .modalUpdate {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.5); 
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white; 
+            margin: 15% auto; 
+            padding: 20px; 
+            border-radius: 8px; 
+            width: 80%; 
+            max-width: 500px;
+        }
+
+        .modal-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px;
+        }
+
+        .modal-body {
+            margin-top: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .x_input {
+            position: relative;
+            width: 100%;
+            height: 40px;
+        }
+
+        .modal-body input {
+            width: 100%;
+            height: 100%;
+            padding-left: 10px;
+        }
+        .modal-body .form_estado {
+            position: absolute;
+            right: 20px;
+            transform: translate(10px, 10px);
+        }
+        .modal-body .x_typerror {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .x_grupo-correcto .form_estado {
+            color: #1ed12d;
+        }
+
+        .x_grupo-incorrecto .form_estado {
+            color: #bb2929;
+        }
+
+        .x_grupo-correcto .x_input {
+            border: 3px solid #1ed12d;
+        }
+
+        .x_grupo-incorrecto .x_input {
+            border: 3px solid #bb2929;
+        }
+
+        .bi-check-circle-fill {
+            color: #1ed12d;
+        }
+
+        .bi-exclamation-circle-fill {
+            color: #bb2929;
+        }
+
+        .x_error-block {
+            display: block;
+            color: red;
+            font-size: 14px;
+        }
+
+        .x_typerror {
+            display: none;
+        }
+
+        .x_typerror-block {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .estudiante-imagen {
+                width: 100px;
+                height: 100px;
+            }
+            .estudiante-info {
+                margin-top: 0.5rem;
+            }
+            .chart-container {
+                height: 200px;
+                width: 300px;
+            }
+            .nutrientes-info {
+                margin-top: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <?php include 'menu.php'; ?>
     <div class="container">
-        <div class="estudiantes-grid">
+        <!-- Sección de Notificaciones -->
+        <div class="notificaciones">
+            <h3><i class="fas fa-bell"></i> Notificaciones</h3>
+            <?php
+            $pedidosPendientes = array_filter($pedidos, function($pedido) {
+                return $pedido['id_estado'] == 2;
+            });
+            
+            if (!empty($pedidosPendientes)): ?>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Tienes <?= count($pedidosPendientes) ?> pedidos pendientes de confirmación.
+                </div>
+            <?php else: ?>
+                <p>No hay notificaciones pendientes.</p>
+            <?php endif; ?>
+        </div> 
+
+        <!-- Sección de Estudiantes -->
+        <div class="grid">
             <?php foreach ($Students as $estudiante): ?>
-                <div class="estudiante-card">
+                <div class="card estudiante-card">
                     <div class="estudiante-imagen">
                         <?php if(!empty($estudiante['imagen'])): ?>
                             <img src="../img/users/<?= $estudiante['imagen']; ?>" alt="Foto estudiante">
@@ -209,207 +406,209 @@
                     <div class="estudiante-info">
                         <h3><?= $estudiante['nombre'] . ' ' . $estudiante['apellido']; ?></h3>
                         <p>Documento: <?= $estudiante['documento_est']; ?></p>
-                        <button type="button" class="btn btn-primary" onclick="showUpdateForm(<?= $estudiante['documento_est']; ?>)">Actualizar</button>
+                        <p>Teléfono: <?= $estudiante['telefono']; ?></p>
+                        <p>Email: <?= $estudiante['email']; ?></p>
+                        <div class="btn-group">
+                            <a href="pedidos.php?id_estudiante=<?= $estudiante['documento_est']; ?>" class="btn-action">
+                                <i class="fas fa-utensils"></i> Ver Pedidos
+                            </a>
+                            <button type="button" class="btn btn-danger" onclick="showUpdateForm(<?= $estudiante['documento_est']; ?>)">Actualizar</button>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
-        <div class="estudiantes shadow-lg p-3 mb-5 bg-white rounded">
-            <h2>Tus Estudiantes</h2>
-            <?php foreach ($Students as $estudiante): ?>
-                <div class="estudiante">
-                    <?= $estudiante['nombre'] . ' ' . $estudiante['apellido']; ?>
+
+        <!-- Sección de Información Nutricional -->
+        <div class="grid">
+            <?php foreach ($nutrientes_est as $index => $estudiante): ?>
+                <div class="card">
+                    <h3><i class="fas fa-chart-pie"></i> Información Nutricional - <?= $estudiante['estudiante']['nombre'] ?> <?= $estudiante['estudiante']['apellido'] ?></h3>
+                    <div class="chart-container">
+                        <canvas id="nutrientesChart<?= $index ?>"></canvas>
+                    </div>
+                    <div class="nutrientes-info mt-3">
+                        <h4>Resumen Nutricional del Día</h4>
+                        <ul class="list-group">
+                            <?php 
+                            $nutrientes = $estudiante['nutrientes'] ?? [];
+                            ?>
+                            <li class="list-group-item">Calorías: <?= number_format($nutrientes['calorias'] ?? 0, 2) ?> kcal</li>
+                            <li class="list-group-item">Proteínas: <?= number_format($nutrientes['proteinas'] ?? 0, 2) ?> g</li>
+                            <li class="list-group-item">Carbohidratos: <?= number_format($nutrientes['carbohidratos'] ?? 0, 2) ?> g</li>
+                            <li class="list-group-item">Grasas: <?= number_format($nutrientes['grasas'] ?? 0, 2) ?> g</li>
+                            <li class="list-group-item">Azúcares: <?= number_format($nutrientes['azucares'] ?? 0, 2) ?> g</li>
+                            <li class="list-group-item">Sodio: <?= number_format($nutrientes['sodio'] ?? 0, 2) ?> mg</li>
+                        </ul>
+                    </div>
                 </div>
             <?php endforeach; ?>
-            <div class="estudiante-nutrientes">
-                <h2>Nutrientes Consumidos Hoy (<?php echo date('d/m/Y'); ?>)</h2>
-                <canvas id="nutrientesChart"></canvas>
+        </div>
+
+        <!-- Sección de Pedidos Recientes -->
+        <div class="card pedidos-recientes">
+            <h3><i class="fas fa-history"></i> Pedidos Recientes</h3>
+            <?php if (empty($pedidos)): ?>
+                <p>No hay pedidos recientes.</p>
+            <?php else: ?>
+                <?php foreach ($pedidos as $pedido): ?>
+                    <div class="pedido-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h4>Pedido #<?= $pedido['id_pedidos']; ?></h4>
+                                <p><i class="fas fa-calendar"></i> Fecha: <?= date('d/m/Y', strtotime($pedido['fecha_ini'])); ?></p>
+                                <p><i class="fas fa-utensils"></i> Menú: <?= $pedido['nombre_menu']; ?></p>
+                                <p><i class="fas fa-circle"></i> Estado: <?= $pedido['estado']; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+
+        <!-- Modal de Actualización de Información -->
+        <div class="modalUpdate" id="modalUpdate">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Actualizar Información del Estudiante</h5>
+                    <button type="button" onclick="closeModal()" class="close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" name="form" class="form">
+                        <input type="hidden" id="documento_est" name="documento_est">
+                        <div class="x_grupo" id="x_telefono">
+                            <label for="telefono" class="form-label">Teléfono:</label>
+                            <div class="x_input">
+                                <input type="number" class="form-control" id="telefono" name="telefono" required>
+                                <i class="form_estado fa fa-exclamation-circle"></i>
+                            </div>
+                            <p class="x_typerror">Teléfono inválido, debe ser un número de 10 dígitos.</p>
+                        </div>
+                        <div class="x_grupo" id="x_email">
+                            <label for="email" class="form-label">Email:</label>
+                            <div class="x_input">
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <i class="form_estado fa fa-exclamation-circle"></i>
+                            </div>
+                            <p class="x_typerror">Email inválido, debe ser un email válido (ejemplo: ejemplo@gmail.com).</p>
+                        </div>
+                        <div class="x_grupo">
+                            <label for="imagen" class="form-label">Imagen:</label>
+                            <div class="x_input">
+                                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    <div class="pagos-recientes shadow-lg p-3 mb-5 bg-white rounded">
-        <h2>Historial de Pagos Recientes</h2>
-        <div class="tabla-pagos">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Estudiante</th>
-                        <th>Concepto</th>
-                        <th>Monto</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if(!empty($pedidos)): ?>
-                        <?php foreach($pedidos as $pedido): ?>
-                            <tr>
-                                <td><?= date('d/m/Y', strtotime($pedido['fecha_ini'])) ?></td>
-                                <td><?= $pedido['nombre'] . ' ' . $pedido['apellido'] ?></td>
-                                <td><?= $pedido['nombre_menu'] ?></td>
-                                <td>$<?= number_format($pedido['total_pedido'], 2, ',', '.') ?></td>
-                                <td><span class="badge <?= $pedido['estado'] == 'Pagado' ? 'badge-success' : 'badge-warning' ?>"><?= $pedido['estado'] ?></span></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5" class="text-center">No hay pagos recientes para mostrar</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
     </div>
-    </div>
-    <div id="updateForm" style="display: none;">
-        <h2>Actualizar Información</h2>
-        <span id="closeForm" onclick="closeUpdateForm()">X</span>
-        <form id="updateForm">
-            <input type="hidden" id="documento_est" name="documento_est">
-            <div class="form-group">
-                <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" value="<?= $estudiante['nombre'] ?>">
-            </div>
-            <div class="form-group">
-                <label for="apellido">Apellido</label>
-                <input type="text" id="apellido" name="apellido" class="form-control" value="<?= $estudiante['apellido'] ?>">
-            </div>
-            <div class="form-group">
-                <label for="telefono">Teléfono</label>
-                <input type="text" id="telefono" name="telefono" class="form-control" value="<?= $estudiante['telefono'] ?>">
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control" value="<?= $estudiante['email'] ?>">
-            </div>
-            <div class="form-group">
-                <label for="imagen">Imagen</label>
-                <input type="file" id="imagen" name="imagen" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
-    </div>
+    <script src="../validate/validar.js"></script>
     <script>
-        function showUpdateForm(documento_est) {
-            document.getElementById('updateForm').style.display = 'block';
-            document.getElementById('documento_est').value = documento_est;
-        }
-        function closeUpdateForm() {
-            document.getElementById('updateForm').style.display = 'none';
-        }
-        function updateEstudiante() {
-            const documento_est = document.getElementById('documento_est').value;
-            const nombre = document.getElementById('nombre').value;
-            const apellido = document.getElementById('apellido').value;
-            const telefono = document.getElementById('telefono').value;
-            const email = document.getElementById('email').value;
-            const imagen = document.getElementById('imagen').value;
+        try {
+            const nutrientesData = <?= json_encode($nutrientes_est); ?>;
+            
+            nutrientesData.forEach((estudiante, index) => {
+                const canvas = document.getElementById(`nutrientesChart${index}`);
+                if (!canvas) {
+                    console.error(`No se encontró el canvas para el índice ${index}`);
+                    return;
+                }
 
-            const data = {
-                documento_est: documento_est,
-                nombre: nombre,
-                apellido: apellido,
-                telefono: telefono,
-                email: email,
-                imagen: imagen
-            };
+                const ctx = canvas.getContext('2d');
+                const datos = estudiante.nutrientes || {};
+                
+                const valores = [
+                    parseFloat(datos.calorias) || 0,
+                    parseFloat(datos.proteinas) || 0,
+                    parseFloat(datos.carbohidratos) || 0,
+                    parseFloat(datos.grasas) || 0,
+                    parseFloat(datos.azucares) || 0,
+                    parseFloat(datos.sodio) || 0
+                ];
 
-            fetch('../ajax/update_estudiante.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-        document.getElementById('updateForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            updateEstudiante();
-        });
-    </script>
-    <script>
-        const nutrientesData = <?php echo json_encode($nutrientes_est); ?>;
-        
-        const ctx = document.getElementById('nutrientesChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: nutrientesData.map(est => est.nombre),
-                datasets: [
-                    {
-                        label: 'Calorías (kcal)',
-                        data: nutrientesData.map(est => est.nutrientes.calorias),
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Calorías', 'Proteínas', 'Carbohidratos', 'Grasas', 'Azúcares', 'Sodio'],
+                        datasets: [{
+                            label: estudiante.estudiante.nombre + ' ' + estudiante.estudiante.apellido,
+                            data: valores,
+                            backgroundColor: 'rgba(220, 53, 69, 0.5)',
+                            borderColor: 'rgba(220, 53, 69, 1)',
+                            borderWidth: 1
+                        }]
                     },
-                    {
-                        label: 'Proteínas (g)',
-                        data: nutrientesData.map(est => est.nutrientes.proteinas),
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Carbohidratos (g)',
-                        data: nutrientesData.map(est => est.nutrientes.carbohidratos),
-                        backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                        borderColor: 'rgba(255, 206, 86, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Grasas (g)',
-                        data: nutrientesData.map(est => est.nutrientes.grasas),
-                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Azúcares (g)',
-                        data: nutrientesData.map(est => est.nutrientes.azucares),
-                        backgroundColor: 'rgba(153, 102, 255, 0.5)',
-                        borderColor: 'rgba(153, 102, 255, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Sodio (mg)',
-                        data: nutrientesData.map(est => est.nutrientes.sodio),
-                        backgroundColor: 'rgba(255, 159, 64, 0.5)',
-                        borderColor: 'rgba(255, 159, 64, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Consumo de Nutrientes por Estudiante - Hoy'
-                    }
-                },
-                scales: {
-                    x: {
-                        stacked: false
-                    },
-                    y: {
-                        stacked: false,
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Cantidad'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toFixed(2);
+                                    }
+                                }
+                            }
                         }
                     }
-                },
-                responsive: true,
-                
+                });
+            });
+        } catch (error) {
+            console.error('Error al crear las gráficas:', error);
+        }
+
+        function showUpdateForm(documento_est) {
+            const estudiante = <?= json_encode($Students) ?>.find(e => e.documento_est === documento_est);
+            if (estudiante) {
+                document.getElementById('documento_est').value = estudiante.documento_est;
+                document.getElementById('telefono').value = estudiante.telefono;
+                document.getElementById('email').value = estudiante.email;
+                document.getElementById('modalUpdate').style.display = 'block';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modalUpdate').style.display = 'none';
+        }
+
+        document.getElementById('form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('documento_est', document.getElementById('documento_est').value);
+            formData.append('telefono', document.getElementById('telefono').value);
+            formData.append('email', document.getElementById('email').value);
+            
+            const imagenFile = document.getElementById('imagen').files[0];
+            if (imagenFile) {
+                formData.append('imagen', imagenFile);
+            }
+
+            try {
+                const response = await fetch('../ajax/update_estudiante.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('Información actualizada correctamente');
+                    location.reload();
+                } else {
+                    alert('Error al actualizar la información');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al actualizar la información');
             }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

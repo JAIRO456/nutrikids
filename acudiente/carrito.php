@@ -1,94 +1,323 @@
     <style>
-        .cart-table th, .cart-table td {
-            vertical-align: middle;
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --text-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --shadow-color: rgba(0,0,0,0.1);
         }
-        .quantity-input {
-            width: 70px;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-        .cart-table {
-            overflow: auto;
-            height: 300px;
-        }
+
         .cart-button {
-            width: 150px;
-            height: 100px;
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px;
+            right: 30px;
+            width: 180px;
+            height: 60px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 1.2em;
             z-index: 1000;
         }
+
+        .cart-button:hover {
+            box-shadow: 0 8px 15px var(--shadow-color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1001;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 900px;
+            height: 90%;
+            margin: auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 5px;
+            border-bottom: 2px solid var(--background-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-title {
+            font-size: 18px;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: white;
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+        }
+
+        .cart-table th, .cart-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--background-color);
+        }
+
+        .cart-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .cart-table tr:hover {
+            background: var(--background-color);
+        }
+
+        .form-group {
+            margin: 5px;
+            position: relative;
+            place-items: center;
+        }
+        .form-group-button{
+            margin: 5px;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: end;
+            gap: 10px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 1.1em;
+        }
+
+        .form-control {
+            max-width: 800px;
+            max-height: 40px;
+            padding: 12px;
+            border: 3px solid var(--background-color);
+            border-radius: 10px;
+            font-size: 1em;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: var(--background-color);
+        }
+
+        .checkbox-label:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .checkbox-input {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .checkbox-input:checked {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .checkbox-input:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+
+            .cart-button {
+                width: 140px;
+                height: 50px;
+                font-size: 1em;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .checkbox-group {
+                gap: 10px;
+            }
+
+            .checkbox-label {
+                padding: 6px 12px;
+                font-size: 0.9em;
+            }
+        }
     </style>
-    <div class="container-modal mt-1">
-        <!-- Botón para abrir el modal del carrito -->
-        <button type="button" class="btn btn-danger cart-button" data-bs-toggle="modal" data-bs-target="#cartModal">
-            <i class="bi bi-cart-fill"></i> Carrito (<span id="cart-count">0</span>)
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <div class="container-modal">
+        <button type="button" class="cart-button" onclick="toggleModal()">
+            <i class="fa-solid fa-cart-shopping"></i> Carrito (<span id="cart-count">0</span>)
         </button>
 
-        <!-- Modal del carrito -->
-        <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="cartModalLabel">Carrito de Compras</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <form id="menuForm" method="POST" action="menus.php">
-                                <div class="container-div card mb-1">
-                                    <button type="submit" class="btn btn-primary">Crear Menu</button>
-                                </div>
-                                <div class="container-div mb-3" id="container-div">
-                                    <label for="nombre_menu" class="form-label">Nombre del Menu</label>
-                                    <textarea type="varchar" class="form-control" id="nombre_menu" name="nombre_menu" required></textarea>
-                                </div>
-                                <div class="row mb-3">
-                                    <label class="form-label">Días</label>
-                                    <input type="hidden" name="dias" id="dias">
-                                    <div class="col-12">
-                                        <?php
-                                            $dias_semana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
-                                            foreach ($dias_semana as $dia) {
-                                                echo "<div class='form-check form-check-inline'>
-                                                        <input class='form-check-input dia dia-checkbox' type='checkbox' id='dia_$dia' value='$dia'>
-                                                        <label class='form-check-label' for='dia_$dia'>" . ucfirst($dia) . "</label>
-                                                    </div>";
-                                            }
-                                        ?>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="productos" id="productos">
-                                <table class="table cart-table">
-                                    <thead class='text-center'>
-                                        <tr>
-                                            <th>Productos</th>
-                                            <th>Cantidad</th>
-                                            <th>Precio</th>
-                                            <th>Acción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="table-body" class='text-center'>
-
-                                    </tbody>
-                                    <tfoot class='text-center'>
-                                        <tr>
-                                            <td colspan="2" class="text-end fw-bold">Total:</td>
-                                            <td id="total-pedidos" class="fw-bold"></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </form>
+        <div class="modal" id="cartModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Carrito de Compras</h2>
+                    <button class="close-button" onclick="toggleModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="menuForm" method="POST" action="menus.php">
+                        <div class="form-group-button">
+                            <button type="submit" class="btn btn-primary">Crear Menu</button>
+                            <button type="button" class="btn btn-danger" onclick="vaciarCarrito()">Vaciar Carrito</button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" onclick="vaciarCarrito()">Vaciar Carrito</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" onclick="checkout()">Pagar</button>
-                    </div>
+                        <div class="form-group">
+                            <label for="nombre_menu" class="form-label">Nombre del Menu</label>
+                            <textarea class="form-control" id="nombre_menu" name="nombre_menu" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Días</label>
+                            <input type="hidden" name="dias" id="dias">
+                            <div class="checkbox-group">
+                                <?php
+                                    $dias_semana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+                                    foreach ($dias_semana as $dia) {
+                                        echo "<label class='checkbox-label'>
+                                                <input type='checkbox' class='checkbox-input dia' id='dia_$dia' value='$dia'>
+                                                " . ucfirst($dia) . "
+                                            </label>";
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                        <input type="hidden" name="productos" id="productos">
+                        <table class="cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Productos</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" style="text-align: right; font-weight: bold;">Total:</td>
+                                    <td id="total-pedidos" style="font-weight: bold;"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleModal() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('show');
+        }
+    </script>
     <script>
         let listaProductos = [];
         let selectedDays = [];

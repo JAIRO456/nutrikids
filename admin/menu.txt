@@ -5,7 +5,13 @@
     $sql -> execute([$doc]);
     $u = $sql -> fetch();
 ?>
-
+<ul class="menu-list">
+                <li><a href="inicio.php"><i class="fa-solid fa-house"></i> Inicio</a></li>
+                <li><a href="directores.php"><i class="fa-solid fa-user-tie"></i>  Directores</a></li>
+                <li><a href="escuelas.php"><i class="fa-solid fa-school"></i>  Escuelas</a></li>
+                <li><a href="productos.php"><i class="fa-solid fa-basket-shopping"></i>  Productos</a></li>
+                <li><a href="licencias.php"><i class="fa-solid fa-file-pen"></i>  Licencias</a></li>
+            </ul>
 <!DOCTYPE html>
 <html lang="es">
 <head>

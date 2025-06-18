@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
@@ -13,46 +13,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <title>Agregar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #dc3545;
+            --secondary-color: #6c757d;
+            --background-color: #f3f4f6;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 75px;
+            padding: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-speed);
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        .nav-link:hover {
+            color: white;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 100px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <main class="container mt-4">
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
-                    <div class="card-body text-center">
-                        <a class="nav-link" href="usuarios/crear_vendedores.php" class="text-white">
-                            <h5 class="card-title">Vendedor</h5> 
-                            <i class="bi bi-person-fill"></i>
-                        </a>
-                    </div>
+    <main class="container">
+        <div class="grid">
+            <div class="card">
+                <div class="card-body">
+                    <a class="nav-link" href="usuarios/crear_vendedores.php">
+                        <h5 class="card-title">Vendedor</h5>
+                        <i class="fa-solid fa-user"></i>
+                    </a>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
-                    <div class="card-body text-center">
-                        <a class="nav-link" href="usuarios/crear_acudientes.php" class="text-white">
-                            <h5 class="card-title">Acudientes</h5> 
-                            <i class="bi bi-person-fill"></i>
-                        </a>
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <a class="nav-link" href="usuarios/crear_acudientes.php">
+                        <h5 class="card-title">Acudientes</h5>
+                        <i class="fa-solid fa-user"></i>
+                    </a>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-white bg-danger">
-                    <div class="card-body text-center">
-                        <a class="nav-link" href="estudiantes/crear_estudiantes.php" class="text-white">
-                            <h5 class="card-title">Estudiantes</h5>
-                            <i class="bi bi-person-fill"></i>
-                        </a>
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <a class="nav-link" href="estudiantes/crear_estudiantes.php">
+                        <h5 class="card-title">Estudiantes</h5>
+                        <i class="fa-solid fa-user"></i>
+                    </a>
                 </div>
-            </div>        
+            </div>
         </div>
     </main>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
 </html>

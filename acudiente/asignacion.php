@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
@@ -150,7 +150,7 @@
 
         select, input {
             width: 100%;
-            padding: 10px;
+            padding: 5px;
             border: 2px solid #ddd;
             border-radius: 5px;
             font-size: 1em;
@@ -225,6 +225,12 @@
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
         }
     </style>
 </head>

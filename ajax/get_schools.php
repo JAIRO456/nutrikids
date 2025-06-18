@@ -1,8 +1,8 @@
  <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     $conex = new Database;
-    $con = $conex->conectar();
+    $con = $conex->conectar();  
 
     $search = isset($_GET['search']) ? $_GET['search'] : '';
     $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');

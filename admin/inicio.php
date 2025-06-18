@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     // require_once('../time.php');
     $conex =new Database;
@@ -27,6 +27,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../img/logo-nutrikids2.png" type="image/png">
     <title>Inicio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -51,7 +52,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            margin-top: 100px;
+            margin-top: 75px;
             padding: 1rem;
         }
 
@@ -132,12 +133,17 @@
         }
 
         .btn-primary {
-            background: var(--primary-color);
+            background: #007bff;
             color: white;
         }
 
         .btn-secondary {
             background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
             color: white;
         }
 
@@ -151,19 +157,35 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            /* border-collapse: collapse; */
             margin: 1rem 0;
+            border: 1px solid #ddd;
+        }
+
+        .report-section-licencias {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        h4 {
+            text-align: center;
         }
 
         th, td {
             padding: 0.75rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            text-align: center;
         }
 
         th {
-            background-color: #f8f9fa;
+            background: #2c3e50;
             font-weight: bold;
+            color: white;
+            text-align: center;
         }
 
         tr:hover {
@@ -182,6 +204,9 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                margin-top: 100px;
+            }
             .grid {
                 grid-template-columns: 1fr;
             }
@@ -203,25 +228,25 @@
             <div class="stat-card">
                 <h5>Directores</h5>
                 <p class="number" id="TotalUsers">
-                    <i class="bi bi-person-fill"></i>
+                    <i class="fa-solid fa-user"></i>
                 </p>
             </div>
             <div class="stat-card">
                 <h5>Licencias Activas</h5>
                 <p class="number" id="TotalLicencias">
-                    <i class="bi bi-file-earmark-check-fill"></i>
+                    <i class="fa-solid fa-file-contract"></i>
                 </p>
             </div>
             <div class="stat-card">
                 <h5>Escuelas</h5>
                 <p class="number" id="TotalSchools">
-                    <i class="bi bi-house-fill"></i>
+                    <i class="fa-solid fa-school"></i>
                 </p>
             </div>
             <div class="stat-card">
                 <h5>Productos</h5>
                 <p class="number" id="TotalProducts">
-                    <i class="bi bi-basket"></i>
+                    <i class="fa-solid fa-basket-shopping"></i>
                 </p>
             </div>
         </div>
@@ -239,6 +264,7 @@
                 <canvas id="nutrient"></canvas>
             </div>
         </div>
+        <div class="report-section-licencias">
             <?php
                 $hoy = date('Y-m-d');
                 $treinta_dias = date('Y-m-d', strtotime('+30 days'));
@@ -385,10 +411,10 @@
             fetch('../ajax/get_counts.php')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('TotalUsers').innerHTML = `<i class="bi bi-person-fill"></i> ${data.TotalUsers}`;
-                    document.getElementById('TotalLicencias').innerHTML = `<i class="bi bi-file-earmark-check-fill"></i> ${data.TotalLicencias}`;
-                    document.getElementById('TotalSchools').innerHTML = `<i class="bi bi-house-fill"></i> ${data.TotalSchools}`;
-                    document.getElementById('TotalProducts').innerHTML = `<i class="bi bi-basket"></i> ${data.TotalProducts}`;
+                    document.getElementById('TotalUsers').innerHTML = `<i class="fa-solid fa-user"></i> ${data.TotalUsers}`;
+                    document.getElementById('TotalLicencias').innerHTML = `<i class="fa-solid fa-file-contract"></i> ${data.TotalLicencias}`;
+                    document.getElementById('TotalSchools').innerHTML = `<i class="fa-solid fa-school"></i> ${data.TotalSchools}`;
+                    document.getElementById('TotalProducts').innerHTML = `<i class="fa-solid fa-basket-shopping"></i> ${data.TotalProducts}`;
                 })
                 .catch(error => console.error('Error al obtener datos:', error));
         }
@@ -407,8 +433,8 @@
                             <td>${user.nombre} ${user.apellido}</td>
                             <td class="d-none d-sm-table-cell">${user.email}</td>
                             <td>
-                                <a class='btn btn-primary' href="directores/update_director.php?id=${user.documento}"><i class="bi bi-pencil-square"></i></a>
-                                <a class='btn btn-danger' href="directores/delete_director.php?id=${user.documento}"><i class="bi bi-trash"></i></a>
+                                <a class='btn btn-primary' href="directores/update_director.php?id=${user.documento}"><i class="fa-solid fa-pencil"></i></a>
+                                <a class='btn btn-danger' href="directores/delete_director.php?id=${user.documento}"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         `;
                         tbody.appendChild(tr);
@@ -431,8 +457,8 @@
                             <td>${product.nombre_prod}</td>
                             <td>${product.categoria}</td>
                             <td>
-                                <a href="produtos/update_producto.php?id=${product.id_producto}" class="btn btn-primary"><i class="bi bi-pencil"></i></a>
-                                <a href="produtos/delete_producto.php?id=${product.id_producto}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                                <a href="produtos/update_producto.php?id=${product.id_producto}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
+                                <a href="produtos/delete_producto.php?id=${product.id_producto}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         `;
                         tbody.appendChild(tr);

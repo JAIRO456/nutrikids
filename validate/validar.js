@@ -1,49 +1,53 @@
-const form = document.getElementById('form1');
-const inputs = document.querySelectorAll('#form1 input');
+const form = document.getElementById('form');
+const inputs = document.querySelectorAll('#form input');
 
 const expres = {
-    name: /^[a-zA-ZÀ-ÿ\s]{1,50}$/,
-    apell: /^[a-zA-ZÀ-ÿ\s]{1,50}$/,
-    doc: /^\d{10,11}$/,
+    nombre: /^[a-zA-ZÀ-ÿ\s]{1,50}$/,
+    apellido: /^[a-zA-ZÀ-ÿ\s]{1,50}$/,
+    documento: /^\d{10,11}$/,
     email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-    tel: /^\d{10,12}$/,
-    password: /^\d{4,4}$/,
+    telefono: /^\d{10,12}$/,
+    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#_-+])[A-Za-z\d#_-+]{8,}$/,
+    escuela: /^.+$/
 }
 
 const campos = {
-    name: false,
-    apell: false,
-    doc: false,
+    nombre: false,
+    apellido: false,
+    documento: false,
     email: false,
-    tel: false,
-    password: false
+    telefono: false,
+    password: false,
+    escuela: false
 }
 
 const validateForm = (e) => {
     switch (e.target.name){
         case "nombre":
-            state(expres.name, e.target, 'nombre');
+            state(expres.nombre, e.target, 'nombre');
         break;
         case "apellido":
-            state(expres.apell, e.target, 'apellido');
+            state(expres.apellido, e.target, 'apellido');
         break;
         case "documento":
-            state(expres.doc, e.target, 'documento');
+            state(expres.documento, e.target, 'documento');
         break;
         case "email":
             state(expres.email, e.target, 'email');
         break;
         case "telefono":
-            state(expres.tel, e.target, 'telefono');
+            state(expres.telefono, e.target, 'telefono');
         break;
         case "password":
             state(expres.password, e.target, 'password');
+        break;
+        case "escuela":
+            state(expres.escuela, e.target, 'escuela');
         break;
     }
 }
 
 const state = (expres, input, x) => {
-
     const element = document.getElementById(`x_${x}`);
     if (!element) {
         console.error(`Elemento con id x_${x} no encontrado`);
@@ -51,20 +55,20 @@ const state = (expres, input, x) => {
     }
 
     if(expres.test(input.value)){
-    document.getElementById(`x_${x}`).classList.remove('x_grupo-incorrecto');
-    document.getElementById(`x_${x}`).classList.add('x_grupo-correcto');
-    document.querySelector(`#x_${x} i`).classList.remove('bi-exclamation-circle-fill');
-    document.querySelector(`#x_${x} i`).classList.add('bi-check-circle-fill');
-    document.querySelector(`#x_${x} .x_typerror`).classList.remove('x_typerror-block');
-    campos[x] = false;
+        document.getElementById(`x_${x}`).classList.remove('x_grupo-incorrecto');
+        document.getElementById(`x_${x}`).classList.add('x_grupo-correcto');
+        document.querySelector(`#x_${x} i`).classList.remove('fa-exclamation-circle');
+        document.querySelector(`#x_${x} i`).classList.add('fa-check-circle');
+        document.querySelector(`#x_${x} .x_typerror`).classList.remove('x_typerror-block');
+        campos[x] = false;
     } 
     else {
-    document.getElementById(`x_${x}`).classList.add('x_grupo-incorrecto');
-    document.getElementById(`x_${x}`).classList.remove('x_grupo-correcto');
-    document.querySelector(`#x_${x} i`).classList.add('bi-exclamation-circle-fill');
-    document.querySelector(`#x_${x} i`).classList.remove('bi-check-circle-fill');
-    document.querySelector(`#x_${x} .x_typerror`).classList.add('x_typerror-block');
-    campos[x] = true;
+        document.getElementById(`x_${x}`).classList.add('x_grupo-incorrecto');
+        document.getElementById(`x_${x}`).classList.remove('x_grupo-correcto');
+        document.querySelector(`#x_${x} i`).classList.add('fa-exclamation-circle');
+        document.querySelector(`#x_${x} i`).classList.remove('fa-check-circle');
+        document.querySelector(`#x_${x} .x_typerror`).classList.add('x_typerror-block');
+        campos[x] = true;
     }
 }
 

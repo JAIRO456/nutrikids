@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
@@ -14,6 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Directores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --primary-color: #28a745;
@@ -39,6 +40,7 @@
         .container-main {
             max-width: 1200px;
             margin: 0 auto;
+            margin-top: 75px;
             padding: 20px;
         }
 
@@ -62,10 +64,16 @@
             align-items: center;
             gap: 5px;
             font-weight: 500;
+            font-size: 15px;
         }
 
         .btn-success {
             background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
             color: white;
         }
 
@@ -103,13 +111,13 @@
 
         .card-header {
             padding: 15px;
-            background: #f8f9fa;
+            background: #2c3e50;
             border-bottom: 1px solid var(--border-color);
         }
 
         .card-header h4 {
             text-align: center;
-            color: var(--text-color);
+            color: white;
         }
 
         .card-body {
@@ -174,6 +182,9 @@
         }
 
         @media (max-width: 768px) {
+            .container-main {
+                margin-top: 100px;
+            }
             .header-actions {
                 flex-direction: column;
             }
@@ -196,13 +207,13 @@
     <main class="container-main">
         <div class="header-actions">
             <div class="action-buttons">
-                <a href="directores/crear_director.php" class="btn btn-success">+ Registrar Director</a>
-                <a href="directores/pdf.php" class="btn btn-danger">PDF</a>
-                <button onclick="window.location.href='directores/excel.php'" class="btn btn-success">Excel</button>
+                <a href="directores/crear_director.php" class="btn btn-success"><i class="fa-solid fa-plus"></i> Registrar Director</a>
+                <a href="directores/pdf.php" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</a>
+                <button onclick="window.location.href='directores/excel.php'" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> Excel</button>
             </div>
             <form id="search-form" class="search-form">
                 <input class="search-input" type="search" placeholder="Buscar directores..." id="search-input">
-                <button class="btn btn-success" type="submit">Buscar</button>
+                <button class="btn btn-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
             </form>
         </div>
 
@@ -255,8 +266,8 @@
                             <td class="d-none d-sm-table-cell">${admin.email}</td>
                             <td>${admin.nombre_escuela}</td>
                             <td>
-                                <a class='btn btn-primary' href="directores/update_director.php?id=${admin.documento}"><i class="bi bi-pencil-square"></i></a>
-                                <a class='btn btn-danger' href="directores/delete_director.php?id=${admin.documento}"><i class="bi bi-trash"></i></a>
+                                <a class='btn btn-primary' href="directores/update_director.php?id=${admin.documento}"><i class="fa-solid fa-pencil"></i></a>
+                                <a class='btn btn-danger' href="directores/delete_director.php?id=${admin.documento}"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         `;
                         tableBody.appendChild(row);

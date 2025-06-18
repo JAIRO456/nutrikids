@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     $conex =new Database;
     $con = $conex->conectar();
@@ -25,7 +25,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selección de Estudiante</title>
+    <title>Horarios</title>
     <style>
         * {
             margin: 0;
@@ -36,6 +36,7 @@
 
         body {
             background-color: #f3f4f6;
+            padding-top: 80px;
         }
 
         .container {

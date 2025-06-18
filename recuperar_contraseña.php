@@ -7,7 +7,7 @@
     <link rel="icon" href="img/logo-nutrikids2.png" type="image/png">
     <title>Recuperar Contraseña</title>
 </head>
-<body onload="document.form1.email.focus()">
+<body onload="document.form.email.focus()">
     <header class="container-header">
         <div class="container-logo-header">
             <a href="index.php"><img class="logo" src="img/logo-nutrikids2.png" alt="Logo Nutrikids"></a>
@@ -17,7 +17,7 @@
         <div class="login-card">
             <h1 class="title2">Recuperar Contraseña</h1>
             <p class="subtitle">Ingresa el número de documento asociado a tu cuenta y te enviaremos instrucciones para restablecer tu contraseña.</p>
-            <form action="libraries/PHPMailer-master/config/email_update_password.php" name="form1" id="form1" method="post" class="form1">
+            <form action="libraries/PHPMailer-master/config/email_update_password.php" name="form" id="form" method="post" class="form">
                 <div class="x_grupo" id="x_email">
                     <label for="email">Correo electrónico</label>
                     <div class="x_input">
@@ -27,7 +27,7 @@
                     <p class="x_typerror">Correo inválido</p>
                 </div>
 
-                <div class="form1-buttons">
+                <div class="form-buttons">
                     <button type="submit">ENVIAR</button>
                     <button type="button" class="btn red" onclick="window.location.href='login.html'">CANCELAR</button>
                 </div>

@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     $conex = new Database;
     $con = $conex->conectar();
@@ -24,7 +24,7 @@
 
         body {
             background-color: #f5f5f5;
-            min-height: 100vh;
+            padding-top: 80px;
         }
 
         .container {
@@ -144,6 +144,11 @@
             color: white;
         }
 
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -154,10 +159,6 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
             .container {
                 padding: 1rem;
             }
@@ -209,6 +210,7 @@
         <div class="button-container">
             <button type="button" id="btn-activo" value="1">Activo</button>
             <button type="button" id="btn-inactivo" value="2">Inactivo</button>
+            <button type="button" onclick="window.location.href='horarios.php'" class="btn btn-secondary mb-1">Regresar</button>
         </div>
     </main>
 

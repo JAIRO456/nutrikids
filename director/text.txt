@@ -1,0 +1,61 @@
+let nutrientChart; // Declara la variable global para el gráfico
+     
+        function actualizarGrafica(datos) { // Función para inicializar o actualizar el gráfico
+            const ctx = document.getElementById('nutrient').getContext('2d');
+       
+            if (nutrientChart) {
+                nutrientChart.destroy(); // Si ya existe un gráfico, lo destruimos antes de crear uno nuevo
+            }
+
+            nutrientChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Calorias', 'Proteínas', 'Carbohidratos', 'Grasas', 'Azucares', 'Sodio'],
+                    datasets: [{
+                        data: [datos.total_cal, datos.total_pro, datos.total_car, datos.total_gras, datos.total_azu, datos.total_sod],
+                        backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+        }
+ 
+        function filtrarGrafica() { // Función para filtrar la gráfica
+            const fechaIni = document.getElementById('fecha_ini').value;
+            const fechaFin = document.getElementById('fecha_fin').value;
+
+            if (fechaIni && fechaFin && new Date(fechaIni) > new Date(fechaFin)) { 
+                alert('La fecha de inicio no puede ser mayor a la fecha final'); // Validación básica de fechas
+                return;
+            }
+            
+            const params = new URLSearchParams(); // Crear objeto con los parámetros de filtro
+            if (fechaIni) params.append('fecha_ini', fechaIni);
+            if (fechaFin) params.append('fecha_fin', fechaFin);
+    
+            fetch(`../ajax/get_nutricion_schools_data.php?${params.toString()}`) // Hacer la petición al servidor
+                .then(response => response.json())
+                .then(data => {
+                    actualizarGrafica(data);
+                })
+                .catch(error => console.error('Error al filtrar:', error));
+        }
+
+        function resetFiltros() { // Función para resetear los filtros
+            document.getElementById('fecha_ini').value = '';
+            document.getElementById('fecha_fin').value = '';
+            filtrarGrafica(); // Esto cargará los datos sin filtros
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() { // Inicializar la gráfica al cargar la página      
+            actualizarGrafica({
+                total_cal: <?= $resultado['total_cal'] ?? 0 ?>, // Usamos los datos         iniciales de PHP
+                total_pro: <?= $resultado['total_pro'] ?? 0 ?>,
+                total_car: <?= $resultado['total_car'] ?? 0 ?>,
+                total_gras: <?= $resultado['total_gras'] ?? 0 ?>,
+                total_azu: <?= $resultado['total_azu'] ?? 0 ?>,
+                total_sod: <?= $resultado['total_sod'] ?? 0 ?>
+            });
+        });
