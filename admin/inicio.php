@@ -8,16 +8,40 @@
 
     include 'menu.php';
 
-    $sqlInfoNutriconal = $con -> prepare("SELECT SUM(informacion_nutricional.calorias * detalles_pedidos_producto.cantidad) AS total_cal, 
+    $sqlInfoNutriconal = $con -> prepare("SELECT 
+    producto.nombre_prod,
+    SUM(informacion_nutricional.calorias * detalles_pedidos_producto.cantidad) AS total_cal, 
     SUM(informacion_nutricional.proteinas * detalles_pedidos_producto.cantidad) AS total_pro, 
     SUM(informacion_nutricional.carbohidratos * detalles_pedidos_producto.cantidad) AS total_car, 
     SUM(informacion_nutricional.grasas * detalles_pedidos_producto.cantidad) AS total_gras, 
     SUM(informacion_nutricional.azucares * detalles_pedidos_producto.cantidad) AS total_azu, 
-    SUM(informacion_nutricional.sodio * detalles_pedidos_producto.cantidad) AS total_sod FROM informacion_nutricional 
+    SUM(informacion_nutricional.sodio * detalles_pedidos_producto.cantidad) AS total_sod 
+    FROM informacion_nutricional 
     INNER JOIN producto ON informacion_nutricional.id_producto = producto.id_producto
-    INNER JOIN detalles_pedidos_producto ON producto.id_producto = detalles_pedidos_producto.id_producto");
+    INNER JOIN detalles_pedidos_producto ON producto.id_producto = detalles_pedidos_producto.id_producto
+    INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
+    WHERE pedidos.fecha_ini = CURDATE() AND pedidos.fecha_fin = CURDATE() AND pedidos.id_estado = 6
+    GROUP BY producto.nombre_prod");
     $sqlInfoNutriconal -> execute();
-    $InfoNutric = $sqlInfoNutriconal -> fetch(PDO::FETCH_ASSOC);
+    $InfoNutric = $sqlInfoNutriconal -> fetchAll(PDO::FETCH_ASSOC);
+
+    $productos = [];
+    $calorias = [];
+    $proteinas = [];
+    $carbohidratos = [];
+    $grasas = [];
+    $azucares = [];
+    $sodios = [];
+
+    foreach ($InfoNutric as $producto) {
+        $productos[] = $producto['nombre_prod'];
+        $calorias[] = $producto['total_cal'];
+        $proteinas[] = $producto['total_pro'];
+        $carbohidratos[] = $producto['total_car'];
+        $grasas[] = $producto['total_gras'];
+        $azucares[] = $producto['total_azu'];
+        $sodios[] = $producto['total_sod'];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -162,14 +186,6 @@
             border: 1px solid #ddd;
         }
 
-        .report-section-licencias {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: var(--card-shadow);
-        }
-
         h4 {
             text-align: center;
         }
@@ -219,6 +235,18 @@
             .input-date {
                 width: 100%;
             }
+
+            .chart-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 150px;
+            }
+
+            .chart-container canvas {
+                width: 100% !important;
+                height: 100% !important;
+            }
         }
     </style>
 </head>
@@ -253,57 +281,74 @@
 
         <div class="report-section">
             <h2>Reportes Nutricionales</h2>
-            <div class="filter-controls">
-                <input type="date" id="fecha_ini" class="input-date">
-                <input type="date" id="fecha_fin" class="input-date">
-                <button onclick="filtrarGrafica()" class="btn btn-primary">Filtrar</button>
-                <button onclick="resetFiltros()" class="btn btn-secondary">Reset</button>
-            </div>
             <h4>Distribución de Nutrientes</h4>
-            <div style="height:350px;">
+            <div class="chart-container" style="height:350px; width: 100%; place-items: center;">
                 <canvas id="nutrient"></canvas>
             </div>
-        </div>
-        <div class="report-section-licencias">
-            <?php
-                $hoy = date('Y-m-d');
-                $treinta_dias = date('Y-m-d', strtotime('+30 days'));
-                $sqlDias = $con->query("SELECT licencias.id_licencia, licencias.fecha_fin, escuelas.nombre_escuela FROM licencias
-                INNER JOIN escuelas ON licencias.id_escuela = escuelas.id_escuela
-                INNER JOIN estados ON licencias.id_estado = estados.id_estado
-                WHERE estados.id_estado = 1 
-                AND licencias.fecha_fin BETWEEN '$hoy' AND '$treinta_dias'
-                ORDER BY licencias.fecha_fin ASC");
-                $licencias = $sqlDias->fetchAll(PDO::FETCH_ASSOC);
-
-                if (count($licencias) > 0): ?>
+            <div class="productos-list mt-4">
+                <h4>Lista de Productos y sus Valores Nutricionales</h4>
+                <div class="table-container">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Escuela</th>
-                                <th>Fecha Expiración</th>
-                                <th>Días Restantes</th>
-                                <th>Acción</th>
+                                <th>Producto</th>
+                                <th>Calorías</th>
+                                <th>Proteínas</th>
+                                <th>Carbohidratos</th>
+                                <th>Grasas</th>
+                                <th>Azúcares</th>
+                                <th>Sodio</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php foreach ($licencias as $licencia): 
-                                $dias_restantes = (new DateTime($licencia['fecha_fin']))->diff(new DateTime($hoy))->days;
-                            ?>
-                            <tr>
-                                <td><?= $licencia['nombre_escuela']; ?></td>
-                                <td><?= date('d/m/Y', strtotime($licencia['fecha_fin'])) ?></td>
-                                <td><?= $dias_restantes ?></td>
-                                <td>
-                                    <a href="licencias/update_licencia.php?id=<?= $licencia['id_licencia'] ?>" class="btn btn-primary">Renovar</a>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
+                        <tbody id="productos-tabla">
                         </tbody>
                     </table>
-                <?php else: ?>
-                    <div class="alert">No hay licencias por expirar en los próximos 30 días.</div>
-                <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        <div class="report-section-licencias">
+            <h4>Licencias por expirar</h4>
+            <div class="table-container">
+                <?php
+                    $hoy = date('Y-m-d');
+                    $treinta_dias = date('Y-m-d', strtotime('+30 days'));
+                    $sqlDias = $con->query("SELECT licencias.id_licencia, licencias.fecha_fin, escuelas.nombre_escuela FROM licencias
+                    INNER JOIN escuelas ON licencias.id_escuela = escuelas.id_escuela
+                    INNER JOIN estados ON licencias.id_estado = estados.id_estado
+                    WHERE estados.id_estado = 1 
+                    AND licencias.fecha_fin BETWEEN '$hoy' AND '$treinta_dias'
+                    ORDER BY licencias.fecha_fin ASC");
+                    $licencias = $sqlDias->fetchAll(PDO::FETCH_ASSOC);
+        
+                    if (count($licencias) > 0): ?>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Escuela</th>
+                                    <th>Fecha Expiración</th>
+                                    <th>Días Restantes</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($licencias as $licencia): 
+                                    $dias_restantes = (new DateTime($licencia['fecha_fin']))->diff(new DateTime($hoy))->days;
+                                ?>
+                                <tr>
+                                    <td><?= $licencia['nombre_escuela']; ?></td>
+                                    <td><?= date('d/m/Y', strtotime($licencia['fecha_fin'])) ?></td>
+                                    <td><?= $dias_restantes ?></td>
+                                    <td>
+                                        <a href="licencias/update_licencia.php?id=<?= $licencia['id_licencia'] ?>" class="btn btn-primary">Renovar</a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <div class="alert">No hay licencias por expirar en los próximos 30 días.</div>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
 
@@ -344,44 +389,85 @@
 </body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let nutrientChart; // Declara la variable global para el gráfico
+        let nutrientChart;
      
-        function actualizarGrafica(datos) { // Función para inicializar o actualizar el gráfico
+        function actualizarGrafica(datos) {
             const ctx = document.getElementById('nutrient').getContext('2d');
        
             if (nutrientChart) {
-                nutrientChart.destroy(); // Si ya existe un gráfico, lo destruimos antes de crear uno nuevo
+                nutrientChart.destroy();
             }
 
+            // Calcular totales para el gráfico
+            const totales = {
+                calorias: datos.reduce((sum, item) => sum + parseFloat(item.total_cal), 0),
+                proteinas: datos.reduce((sum, item) => sum + parseFloat(item.total_pro), 0),
+                carbohidratos: datos.reduce((sum, item) => sum + parseFloat(item.total_car), 0),
+                grasas: datos.reduce((sum, item) => sum + parseFloat(item.total_gras), 0),
+                azucares: datos.reduce((sum, item) => sum + parseFloat(item.total_azu), 0),
+                sodio: datos.reduce((sum, item) => sum + parseFloat(item.total_sod), 0)
+            };
+
             nutrientChart = new Chart(ctx, {
-                type: 'pie',
+                type: 'bar',
                 data: {
-                    labels: ['Calorias', 'Proteínas', 'Carbohidratos', 'Grasas', 'Azucares', 'Sodio'],
+                    labels: ['Calorías', 'Proteínas', 'Carbohidratos', 'Grasas', 'Azúcares', 'Sodio'],
                     datasets: [{
-                        data: [datos.total_cal, datos.total_pro, datos.total_car, datos.total_gras, datos.total_azu, datos.total_sod],
+                        label: 'Valores Totales',
+                        data: [
+                            totales.calorias,
+                            totales.proteinas,
+                            totales.carbohidratos,
+                            totales.grasas,
+                            totales.azucares,
+                            totales.sodio
+                        ],
                         backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
                     }]
                 },
                 options: {
                     responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
+            });
+
+            // Actualizar la tabla de productos
+            const tbody = document.getElementById('productos-tabla');
+            tbody.innerHTML = '';
+            
+            datos.forEach(producto => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${producto.nombre_prod}</td>
+                    <td>${parseFloat(producto.total_cal).toFixed(2)}</td>
+                    <td>${parseFloat(producto.total_pro).toFixed(2)}</td>
+                    <td>${parseFloat(producto.total_car).toFixed(2)}</td>
+                    <td>${parseFloat(producto.total_gras).toFixed(2)}</td>
+                    <td>${parseFloat(producto.total_azu).toFixed(2)}</td>
+                    <td>${parseFloat(producto.total_sod).toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
             });
         }
  
-        function filtrarGrafica() { // Función para filtrar la gráfica
+        function filtrarGrafica() {
             const fechaIni = document.getElementById('fecha_ini').value;
             const fechaFin = document.getElementById('fecha_fin').value;
 
-            if (fechaIni && fechaFin && new Date(fechaIni) > new Date(fechaFin)) { 
-                alert('La fecha de inicio no puede ser mayor a la fecha final'); // Validación básica de fechas
+            if (fechaIni && fechaFin && new Date(fechaIni) > new Date(fechaFin)) {
+                alert('La fecha de inicio no puede ser mayor a la fecha final');
                 return;
             }
             
-            const params = new URLSearchParams(); // Crear objeto con los parámetros de filtro
+            const params = new URLSearchParams();
             if (fechaIni) params.append('fecha_ini', fechaIni);
             if (fechaFin) params.append('fecha_fin', fechaFin);
     
-            fetch(`../ajax/get_nutricion_data.php?${params.toString()}`) // Hacer la petición al servidor
+            fetch(`../ajax/get_nutricion_data.php?${params.toString()}`)
                 .then(response => response.json())
                 .then(data => {
                     actualizarGrafica(data);
@@ -389,21 +475,14 @@
                 .catch(error => console.error('Error al filtrar:', error));
         }
 
-        function resetFiltros() { // Función para resetear los filtros
+        function resetFiltros() {
             document.getElementById('fecha_ini').value = '';
             document.getElementById('fecha_fin').value = '';
-            filtrarGrafica(); // Esto cargará los datos sin filtros
+            filtrarGrafica();
         }
         
-        document.addEventListener('DOMContentLoaded', function() { // Inicializar la gráfica al cargar la página      
-            actualizarGrafica({
-                total_cal: <?= $InfoNutric['total_cal'] ?? 0 ?>, // Usamos los datos iniciales de PHP
-                total_pro: <?= $InfoNutric['total_pro'] ?? 0 ?>,
-                total_car: <?= $InfoNutric['total_car'] ?? 0 ?>,
-                total_gras: <?= $InfoNutric['total_gras'] ?? 0 ?>,
-                total_azu: <?= $InfoNutric['total_azu'] ?? 0 ?>,
-                total_sod: <?= $InfoNutric['total_sod'] ?? 0 ?>
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarGrafica(<?= json_encode($InfoNutric) ?>);
         });
     </script>
     <script>

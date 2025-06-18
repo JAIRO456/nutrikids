@@ -264,7 +264,7 @@
                     <button class="close-button" onclick="toggleModal()">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="menuForm" method="POST" action="menus.php">
+                    <form id="form" method="POST" action="menus.php">
                         <div class="form-group-button">
                             <button type="submit" class="btn btn-primary">Crear Menu</button>
                             <button type="button" class="btn btn-danger" onclick="vaciarCarrito()">Vaciar Carrito</button>
@@ -311,7 +311,7 @@
             </div>
         </div>
     </div>
-
+    <script src="../validate/nombres_menu.js"></script>
     <script>
         function toggleModal() {
             const modal = document.getElementById('cartModal');
@@ -406,7 +406,7 @@
         }
     
         // Actualizar el campo oculto de días y productos al enviar el formulario
-        document.getElementById('menuForm').addEventListener('submit', function(e) {
+        document.getElementById('form').addEventListener('submit', function(e) {
             actualizarDias();
             document.getElementById('productos').value = JSON.stringify(listaProductos);
             document.getElementById('dias').value = JSON.stringify(selectedDays);

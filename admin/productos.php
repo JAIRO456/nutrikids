@@ -125,6 +125,7 @@
 
         .card-body {
             padding: 20px;
+            overflow-x: auto;
         }
 
         .table {
@@ -236,10 +237,10 @@
                 <table class="table" id="table-products">
                     <thead>
                         <tr>
-                            <th class="hide-mobile">CODE</th>
+                            <th>CODE</th>
                             <th>Nombre</th>
                             <th>Categoría</th>
-                            <th class="hide-mobile">Precio</th>
+                            <th>Precio</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -270,10 +271,10 @@
                     data.data.forEach(product => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td class="hide-mobile">${product.id_producto}</td>
+                            <td>${product.id_producto}</td>
                             <td>${product.nombre_prod}</td>
                             <td>${product.categoria}</td>
-                            <td class="hide-mobile">${product.precio}</td>
+                            <td>${product.precio}</td>
                             <td>
                                 <a href="produtos/update_producto.php?id=${product.id_producto}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
                                 <a href="produtos/delete_producto.php?id=${product.id_producto}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>

@@ -121,6 +121,7 @@
 
         .card-body {
             padding: 20px;
+            overflow-x: auto;
         }
 
         .table {
@@ -224,10 +225,10 @@
                 <table class="table" id="table-schools">
                     <thead>
                         <tr>
-                            <th class="hide-mobile">Imagen</th>
+                            <th>Imagen</th>
                             <th>ID</th>
                             <th>Nombre</th>
-                            <th class="hide-mobile">Correo</th>
+                            <th>Correo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -257,10 +258,10 @@
                     data.data.forEach(school => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td class="hide-mobile"><img src="../img/schools/${school.imagen_esc}" alt="Imagen" width="50" height="50"></td>
+                            <td><img src="../img/schools/${school.imagen_esc}" alt="Imagen" width="50" height="50"></td>
                             <td>${school.id_escuela}</td>
                             <td>${school.nombre_escuela}</td>
-                            <td class="hide-mobile">${school.email_esc}</td>
+                            <td>${school.email_esc}</td>
                             <td> 
                                 <a href="escuelas/update_escuela.php?id=${school.id_escuela}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
                                 <a href="escuelas/delete_escuela.php?id=${school.id_escuela}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>

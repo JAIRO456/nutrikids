@@ -7,7 +7,7 @@
     $conex = new Database;
     $con = $conex->conectar();
 
-    include 'menu.php';
+    //include 'menu.php';
 
     // Obtener años disponibles para el select
     $anios = obtenerAniosDisponibles($con);

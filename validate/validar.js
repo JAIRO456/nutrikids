@@ -7,7 +7,7 @@ const expres = {
     documento: /^\d{10,11}$/,
     email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     telefono: /^\d{10,12}$/,
-    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#_-+])[A-Za-z\d#_-+]{8,}$/,
+    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/,
     escuela: /^.+$/
 }
 
@@ -76,3 +76,21 @@ inputs.forEach((input) => {
     input.addEventListener('keyup', validateForm);
     input.addEventListener('blur', validateForm);
 });
+
+/* form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // Validar todos los campos antes del envío
+    inputs.forEach((input) => {
+        validateForm({ target: input });
+    });
+
+    // Verificar si hay campos inválidos
+    const hayErrores = Object.values(campos).some(campo => campo === true);
+    
+    if (hayErrores) {
+        alert('Por favor, complete correctamente todos los campos antes de enviar el formulario.');
+    } else {
+        form.submit();
+    }
+}); */

@@ -1,10 +1,10 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     $conex = new Database;
     $con = $conex->conectar();
-
+    
     $documento = $_SESSION['documento'];
     $productos = isset($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
     $nombre_menu = $_POST['nombre_menu'];

@@ -100,13 +100,6 @@
             min-width: 200px;
         }
 
-        .form-select {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            min-width: 200px;
-        }
-
         .card {
             background: white;
             border-radius: 8px;
@@ -129,6 +122,7 @@
 
         .card-body {
             padding: 20px;
+            overflow-x: auto;
         }
 
         .table {
@@ -151,6 +145,32 @@
             background-color: #f8f9fa;
         }
 
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .pagination a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -170,11 +190,11 @@
                 flex-direction: column;
             }
 
-            .search-form {
+            .icon-down {
                 width: 100%;
             }
 
-            .form-select {
+            .search-form {
                 width: 100%;
             }
 
@@ -183,7 +203,7 @@
             }
 
             .hide-mobile {
-                display: none !important;
+                display: none;
             }
         }
     </style>
@@ -192,12 +212,12 @@
     <main class="container-main">
         <div class="header-actions">
             <div class="action-buttons">
-                <a href="usuarios/pdf.php" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</a>
+                <button onclick="window.location.href='usuarios/pdf.php'" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                 <button onclick="window.location.href='usuarios/excel.php'" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> Excel</button>
             </div>
             <form id="search-form" class="search-form">
                 <input class="search-input" type="search" placeholder="Buscar usuarios..." id="search-input">
-                <select class="form-select" id="rol-select">
+                <select class="form-select icon-down" id="rol-select">
                     <option value="">Todas los roles</option>
                     <?php
                         $sqlRoles = $con->prepare("SELECT * FROM roles WHERE id_rol > 2 ORDER BY id_rol");
@@ -219,18 +239,22 @@
                 <table class="table" id="table-users">
                     <thead>
                         <tr>
-                            <th class="hide-mobile">Imagen</th>
+                            <th>Imagen</th>
                             <th>Documento</th>
                             <th>Nombre</th>
                             <th>Rol</th>
-                            <th class="hide-mobile">Estado</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="table-body"></tbody>
                 </table>
             </div>
         </div>
+
+        <nav class="pagination-container">
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
     </main>
 </body>
     <script>
@@ -245,11 +269,11 @@
                     data.forEach(user => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td class="hide-mobile">${user.imagen}</td>
+                            <td><img src='../img/usuarios/${user.imagen}' alt='${user.nombre} ${user.apellido}' style='width: 50px; height: 50px; border-radius: 50%;'></td>
                             <td>${user.documento}</td>
                             <td>${user.nombre} ${user.apellido}</td>
                             <td>${user.rol}</td>
-                            <td class="hide-mobile">${user.estado}</td>
+                            <td>${user.estado}</td>
                             <td>
                                 <a class='btn btn-primary' href='usuarios/update_users.php?id=${user.documento}'><i class='fa-solid fa-pencil'></i></a>
                                 <a class='btn btn-danger' href='usuarios/delete_users.php?id=${user.documento}'><i class='fa-solid fa-trash'></i></a>

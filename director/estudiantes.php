@@ -122,6 +122,7 @@
 
         .card-body {
             padding: 20px;
+            overflow-x: auto;
         }
 
         .table {
@@ -144,6 +145,32 @@
             background-color: #f8f9fa;
         }
 
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .pagination a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -163,6 +190,10 @@
                 flex-direction: column;
             }
 
+            .icon-down {
+                width: 100%;
+            }
+
             .search-form {
                 width: 100%;
             }
@@ -172,20 +203,20 @@
             }
 
             .hide-mobile {
-                display: none !important;
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <main class="container-main">
+<main class="container-main">
         <div class="header-actions">
             <div class="action-buttons">
-                <a href="estudiantes/pdf.php" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</a>
+                <button onclick="window.location.href='estudiantes/pdf.php'" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                 <button onclick="window.location.href='estudiantes/excel.php'" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> Excel</button>
             </div>
             <form id="search-form" class="search-form">
-                <input class="search-input" type="search" placeholder="Buscar estudiante..." id="search-input">
+                <input class="search-input" type="search" placeholder="Buscar estudiantes..." id="search-input">
                 <button class="btn btn-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
             </form>
         </div>
@@ -198,17 +229,21 @@
                 <table class="table" id="table-student">
                     <thead>
                         <tr>
-                            <th class="hide-mobile">Imagen</th>
+                            <th>Imagen</th>
                             <th>Documento</th>
                             <th>Nombre</th>
-                            <th class="hide-mobile">Estado</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="table-body"></tbody>
                 </table>
             </div>
         </div>
+
+        <nav class="pagination-container">
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
     </main>
 </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-9U7pcFgL29UpmO6HfoEZ5rZ9zxL5FZKsw19eUyyglgKjHODUhlPqGe8C+ekc3E10" crossorigin="anonymous"></script>
@@ -223,13 +258,13 @@
                     data.forEach(student => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td class="hide-mobile">${student.imagen}</td>
+                            <td>${student.imagen}</td>
                             <td>${student.documento_est}</td>
                             <td>${student.nombre} ${student.apellido}</td>
-                            <td class="hide-mobile">${student.estado}</td>
+                            <td>${student.estado}</td>
                             <td>
-                                <a class='btn btn-primary' href="estudiantes/update_estudiantes.php?id=${student.documento_est}"><i class="bi bi-pencil-square"></i></a>
-                                <a class='btn btn-danger' href="estudiantes/delete_estudiantes.php?id=${student.documento_est}"><i class="bi bi-trash"></i></a>
+                                <a class='btn btn-primary' href="estudiantes/update_estudiantes.php?id=${student.documento_est}"><i class="fa-solid fa-pencil"></i></a>
+                                <a class='btn btn-danger' href="estudiantes/delete_estudiantes.php?id=${student.documento_est}"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         `;
                         tbody.appendChild(tr);

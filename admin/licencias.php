@@ -125,6 +125,7 @@
 
         .card-body {
             padding: 20px;
+            overflow-x: auto;
         }
 
         .table {
@@ -238,7 +239,7 @@
                 <table class="table" id="table-licences">
                     <thead>
                         <tr>
-                            <th class="hide-mobile">Code</th>
+                            <th>Code</th>
                             <th>Nombre</th>
                             <th>Fecha Inicio</th>
                             <th>Fecha Fin</th>
@@ -265,7 +266,7 @@
                     data.forEach(licencia => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td class="hide-mobile">${licencia.id_licencia}</td>
+                            <td>${licencia.id_licencia}</td>
                             <td>${licencia.tipo}</td>
                             <td>${licencia.fecha_inicio}</td>
                             <td>${licencia.fecha_fin}</td>

@@ -122,6 +122,7 @@
 
         .card-body {
             padding: 20px;
+            overflow-x: auto;
         }
 
         .table {
@@ -225,10 +226,10 @@
                 <table class="table" id="table-users">
                     <thead>
                         <tr>
-                            <th class="hide-mobile">Imagen</th>
+                            <th>Imagen</th>
                             <th>Documento</th>
                             <th>Nombre</th>
-                            <th class="hide-mobile">Correo</th>
+                            <th>Correo</th>
                             <th>Escuela</th>
                             <th>Acciones</th>
                         </tr>
@@ -260,10 +261,10 @@
                     data.data.forEach(admin => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td class="d-none d-sm-table-cell"><img class="d-none d-sm-table-cell" src="../img/users/${admin.imagen}" alt="Imagen" width="50"></td>
+                            <td><img src="../img/users/${admin.imagen}" alt="Imagen" width="50"></td>
                             <td>${admin.documento}</td>
                             <td>${admin.nombre}<br>${admin.apellido}</br>
-                            <td class="d-none d-sm-table-cell">${admin.email}</td>
+                            <td>${admin.email}</td>
                             <td>${admin.nombre_escuela}</td>
                             <td>
                                 <a class='btn btn-primary' href="directores/update_director.php?id=${admin.documento}"><i class="fa-solid fa-pencil"></i></a>
