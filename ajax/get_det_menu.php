@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../conex/conex.php');
+    require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
     $conex = new Database;
     $con = $conex->conectar();
@@ -28,11 +28,6 @@
         exit;
     }
 
-    if (empty($id_menu)) {
-        echo json_encode(['error' => 'ID de menú no proporcionado.']);
-        exit;
-    }
-
     $sql = $con->prepare("SELECT producto.id_producto, producto.precio, producto.nombre_prod, detalles_menu.cantidad, detalles_menu.subtotal
     FROM detalles_menu
     INNER JOIN menus ON detalles_menu.id_menu = menus.id_menu
@@ -40,9 +35,17 @@
     WHERE detalles_menu.id_menu = ?");
     $sql->execute([$id_menu]);
     $pedidos = $sql->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Validar si el menú tiene productos
+    if (empty($pedidos)) {
+        echo json_encode(['error' => 'Este menú no tiene productos.']);
+        exit;
+    }
+    
     $total = 0;
     $response = [];
     foreach ($pedidos as $pedido) { 
+        
         $subtotal = $pedido['precio'] * $pedido['cantidad'];
         $total += $subtotal;
         $response[] = [
@@ -54,10 +57,6 @@
             'id_producto' => $pedido['id_producto']
         ];
     }
-    if (empty($response)) {
-        echo json_encode(['error' => 'No hay pedidos para este menú.']);
-    } 
-    else {
-        echo json_encode(['pedidos' => $response, 'total' => number_format($total, 2)]);
-    }
+    
+    echo json_encode(['pedidos' => $response, 'total' => number_format($total, 2)]);
 ?>

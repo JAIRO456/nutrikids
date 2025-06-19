@@ -215,11 +215,11 @@
 
         <div class="menu-content">
             <ul class="menu-list">
-                <li><a href="inicio.php"><i class="fa-solid fa-house"></i> Inicio</a></li>
-                <li><a href="directores.php"><i class="fa-solid fa-user-tie"></i>  Directores</a></li>
-                <li><a href="escuelas.php"><i class="fa-solid fa-school"></i>  Escuelas</a></li>
-                <li><a href="productos.php"><i class="fa-solid fa-basket-shopping"></i>  Productos</a></li>
-                <li><a href="licencias.php"><i class="fa-solid fa-file-pen"></i>  Licencias</a></li>
+                <li><a onclick="window.location.href='inicio.php'"><i class="fa-solid fa-house"></i> Inicio</a></li>
+                <li><a onclick="window.location.href='directores.php'"><i class="fa-solid fa-user-tie"></i>  Directores</a></li>
+                <li><a onclick="window.location.href='escuelas.php'"><i class="fa-solid fa-school"></i>  Escuelas</a></li>
+                <li><a onclick="window.location.href='productos.php'"><i class="fa-solid fa-basket-shopping"></i>  Productos</a></li>
+                <li><a onclick="window.location.href='licencias.php'"><i class="fa-solid fa-file-pen"></i>  Licencias</a></li>
             </ul>
             <ul class="menu-user">
                 <li class="dropdown">
@@ -229,9 +229,9 @@
                         <span class="rol"><?php echo $u['rol']; ?></span>
                     </a>
                     <div class="dropdown-content" id="usuario">
-                        <a href="cuenta.php">Mi Cuenta</a>
+                        <a onclick="window.location.href='cuenta.php'">Mi Cuenta</a>
                         <div class="divider"></div>
-                        <a href="../include/logout.php" class="logout">Cerrar Sesión</a>
+                        <a onclick="window.location.href='../include/logout.php'" class="logout">Cerrar Sesión</a>
                     </div>
                 </li>
             </ul>

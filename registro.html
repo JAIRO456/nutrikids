@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuario</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .registro-form { background: #fff; padding: 20px; margin: 40px auto; width: 350px; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
+        .registro-form h2 { text-align: center; }
+        .registro-form label { display: block; margin-top: 10px; }
+        .registro-form input, .registro-form select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
+        .registro-form button { margin-top: 15px; width: 100%; padding: 10px; background: #28a745; color: #fff; border: none; border-radius: 4px; font-size: 16px; }
+        .registro-form button:hover { background: #218838; }
+    </style>
+</head>
+<body>
+    <form class="registro-form" action="registro.php" method="POST" enctype="multipart/form-data">
+        <h2>Registro de Usuario</h2>
+        <label for="documento">Documento:</label>
+        <input type="text" id="documento" name="documento" required>
+
+        <label for="nombre">Nombres:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="apellido">Apellidos:</label>
+        <input type="text" id="apellido" name="apellido" required>
+
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="telefono" required>
+
+        <label for="imagen">Imagen (opcional):</label>
+        <input type="file" id="imagen" name="imagen" accept="image/*">
+
+        <label for="id_rol">Rol:</label>
+        <select id="id_rol" name="id_rol" required>
+            <option value="">Seleccione un rol</option>
+            <option value="1">Administrador</option>
+            <option value="2">Director</option>
+            <option value="3">Vendedor</option>
+            <option value="4">Acudiente</option>
+            <!-- Agrega más roles según tu base de datos -->
+        </select>
+
+        <label for="id_estado">Estado:</label>
+        <select id="id_estado" name="id_estado" required>
+            <option value="">Seleccione un estado</option>
+            <option value="1">Activo</option>
+            <option value="2">Inactivo</option>
+            <!-- Agrega más estados según tu base de datos -->
+        </select>
+
+        <button type="submit">Registrar</button>
+    </form>
+</body>
+</html>

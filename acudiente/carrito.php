@@ -278,10 +278,10 @@
                             <input type="hidden" name="dias" id="dias">
                             <div class="checkbox-group">
                                 <?php
-                                    $dias_semana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+                                    $dias_semana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'];
                                     foreach ($dias_semana as $dia) {
                                         echo "<label class='checkbox-label'>
-                                                <input type='checkbox' class='checkbox-input dia' id='dia_$dia' value='$dia'>
+                                                <input type='checkbox' class='checkbox-input dia' id='dia_$dia' name='dia' value='$dia'>
                                                 " . ucfirst($dia) . "
                                             </label>";
                                     }
@@ -319,12 +319,14 @@
         }
     </script>
     <script>
+        let nombre_menu = '';
         let listaProductos = [];
         let selectedDays = [];
                                             
         // Cargar productos y días desde localStorage al iniciar
         function cargarProductos() {
             const productosGuardados = localStorage.getItem('carrito');
+            const nombre_menu = localStorage.getItem('nombre_menu');
             if (productosGuardados) {
                 listaProductos = JSON.parse(productosGuardados);
             }
@@ -343,6 +345,7 @@
         function guardarProductos() {
             localStorage.setItem('carrito', JSON.stringify(listaProductos));
             localStorage.setItem('selectedDays', JSON.stringify(selectedDays));
+            localStorage.setItem('nombre_menu', nombre_menu);
         }
     
         // Actualizar los días seleccionados
@@ -359,10 +362,11 @@
             if (productoExistente) {
                 productoExistente.cantidad += 1;
             } else {
-                listaProductos.push({ id_producto, nombre_prod, precio, cantidad: 1 });
+                listaProductos.push({ id_producto, nombre_prod, precio: parseFloat(precio), cantidad: 1 });
             }
             guardarProductos();
             actualizarCarrito();
+            document.getElementById('productos').value = JSON.stringify(listaProductos);
         }
     
         function eliminarProducto(id_producto) {
@@ -371,6 +375,7 @@
                 guardarProductos();
                 actualizarCarrito();
             }
+            document.getElementById('productos').value = JSON.stringify(listaProductos);
         }
     
         function vaciarCarrito() {
@@ -383,6 +388,7 @@
                 guardarProductos();
                 actualizarCarrito();
             }
+            document.getElementById('productos').value = JSON.stringify(listaProductos);
         }
     
         function actualizarCarrito() {
@@ -410,6 +416,15 @@
             actualizarDias();
             document.getElementById('productos').value = JSON.stringify(listaProductos);
             document.getElementById('dias').value = JSON.stringify(selectedDays);
+            console.log('Enviando productos:', listaProductos);
+            console.log('Campo productos:', document.getElementById('productos').value);
+
+            // Validación extra: si el campo productos está vacío, evita el envío
+            if (!listaProductos.length) {
+                alert('Debes agregar al menos un producto al carrito.');
+                e.preventDefault();
+                return false;
+            }
         });
     
         // Escuchar cambios en los checkboxes de días
@@ -419,4 +434,19 @@
     
         // Cargar productos y días al iniciar la página
         window.addEventListener('load', cargarProductos);
+
+        window.addEventListener('load', function() {
+            if (!localStorage.getItem('carrito')) {
+                // Limpiar campos del formulario
+                document.getElementById('nombre_menu').value = '';
+                document.getElementById('dias').value = '';
+                document.querySelectorAll('.dia').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                document.getElementById('productos').value = '';
+                document.getElementById('table-body').innerHTML = '';
+                document.getElementById('total-pedidos').textContent = '0.00';
+                document.getElementById('cart-count').textContent = '0';
+            }
+        });
     </script>

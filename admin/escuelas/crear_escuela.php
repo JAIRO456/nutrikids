@@ -194,74 +194,192 @@
         }
 
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            animation: fadeIn 0.3s ease;
-        }
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+.modal.show {
+    opacity: 1;
+}
+.modal-content {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 350px;
+    max-width: 90vw;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    transform: scale(0.7) translateY(-50px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(119, 184, 133, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+.modal.show .modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #77b885, #5a9c6b, #77b885);
+    background-size: 200% 100%;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+.modal-content p {
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.5;
+    font-weight: 500;
+    animation: fadeInUp 0.6s ease-out;
+}
+.modal-content button {
+    margin-top: 15px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #77b885 0%, #5a9c6b 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(119, 184, 133, 0.3);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+.modal-content button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+.modal-content button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(119, 184, 133, 0.4);
+    background: linear-gradient(135deg, #5a9c6b 0%, #4a8a5a 100%);
+}
+.modal-content button:hover::before {
+    left: 100%;
+}
+.modal-content button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(119, 184, 133, 0.3);
+}
+/* Efecto de brillo en el borde superior */
+.modal-content::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    animation: shimmer 2s ease-in-out infinite;
+}
+@keyframes shimmer {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+/* Efecto de pulso para el botón cuando hay éxito */
+.modal-content button.success {
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% {
+        box-shadow: 0 4px 15px rgba(119, 184, 133, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(119, 184, 133, 0.6);
+    }
+    100% {
+        box-shadow: 0 4px 15px rgba(119, 184, 133, 0.3);
+    }
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            width: 350px;
-            animation: scaleIn 0.3s ease;
-        }
+.x_input {
+    position: relative;
+    width: 100%;
+    height: 40px;
+}
 
-        .modal button {
-            padding: 10px 20px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: var(--transition);
-        }
+.x_grupo .form_estado {
+    position: absolute;
+    right: 20px;
+    transform: translate(10px, 10px);
+}
 
-        .modal button:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
+.x_grupo-correcto .form_estado {
+    color: #1ed12d;
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+.x_grupo-incorrecto .form_estado {
+    color: #bb2929;
+}
 
-        @keyframes slideDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+.x_grupo-correcto .x_input {
+    border: 3px solid #1ed12d;
+}
 
-        @keyframes scaleIn {
-            from {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
+.x_grupo-incorrecto .x_input {
+    border: 3px solid #bb2929;
+}
+
+.bi-check-circle-fill {
+    color: #1ed12d;
+}
+
+.bi-exclamation-circle-fill {
+    color: #bb2929;
+}
+
+.x_error-block {
+    display: block;
+    color: red;
+    font-size: 14px;
+}
+
+.x_typerror {
+    display: none;
+}
+
+.x_typerror-block {
+    display: block;
+}
 
         @media (max-width: 768px) {
             .form-group {

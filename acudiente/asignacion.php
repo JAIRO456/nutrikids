@@ -12,6 +12,9 @@
         $id_menu = $_POST['id_menu'];
         $documento_est = $_POST['documento_est'];
         $dias = !empty($_POST['dias']) ? json_decode($_POST['dias'], true) : [];
+        if (!is_array($dias) && !empty($_POST['dias'])) {
+            $dias = explode(',', $_POST['dias']);
+        }
         $fecha_ini = $_POST['fecha_ini'];
         $fecha_fin = $_POST['fecha_fin'];
         // $monto = $_POST['monto'];
@@ -20,11 +23,11 @@
 
         if (empty($id_menu) || empty($documento_est) || empty($dias) || empty($fecha_ini) || empty($fecha_fin) || empty($metodo_pago)) {
             echo "<script>alert('Por favor complete todos los campos requeridos.');</script>";
-            echo "<script>location.href='pagos.php';</script>";
+            echo "<script>location.href='asignacion.php';</script>";
         } 
         else if (count($productos) == 0) {
             echo "<script>alert('No hay productos seleccionados.');</script>";
-            echo "<script>location.href='pagos.php';</script>";
+            echo "<script>location.href='asignacion.php';</script>";
         }
         else {
             try {
@@ -51,13 +54,15 @@
                             $sqlInsertDetsMenu = $con->prepare("INSERT INTO detalles_pedidos_producto (id_pedido, documento_est, id_menu, id_producto, cantidad, subtotal)
                             VALUES (?, ?, ?, ?, ?, ?)");
                             $sqlInsertDetsMenu->execute([$id_pedido, $documento_est, $id_menu, $id_producto, $cantidad, $subtotal]);
-                            echo "<script>alert('Pedido registrado exitosamente');</script>";
-                            echo "<script>location.href='pagos.php';</script>";
                         } 
                         else {
                             throw new Exception("Product with ID $id_producto not found.");
                         }
                     }
+                    
+                    // Generar factura automáticamente
+                    echo "<script>window.location.href='factura.php?id_pedido=" . $id_pedido . "';</script>";
+                    exit();
                 } 
                 else {
                     throw new Exception("Error al registrar el pago");
@@ -288,7 +293,7 @@
                     <div class="form-row">
                         <div class="form-col">
                             <label for="monto">Monto</label>
-                            <input type="number" step="0.01" id="monto" name="monto">
+                            <input type="number" step="0.01" id="monto" name="monto" readonly>
                         </div>
                         <div class="form-col">
                             <label for="metodo_pago">Método de Pago</label>
@@ -371,39 +376,66 @@
 
                     if (data.error) {
                         tbody.innerHTML = `<tr><td colspan="3">${data.error}</td></tr>`;
+                        console.log('Error en get_det_menu:', data.error);
                         return;
                     }
 
-                    data.pedidos.forEach(pedido => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${pedido.nombre_prod}</td>
-                            <td>${pedido.cantidad}</td>
-                            <td>${pedido.subtotal}</td>
-                        `;
-                        tbody.appendChild(tr);
-                        total += parseFloat(pedido.subtotal);
+                    if (data.pedidos && data.pedidos.length > 0) {
+                        data.pedidos.forEach(pedido => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${pedido.nombre_prod}</td>
+                                <td>${pedido.cantidad}</td>
+                                <td>${pedido.subtotal}</td>
+                            `;
+                            tbody.appendChild(tr);
+                            total += parseFloat(pedido.subtotal);
 
-                        selectedProducts.push({
-                            id_producto: pedido.id_producto,
-                            nombre_prod: pedido.nombre_prod,
-                            precio: parseFloat(pedido.precio),
-                            cantidad: parseInt(pedido.cantidad)
+                            selectedProducts.push({
+                                id_producto: pedido.id_producto,
+                                nombre_prod: pedido.nombre_prod,
+                                precio: parseFloat(pedido.precio),
+                                cantidad: parseInt(pedido.cantidad)
+                            });
                         });
-                    });
 
-                    document.getElementById('total-pedidos').textContent = total.toFixed(2);
-                    document.getElementById('productos').value = JSON.stringify(selectedProducts);
+                        document.getElementById('total-pedidos').textContent = total.toFixed(2);
+                        document.getElementById('monto').value = total.toFixed(2);
+                        document.getElementById('productos').value = JSON.stringify(selectedProducts);
+                        console.log('Productos cargados:', selectedProducts);
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="3">No hay productos en este menú</td></tr>';
+                        document.getElementById('productos').value = '';
+                        console.log('No hay productos en el menú');
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     document.getElementById('det_menu').innerHTML = '<tr><td colspan="3">Error al cargar los detalles</td></tr>';
+                    document.getElementById('productos').value = '';
                 });
         } else {
             document.getElementById('det_menu').innerHTML = '<tr><td colspan="3">Seleccione un menú para ver los detalles</td></tr>';
             document.getElementById('total-pedidos').textContent = '';
+            document.getElementById('monto').value = '';
             document.getElementById('productos').value = '';
             document.getElementById('dias').value = '';
+        }
+    });
+
+    // Agregar evento para el submit del formulario
+    document.getElementById('menuForm').addEventListener('submit', function(e) {
+        const productos = document.getElementById('productos').value;
+        const dias = document.getElementById('dias').value;
+        
+        console.log('Enviando formulario:');
+        console.log('Productos:', productos);
+        console.log('Días:', dias);
+        
+        if (!productos || productos === '[]') {
+            alert('No hay productos seleccionados. Por favor seleccione un menú primero.');
+            e.preventDefault();
+            return false;
         }
     });
 </script>

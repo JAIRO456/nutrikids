@@ -4,7 +4,7 @@ const inputs = document.querySelectorAll('#form input, #form textarea');
 const palabras_reservadas = ['admin', 'administrador', 'root', 'system', 'select', 'insert', 'delete', 'update'];
 
 const expres = {
-    nombre_menu: /^[a-zA-ZÀ-ÿ\s]{1,50}$/
+    nombre_menu: /^[a-zA-ZÀ-ÿ0-9]+(?:\s[a-zA-ZÀ-ÿ0-9]+)*$/
 }
 
 const campos = {

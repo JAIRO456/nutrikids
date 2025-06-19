@@ -8,7 +8,9 @@
     include 'menu.php';
 
     $documento = $_SESSION['documento'];
-    $sqlHistory = $con -> prepare('SELECT * FROM pedidos
+    $sqlHistory = $con -> prepare('SELECT DISTINCT menus.id_menu, pedidos.total_pedido, metodos_pago.metodo, pedidos.fecha_ini, pedidos.id_pedidos, pedidos.dia, pedidos.archivo FROM pedidos
+    INNER JOIN detalles_pedidos_producto ON pedidos.id_pedidos = detalles_pedidos_producto.id_pedido
+    INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
     INNER JOIN metodos_pago ON pedidos.id_met_pago = metodos_pago.id_met_pago
     INNER JOIN estados ON pedidos.id_estado = estados.id_estado
     WHERE pedidos.documento = ?');
@@ -247,7 +249,7 @@
                                 <td><?php echo $pago['total_pedido']; ?></td>
                                 <td><?php echo $pago['metodo']; ?></td>
                                 <td><?php echo $pago['fecha_ini']; ?></td>
-                                <td><!-- <a href="../PDF/<?php // echo $pago['archivo']; ?>" class="btn btn-primary">Ver Factura</a>--></td> 
+                                <td><button onclick="window.open('../PDF/<?php echo $pago['archivo']; ?>')" class="btn btn-primary">Ver Factura</button></td> 
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

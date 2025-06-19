@@ -29,13 +29,13 @@
 
                 <div class="form-buttons">
                     <button type="submit">ENVIAR</button>
-                    <button type="button" class="btn red" onclick="window.location.href='login.html'">CANCELAR</button>
+                    <button type="button" class="btn red" onclick="window.location.href='login'">CANCELAR</button>
                 </div>
             </form>
             <div style="text-align:center; margin-top: 18px;">
-                <a href="login.html" style="color:#77b885; text-decoration:underline; font-size:1rem;">
+                <button type="button" class="btn green" onclick="window.location.href='login'">
                     ¿Ya recordaste tu contraseña? Inicia sesión
-                </a>
+                </button>
             </div>
         </div>
     </main>

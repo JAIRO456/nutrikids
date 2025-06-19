@@ -196,7 +196,7 @@
                     row.classList.add('product-card');
                     row.style.width = '250px';
                     row.innerHTML = `
-                        <a href="informacion_nutricional.php?id_producto=${product.id_producto}" style="text-decoration:none; color:inherit;">
+                        <a onclick="window.location.href='informacion_nutricional?id_producto=${product.id_producto}'" style="text-decoration:none; color:inherit;">
                             <img src="../img/products/${product.imagen_prod}" alt="${product.nombre_prod}">
                             <h3>${product.nombre_prod}</h3>
                             <p>${product.precio}</p>

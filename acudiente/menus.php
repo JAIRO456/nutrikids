@@ -6,8 +6,24 @@
     $con = $conex->conectar();
     
     $documento = $_SESSION['documento'];
-    $productos = isset($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
+    
     $nombre_menu = $_POST['nombre_menu'];
+    if (empty($nombre_menu)) {
+        throw new Exception("El nombre del menú es requerido.");
+        exit();
+    }
+    if (strlen($nombre_menu) > 50) {
+        throw new Exception("El nombre del menú no puede tener más de 50 caracteres.");
+        exit();
+    }
+    
+    $productos = isset($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
+    error_log(print_r($productos, true)); // Para ver qué llega realmente
+    if (empty($productos)) {
+        throw new Exception("Debe seleccionar al menos un producto.");
+        exit();
+    }
+
 
     $total_precio = 0;
     foreach ($productos as $producto) {

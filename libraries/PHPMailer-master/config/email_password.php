@@ -34,12 +34,12 @@
                 <p><strong>Usuario:</strong> {$documento}</p><br>
                 <p><strong>Contraseña:</strong> {$password_desencriptado}</p><br>
                 <p>Para comenzar, haz clic en el siguiente enlace e inicia sesión:</p>
-                <p><a href='http://localhost/project/nutrikids/login.html'>Iniciar sesión en NUTRIKIDS</a></p>
+                <p><a href='https://nutrikidsfj.com/login.html'>Iniciar sesión en NUTRIKIDS</a></p>
                 <p>Si tienes alguna pregunta o necesitas asistencia, nuestro equipo de soporte está disponible en soporte@nutrikids.com.</p>
                 <p>¡Gracias por unirte a la comunidad de NUTRIKIDS! Estamos emocionados de acompañarte a ti y a tu familia en este viaje hacia una vida más saludable.</p>
                 <p>Atentamente,</p>
                 <p>El equipo de NUTRIKIDS</p>
-                <p><a href='https://nutrikids.com'>nutrikids.com</a> | soporte@nutrikids.com</p>";
+                <p><a href='https://nutrikidsfj.com'>nutrikidsfj.com</a> | soporte@nutrikids.com</p>";
             $mail->send();
             return true;
         } 

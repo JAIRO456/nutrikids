@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once('../../../conex/conex.php');
+    require_once('../../../database/conex.php');
     $conex =new Database;
     $con = $conex->conectar();
     
@@ -19,8 +19,29 @@
         $sqlUsuario->execute([$correo]);
         $usuario = $sqlUsuario->fetch(PDO::FETCH_ASSOC);
 
+        function generatePassword() {
+            $minusculas = 'abcdefghijklmnopqrstuvwxyz';
+            $mayusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $numeros = '0123456789';
+            $especiales = '#_-+';
+            // $especiales = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    
+            $todosCaracteres = $minusculas . $mayusculas . $numeros . $especiales;
+    
+            $contrasena = $minusculas[rand(0, strlen($minusculas) - 1)];
+            $contrasena .= $mayusculas[rand(0, strlen($mayusculas) - 1)];
+            $contrasena .= $numeros[rand(0, strlen($numeros) - 1)];
+            $contrasena .= $especiales[rand(0, strlen($especiales) - 1)];
+    
+            for ($i = strlen($contrasena); $i < 8; $i++) {
+                $contrasena .= $todosCaracteres[rand(0, strlen($todosCaracteres) - 1)];
+            }
+    
+            return $contrasena;
+        }
+
         if ($usuario) {
-            $new_password = rand(1000, 9999);
+            $new_password = generatePassword();
             $nombre = $usuario['nombre'];
             $apellido = $usuario['apellido'];
             
@@ -53,7 +74,7 @@
                     <p>¡Gracias por ser parte de NUTRIKIDS! Estamos aquí para ayudarte a fomentar hábitos saludables.</p>
                     <p>Atentamente,</p>
                     <p>El equipo de NUTRIKIDS</p>
-                    <p><a href='https://nutrikids.com'>nutrikids.com | soporte@nutrikids.com</a></p>";
+                    <p><a href='https://nutrikidsfj.com'>nutrikidsfj.com | soporte@nutrikids.com</a></p>";
                 $mail->send();
                 // echo '<script>alert("Se ha enviado un correo con la nueva contraseña")</script>';
                 // echo '<script>window.location = "../../../login.html"</script>';

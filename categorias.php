@@ -91,7 +91,7 @@
             <div class="categoria-container">
                 <?php foreach ($Categories as $Category) { ?>
                     <div class="categoria-card">
-                        <a href="productos.php?id_categoria=<?= $Category['id_categoria']; ?>">
+                        <a onclick="window.location.href='productos?id_categoria=<?= $Category['id_categoria']; ?>'">
                             <img src="../img/categories/<?= $Category['imagen']; ?>" 
                                  class="categoria-imagen" 
                                  alt="<?= $Category['categoria']; ?>">

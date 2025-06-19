@@ -14,13 +14,14 @@
         exit;
     }
 
-    $sql = $con->prepare("SELECT menus.id_menu, producto.nombre_prod, detalles_pedidos_producto.subtotal, detalles_pedidos_producto.cantidad
+    $sql = $con->prepare("SELECT DISTINCT menus.id_menu, producto.nombre_prod, detalles_pedidos_producto.subtotal, detalles_pedidos_producto.cantidad
     FROM detalles_pedidos_producto
     INNER JOIN pedidos ON detalles_pedidos_producto.id_pedido = pedidos.id_pedidos
     INNER JOIN menus ON detalles_pedidos_producto.id_menu = menus.id_menu
+    INNER JOIN detalles_menu ON menus.id_menu = detalles_menu.id_menu
     INNER JOIN producto ON detalles_pedidos_producto.id_producto = producto.id_producto
     INNER JOIN estudiantes ON detalles_pedidos_producto.documento_est = estudiantes.documento_est
-    WHERE detalles_pedidos_producto.documento_est = ? AND FIND_IN_SET(?, pedidos.dia) > 0");
+    WHERE detalles_pedidos_producto.documento_est = ? AND FIND_IN_SET(?, pedidos.dia) > 0 AND detalles_menu.id_estado = 1 AND pedidos.id_estado = 6");
     $sql->execute([$id_estudiante, $dia]);
     $pedidos = $sql->fetchAll(PDO::FETCH_ASSOC);
     $id_menu = !empty($pedidos) ? $pedidos[0]['id_menu'] : null;
@@ -29,7 +30,7 @@
         $response[] = [ 
             'nombre_prod' => $pedido['nombre_prod'],
             'cantidad' => $pedido['cantidad'],
-            'subtotal' => number_format($pedido['subtotal'], 2),
+            'subtotal' => $pedido['subtotal']
         ];
     }
     if (empty($response)) {

@@ -208,8 +208,8 @@
     <main class="container-main">
         <div class="header-actions">
             <div class="action-buttons">
-                <a href="directores/crear_director.php" class="btn btn-success"><i class="fa-solid fa-plus"></i> Registrar Director</a>
-                <a href="directores/pdf.php" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</a>
+                <a onclick="window.location.href='directores/crear_director.php'" class="btn btn-success"><i class="fa-solid fa-plus"></i> Registrar Director</a>
+                <a onclick="window.location.href='directores/pdf.php'" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</a>
                 <button onclick="window.location.href='directores/excel.php'" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> Excel</button>
             </div>
             <form id="search-form" class="search-form">
