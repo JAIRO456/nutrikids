@@ -2,7 +2,7 @@
     session_start();
     require_once('../database/conex.php');
     require_once('../include/validate_sesion.php');
-    require_once('../include/functions_reportes.php');
+    require_once('../director/functions_reportes.php');
     
     $conex = new Database;
     $con = $conex->conectar();
@@ -52,7 +52,7 @@
             case 'semana':
                 $ventas = $mes ? 
                     obtenerVentasPorSemana($con, $anio, $mes, $id_escuela) : 
-                    obtenerVentasPorSemana($con, $anio, $id_escuela);
+                    obtenerVentasPorSemana($con, $anio, $id_escue   la);
     
                 foreach ($ventas as $venta) {
                     $response['labels'][] = "Semana " . $venta['semana'];

@@ -278,10 +278,10 @@
                             <input type="hidden" name="dias" id="dias">
                             <div class="checkbox-group">
                                 <?php
-                                    $dias_semana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'];
+                                    $dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
                                     foreach ($dias_semana as $dia) {
                                         echo "<label class='checkbox-label'>
-                                                <input type='checkbox' class='checkbox-input dia' id='dia_$dia' name='dia' value='$dia'>
+                                                <input type='checkbox' class='checkbox-input dia' id='dia_$dia' name='dias[]' value='$dia'>
                                                 " . ucfirst($dia) . "
                                             </label>";
                                     }
@@ -329,6 +329,7 @@
             const nombre_menu = localStorage.getItem('nombre_menu');
             if (productosGuardados) {
                 listaProductos = JSON.parse(productosGuardados);
+                document.getElementById('productos').value = JSON.stringify(listaProductos);
             }
             const diasGuardados = localStorage.getItem('selectedDays');
             if (diasGuardados) {
@@ -422,6 +423,13 @@
             // Validación extra: si el campo productos está vacío, evita el envío
             if (!listaProductos.length) {
                 alert('Debes agregar al menos un producto al carrito.');
+                e.preventDefault();
+                return false;
+            }
+            
+            // Validación extra: si no se han seleccionado días, evita el envío
+            if (!selectedDays.length) {
+                alert('Debes seleccionar al menos un día.');
                 e.preventDefault();
                 return false;
             }

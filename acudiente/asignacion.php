@@ -7,21 +7,18 @@
 
     include 'menu.php';
 
+    $documento = $_SESSION['documento'];
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $documento = $_SESSION['documento'];
         $id_menu = $_POST['id_menu'];
         $documento_est = $_POST['documento_est'];
-        $dias = !empty($_POST['dias']) ? json_decode($_POST['dias'], true) : [];
-        if (!is_array($dias) && !empty($_POST['dias'])) {
-            $dias = explode(',', $_POST['dias']);
-        }
         $fecha_ini = $_POST['fecha_ini'];
         $fecha_fin = $_POST['fecha_fin'];
         // $monto = $_POST['monto'];
         $metodo_pago = $_POST['metodo_pago'];
         $productos = $productos = !empty($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
 
-        if (empty($id_menu) || empty($documento_est) || empty($dias) || empty($fecha_ini) || empty($fecha_fin) || empty($metodo_pago)) {
+        if (empty($id_menu) || empty($documento_est) || empty($fecha_ini) || empty($fecha_fin) || empty($metodo_pago)) {
             echo "<script>alert('Por favor complete todos los campos requeridos.');</script>";
             echo "<script>location.href='asignacion.php';</script>";
         } 
@@ -36,9 +33,9 @@
                 $sqlMenu->execute([$id_menu]);
                 $menu = $sqlMenu->fetch(PDO::FETCH_ASSOC);
                 // Insertar en la tabla pagos
-                $sqlInsertPedidos = $con->prepare("INSERT INTO pedidos (dia, documento, total_pedido, id_met_pago, fecha_ini, fecha_fin, id_estado)
-                VALUES (?, ?, ?, ?, ?, ?, ?)");
-                if ($sqlInsertPedidos->execute([implode(',', $dias), $documento, $menu['precio'], $metodo_pago, $fecha_ini, $fecha_fin, 1])) {
+                $sqlInsertPedidos = $con->prepare("INSERT INTO pedidos (documento, total_pedido, id_met_pago, fecha_ini, fecha_fin, id_estado)
+                VALUES (?, ?, ?, ?, ?, ?)");
+                if ($sqlInsertPedidos->execute([$documento, $menu['precio'], $metodo_pago, $fecha_ini, $fecha_fin, 6])) {
                     $id_pedido = $con->lastInsertId();
                     foreach ($productos as $producto) {
                         $id_producto = intval($producto['id_producto']);
@@ -59,7 +56,7 @@
                             throw new Exception("Product with ID $id_producto not found.");
                         }
                     }
-                    
+                    echo "<script>alert('Pago registrado correctamente');</script>";
                     // Generar factura automáticamente
                     echo "<script>window.location.href='factura.php?id_pedido=" . $id_pedido . "';</script>";
                     exit();
@@ -252,7 +249,6 @@
                             <select id="id_menu" name="id_menu" required>
                                 <option value="">Seleccione un menú</option>
                                 <?php
-                                    $documento = $_SESSION['documento'];
                                     $sqlMenus = $con->prepare("SELECT id_menu, nombre_menu FROM menus 
                                     INNER JOIN usuarios ON menus.documento = usuarios.documento
                                     WHERE usuarios.documento = ? ORDER BY menus.nombre_menu ASC");
@@ -268,14 +264,13 @@
                             <select id="documento_est" name="documento_est" required>
                                 <option value="">Seleccione un estudiante</option>
                                 <?php
-                                    $documento = $_SESSION['documento'];
                                     $sqlEstudiantes = $con->prepare("SELECT estudiantes.documento_est, estudiantes.nombre, estudiantes.apellido FROM estudiantes
                                     INNER JOIN usuarios ON estudiantes.documento = usuarios.documento
                                     WHERE usuarios.documento = ? ORDER BY estudiantes.nombre ASC");
                                     $sqlEstudiantes->execute([$documento]);
                                     while ($row = $sqlEstudiantes->fetch(PDO::FETCH_ASSOC)) {
                                         echo "<option value='{$row['documento_est']}'>{$row['nombre']} {$row['apellido']}</option>";
-                                    }
+                                    }   
                                 ?>
                             </select>
                         </div>
@@ -315,7 +310,6 @@
             <div class="card">
                 <div class="card-header">Detalles del Menú Seleccionado</div>
                 <input type="hidden" name="productos" id="productos">
-                <input type="hidden" name="dias" id="dias">
                 <div class="card-body">
                     <table id="table-pedidos">
                         <thead>
@@ -344,30 +338,13 @@
 </body>
 <script>
     let selectedProducts = [];
-    let selectedDays = [];
-
-    window.addEventListener('DOMContentLoaded', function() {
-        const diasGuardados = localStorage.getItem('selectedDays');
-        if (diasGuardados) {
-            document.getElementById('dias').value = diasGuardados;
-        }
-    });
 
     document.getElementById('id_menu').addEventListener('change', function() {
         const id_menu = this.value;
-        const diasInput = document.getElementById('dias').value;
-        let dias = [];
-        try {
-            dias = JSON.parse(diasInput);
-        } catch (e) {
-            dias = [];
-        }
-        const diasString = dias.join(',');
-
         selectedProducts = [];
         
         if (id_menu) {
-            fetch(`../ajax/get_det_menu.php?id_menu=${encodeURIComponent(id_menu)}&dias=${encodeURIComponent(diasString)}`)
+            fetch(`../ajax/get_det_menu.php?id_menu=${encodeURIComponent(id_menu)}`)
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.getElementById('det_menu');
@@ -419,18 +396,15 @@
             document.getElementById('total-pedidos').textContent = '';
             document.getElementById('monto').value = '';
             document.getElementById('productos').value = '';
-            document.getElementById('dias').value = '';
         }
     });
 
     // Agregar evento para el submit del formulario
     document.getElementById('menuForm').addEventListener('submit', function(e) {
         const productos = document.getElementById('productos').value;
-        const dias = document.getElementById('dias').value;
         
         console.log('Enviando formulario:');
         console.log('Productos:', productos);
-        console.log('Días:', dias);
         
         if (!productos || productos === '[]') {
             alert('No hay productos seleccionados. Por favor seleccione un menú primero.');

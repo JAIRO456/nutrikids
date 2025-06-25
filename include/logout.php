@@ -45,7 +45,7 @@
                 document.addEventListener('DOMContentLoaded', function() {
                     showModal('Sesión cerrada');
                     setTimeout(() => {
-                        window.location.href = '../login';
+                        window.location.href = '../login.html';
                     }, 2000);
                 });
 

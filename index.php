@@ -5,9 +5,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/index.css">
     <link rel="icon" href="../img/logo-nutrikids2.png" type="image/png">
     <title>NUTRIKIDS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            margin: 0;
+            padding-top: 7%; 
+            font-family: Arial, sans-serif;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+            max-width: 100%;
+        }
+        .container-carousel {
+            padding-top: 1%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .button-previous, .button-next {
+            background: #00b894;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .container-carousel-imgs {
+            display: flex;
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            background: #fff;
+            position: relative;
+        }
+        .img {
+            min-width: 100%;
+            transition: opacity 0.5s;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .img img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+        .button-previous, .button-next {
+            background: #00b894;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .container-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5%;
+            flex-wrap: wrap;
+        }
+        .container-div1 {
+            flex: 1 1 350px;
+        } 
+        .container-div1 h1 {
+            font-size: 2.8rem;
+            color: #00b894;
+            margin-bottom: 15px;
+        }
+        .container-div1 h2 {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #222;
+            margin-bottom: 15px;
+        }
+        .container-div1 p {
+            font-size: 1rem;
+            color: #555;
+        }
+        .container-img {
+            flex: 1 1 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container-img .nutri {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            border: 4px solid #00b894;
+        }
+        .container-section2 {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .container-info {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            flex: 1 1 320px;
+            min-width: 300px;
+            max-width: 400px;
+        }
+        .container-info h2 {
+            color: #00b894;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .container-info p {
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding-top: 22%;
+            }
+            .container-section {
+                padding: 10%;
+            }
+            .container-section2 {
+                padding: 10%;
+                padding-top: 5%;
+            }
+        }
+    </style>
 </head>
 <body>
     <main class="container">
@@ -64,7 +209,7 @@
         </section>
     </main>
 
-    <?php include "footer.html"; ?>
+    <?php // include "footer.html"; ?>
 
 </body>
 <!-- https://st3.depositphotos.com/6723736/32546/v/450/depositphotos_325461292-stock-illustration-young-nutritionist-woman-and-ingredients.jpg -->

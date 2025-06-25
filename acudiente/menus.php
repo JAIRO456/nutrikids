@@ -8,6 +8,7 @@
     $documento = $_SESSION['documento'];
     
     $nombre_menu = $_POST['nombre_menu'];
+    
     if (empty($nombre_menu)) {
         throw new Exception("El nombre del menú es requerido.");
         exit();
@@ -17,16 +18,48 @@
         exit();
     }
     
-    $productos = isset($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
-    error_log(print_r($productos, true)); // Para ver qué llega realmente
-    if (empty($productos)) {
-        throw new Exception("Debe seleccionar al menos un producto.");
+    // Procesar los días
+    $dias = [];
+    if (isset($_POST['dias'])) {
+        if (is_string($_POST['dias'])) {
+            // Si viene como JSON
+            $dias = json_decode($_POST['dias'], true);
+        } else {
+            // Si viene como array de checkboxes
+            $dias = $_POST['dias'];
+        }
+    }
+    
+    if (empty($dias) || !is_array($dias)) {
+        throw new Exception("Debe seleccionar al menos un día, si no selecciona ninguno, el menu no se guardara.");
+        exit();
+    }
+    
+    // Procesar los productos
+    $productos = [];
+    if (isset($_POST['productos']) && !empty($_POST['productos'])) {
+        $productos_raw = $_POST['productos'];
+        
+        if (is_string($productos_raw)) {
+            $productos = json_decode($productos_raw, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new Exception("Error al decodificar JSON de productos: " . json_last_error_msg());
+            }
+        } else {
+            $productos = $productos_raw;
+        }
+    }
+    
+    if (empty($productos) || !is_array($productos)) {
+        throw new Exception("Debe seleccionar al menos un producto, si no selecciona ninguno, el menu no se guardara.");
         exit();
     }
 
-
     $total_precio = 0;
     foreach ($productos as $producto) {
+        if (!is_array($producto) || !isset($producto['precio']) || !isset($producto['cantidad'])) {
+            throw new Exception("Formato de producto inválido: " . print_r($producto, true));
+        }
         $total_precio += floatval($producto['precio']) * intval($producto['cantidad']);
     }
 
@@ -45,9 +78,12 @@
             $verif = $sql->fetch(PDO::FETCH_ASSOC);
 
             if ($verif) {
-                $sqlInsertDetsMenu = $con->prepare("INSERT INTO detalles_menu (cantidad, id_menu, id_producto, id_estado, subtotal) 
-                VALUES (?, ?, ?, ?, ?)");
-                $sqlInsertDetsMenu->execute([$cantidad, $idMenu, $id_producto, 2, $subtotal]);
+                // Para cada día seleccionado, crear un registro separado
+                foreach ($dias as $dia) {
+                    $sqlInsertDetsMenu = $con->prepare("INSERT INTO detalles_menu (cantidad, dias, id_menu, id_producto, id_estado, subtotal) 
+                    VALUES (?, ?, ?, ?, ?, ?)");
+                    $sqlInsertDetsMenu->execute([$cantidad, $dia, $idMenu, $id_producto, 2, $subtotal]);
+                }
             } 
             else {
                 throw new Exception("Product with ID $id_producto not found.");

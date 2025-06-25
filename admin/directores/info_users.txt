@@ -1,0 +1,323 @@
+<?php
+    session_start();
+    require_once('../../database/conex.php');
+    require_once('../../include/validate_sesion.php');
+    // require_once('../time.php');
+    $conex =new Database;
+    $con = $conex->conectar();
+
+    $doc_user = $_GET['id'];
+    $sqlEscuela = $con -> prepare("SELECT escuelas.id_escuela FROM escuelas 
+    INNER JOIN detalles_usuarios_escuela ON escuelas.id_escuela = detalles_usuarios_escuela.id_escuela
+    INNER JOIN usuarios ON detalles_usuarios_escuela.documento = usuarios.documento
+    WHERE usuarios.documento = ?");
+    $sqlEscuela -> execute([$doc_user]);
+    $escuela = $sqlEscuela -> fetch(PDO::FETCH_ASSOC);
+    
+    $sqlUsers = $con -> prepare("SELECT COUNT(*) as total_users FROM usuarios
+    INNER JOIN detalles_usuarios_escuela ON usuarios.documento = detalles_usuarios_escuela.documento
+    INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela
+    WHERE escuelas.id_escuela = ? AND usuarios.id_estado = 1");
+    $sqlUsers -> execute([$escuela['id_escuela']]);
+    $users = $sqlUsers -> fetch(PDO::FETCH_ASSOC);
+    $total_users = $users['total_users'];
+
+    $sqlUsersActive = $con -> prepare("SELECT COUNT(DISTINCT pedidos.documento) as total_users_active FROM pedidos 
+    INNER JOIN usuarios ON pedidos.documento = usuarios.documento 
+    INNER JOIN detalles_usuarios_escuela ON usuarios.documento = detalles_usuarios_escuela.documento INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela 
+    WHERE escuelas.id_escuela = ? AND usuarios.id_estado = 1 AND pedidos.fecha_ini <= CURRENT_DATE AND pedidos.fecha_fin >= CURRENT_DATE");
+    $sqlUsersActive -> execute([$escuela['id_escuela']]);
+    $usersActive = $sqlUsersActive -> fetch(PDO::FETCH_ASSOC);
+    $total_users_active = $usersActive['total_users_active'];
+
+    $porcentaje_users_active = ($total_users_active / $total_users) * 100;
+    $porcentaje_users_active = number_format($porcentaje_users_active, 2);
+
+    $total_users_inactive = ($total_users - $total_users_active);
+    $porcentaje_users_inactive = ($total_users - $total_users_active) / $total_users * 100;
+    $porcentaje_users_inactive = number_format($porcentaje_users_inactive, 2);
+
+    $anio_actual = date('Y');
+    $mes_actual = date('m');
+    
+    $nombresMeses = [
+        1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
+        5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
+        9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
+    ];
+
+    $sqlAnios = $con -> prepare("SELECT DISTINCT YEAR(p.fecha_ini) as anio FROM pedidos p
+    INNER JOIN detalles_usuarios_escuela deu ON p.documento = deu.documento
+    INNER JOIN usuarios u ON deu.documento = u.documento
+    INNER JOIN escuelas e ON deu.id_escuela = e.id_escuela
+    WHERE e.id_escuela = ?
+    ORDER BY p.fecha_ini DESC");
+    $sqlAnios -> execute([$escuela['id_escuela']]);
+    $anios = $sqlAnios -> fetchAll(PDO::FETCH_ASSOC);
+
+    $sqlMeses = $con -> prepare("SELECT DISTINCT MONTH(p.fecha_ini) as mes FROM pedidos p
+    INNER JOIN detalles_usuarios_escuela deu ON p.documento = deu.documento
+    INNER JOIN usuarios u ON deu.documento = u.documento
+    INNER JOIN escuelas e ON deu.id_escuela = e.id_escuela
+    WHERE e.id_escuela = ?
+    ORDER BY p.fecha_ini DESC");
+    $sqlMeses -> execute([$escuela['id_escuela']]);
+    $meses = $sqlMeses -> fetchAll(PDO::FETCH_ASSOC);
+
+    $mesesFormateados = [];
+    foreach ($meses as $mes) {
+        $mesesFormateados[$nombresMeses[$mes['mes']]] = $mes['mes'];
+    }
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../img/logo-nutrikids2.png" type="image/png">
+    <title>Información de Usuarios - Escuela</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .report-section {
+            margin-bottom: 30px;
+        }
+        .report-section h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .report-section h4 {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            height: 400px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .filtros {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .filtros label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .filtros input {
+            padding: 5px 10px;
+            margin-right: 15px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .filtros button {
+            padding: 5px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .filtros button:hover {
+            background-color: #0056b3;
+        }
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            font-style: italic;
+        }
+        .debug-info {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+            .filtros input, .filtros button {
+                display: block;
+                margin: 5px 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="report-section">
+            <h1>Información de Usuarios - Escuela</h1>
+            <h4>Escuela ID: <?php echo $escuela['id_escuela']; ?></h4>
+            <div class="debug-info">
+                <strong>Debug:</strong> Fecha actual: <?php echo date('Y-m-d'); ?> | 
+                Datos encontrados: <?php echo $total_users; ?> usuarios
+            </div>          
+            <div class="filtros">
+                <label for="fecha_ini">Fecha Inicio:</label>
+                <input type="date" id="fecha_ini" name="fecha_ini">
+                <label for="fecha_fin">Fecha Fin:</label>
+                <input type="date" id="fecha_fin" name="fecha_fin">
+                <button onclick="filtrarGrafica()">Filtrar</button>
+                <button onclick="resetFiltros()">Resetear</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="usersChart"></canvas>
+            </div>
+            <div id="no-data-message" class="no-data" style="display: none;">
+                No hay datos de usuarios disponibles para el período seleccionado.
+            </div>
+        </div>
+        <div class="report-section">
+            <h2>Registros de Usuarios</h2>
+            <div class="filtros">
+                <select id="anio" onchange="cargarMeses()">
+                    <option value="">Selecciona un año</option>
+                    <?php foreach ($anios as $anio) { ?>
+                        <option value="<?php echo $anio['anio']; ?>" <?php echo $anio['anio'] == $anio_actual ? 'selected' : ''; ?>><?php echo $anio['anio']; ?></option>
+                    <?php } ?>
+                </select>
+                <select id="mes" onchange="cargarMeses()">
+                    <option value="">Selecciona un mes</option>
+                    <?php foreach ($mesesFormateados as $nombreMes => $numeroMes) { ?>
+                        <option value="<?php echo $numeroMes; ?>" <?php echo $numeroMes == $mes_actual ? 'selected' : ''; ?>><?php echo $nombreMes; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="chart-container">
+                <canvas id="usersChart2"></canvas>
+            </div>
+            <div id="no-data-message2" class="no-data" style="display: none;">
+                No hay datos de usuarios disponibles para el período seleccionado.
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const id_escuela = <?php echo json_encode($escuela['id_escuela']); ?>;
+    let usersChart;
+
+    const datosIniciales = {
+        total_users: <?php echo json_encode($total_users); ?>,
+        total_users_active: <?php echo json_encode($total_users_active); ?>,
+        total_users_inactive: <?php echo json_encode($total_users_inactive); ?>,
+        porcentaje_users_active: <?php echo json_encode($porcentaje_users_active); ?>,
+        porcentaje_users_inactive: <?php echo json_encode($porcentaje_users_inactive); ?>
+    };
+
+    const datosIniciales2 = {
+
+    function actualizarGrafica(datos) {
+        const ctx = document.getElementById('usersChart').getContext('2d');
+        const noDataMessage = document.getElementById('no-data-message');
+
+        if (usersChart) {
+            usersChart.destroy();
+        }
+
+        const valores = [
+            datos.total_users_active || 0,
+            datos.total_users_inactive || 0
+        ];
+
+        const tieneDatos = valores.some(valor => valor > 0);
+        if (!tieneDatos) {
+            noDataMessage.style.display = 'block';
+            return;
+        }
+
+        noDataMessage.style.display = 'none';
+
+        usersChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Usuarios Activos: ' + datos.total_users_active + ' (' + datos.porcentaje_users_active + '%)', 'Usuarios Inactivos: ' + datos.total_users_inactive + ' (' + datos.porcentaje_users_inactive + '%)'],
+                datasets: [{
+                    label: 'Usuarios',
+                    data: valores,
+                    backgroundColor: ['#36A2EB', '#FF6384'],
+                    borderColor: ['#36A2EB', '#FF6384'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    function filtrarGrafica() {
+        const fechaIni = document.getElementById('fecha_ini').value;
+        const fechaFin = document.getElementById('fecha_fin').value;
+
+        if (fechaIni && fechaFin && new Date(fechaIni) > new Date(fechaFin)) {
+            alert('La fecha de inicio no puede ser mayor a la fecha final');
+            return;
+        }
+
+        const params = new URLSearchParams({ id_escuela });
+        if (fechaIni) params.append('fecha_ini', fechaIni);
+        if (fechaFin) params.append('fecha_fin', fechaFin);
+        fetch(`../../ajax/get_users_data.php?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => actualizarGrafica(data))
+            .catch(error => console.error('Error al filtrar usuarios:', error));
+    }
+
+    function resetFiltros() {
+        document.getElementById('fecha_ini').value = '';
+        document.getElementById('fecha_fin').value = '';
+        actualizarGrafica(datosIniciales);
+    }
+
+    function cargarMeses() {
+        const anio = document.getElementById('anio').value;
+        const mes = document.getElementById('mes').value;
+        const params = new URLSearchParams({ id_escuela, anio, mes });
+        fetch(`../../ajax/get_users2_data.php?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => actualizarGrafica(data))
+            .catch(error => console.error('Error al cargar meses:', error));
+    }
+
+    function actualizarGrafica2(datos) {
+        const ctx = document.getElementById('usersChart2').getContext('2d');
+        const noDataMessage = document.getElementById('no-data-message2');
+
+        if (usersChart2) {
+            usersChart2.destroy();
+        }
+
+        
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        actualizarGrafica(datosIniciales);
+    });
+</script>
+</html>

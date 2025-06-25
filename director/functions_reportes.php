@@ -80,13 +80,14 @@
         return $ventas;
     }
 
-    function obtenerAniosDisponibles($con) {
-        $sql = $con->query("SELECT DISTINCT YEAR(p.fecha_ini) as anio FROM pedidos p
+    function obtenerAniosDisponibles($con, $id_escuela) {
+        $sql = $con->prepare("SELECT DISTINCT YEAR(p.fecha_ini) as anio FROM pedidos p
         INNER JOIN detalles_usuarios_escuela deu ON p.documento = deu.documento
         INNER JOIN usuarios u ON deu.documento = u.documento
         INNER JOIN escuelas e ON deu.id_escuela = e.id_escuela
         WHERE e.id_escuela = ?
         ORDER BY p.fecha_ini DESC");
+        $sql->execute([$id_escuela]);
 
         $anios = [];
         while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {

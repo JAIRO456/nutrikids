@@ -1,21 +1,12 @@
 <?php
     session_start();
-    require_once '../database/conex.php';
-    require_once '../include/validate_sesion.php';
+    require_once('../../database/conex.php');
+    require_once('../../include/validate_sesion.php');
     // require_once('../time.php');
     $conex =new Database;
     $con = $conex->conectar();
 
-    include 'menu.php';
-
-    $documento = $_SESSION['documento'];
-
-    $sql = $con->prepare("SELECT * FROM usuarios INNER JOIN detalles_usuarios_escuela ON usuarios.documento = detalles_usuarios_escuela.documento
-    INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela WHERE usuarios.documento = ?");
-    $sql->execute([$documento]);
-    $u = $sql->fetch(PDO::FETCH_ASSOC);
-    $id_escuela = $u['id_escuela'];
-
+    $id_escuela = $_GET['id'];
     $sqlInfoNutriconal = $con -> prepare("SELECT 
     SUM(informacion_nutricional.calorias * detalles_pedidos_producto.cantidad) AS total_cal, 
     SUM(informacion_nutricional.proteinas * detalles_pedidos_producto.cantidad) AS total_pro, 
@@ -63,7 +54,7 @@
     INNER JOIN escuelas ON detalles_usuarios_escuela.id_escuela = escuelas.id_escuela
     WHERE pedidos.fecha_ini = CURDATE() AND pedidos.fecha_fin = CURDATE() AND pedidos.id_estado = 6 AND escuelas.id_escuela = ? 
     GROUP BY producto.nombre_prod
-    ORDER BY producto.nombre_prod ASC LIMIT 10");
+    ORDER BY total_cantidad DESC LIMIT 10");
     $sqlInfoProductos -> execute([$id_escuela]);
     $InfoProductos = $sqlInfoProductos -> fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -81,17 +72,16 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background-color: #f5f5f5;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background-color: white;
-            padding: 1rem;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-top: 100px;
         }
         .report-section {
             margin-bottom: 30px;
@@ -165,7 +155,8 @@
 <body>
     <main class="container">
         <div class="report-section">
-            <h2>Reportes Nutricionales</h2>       
+            <h2>Reportes Nutricionales</h2>
+            <h4>Distribución de Nutrientes - Escuela ID: <?php echo htmlspecialchars($id_escuela); ?></h4>        
             <div class="debug-info">
                 <strong>Debug:</strong> Fecha actual: <?php echo date('Y-m-d'); ?> | 
                 Datos encontrados: <?php echo count($InfoNutric); ?> registros
@@ -185,9 +176,9 @@
                 No hay datos nutricionales disponibles para el período seleccionado.
             </div>
         </div>
-        <hr>
         <div class="report-section">
             <h2>Reportes de Productos mas Vendidos</h2>
+            <h4>Productos mas vendidos - Escuela ID: <?php echo htmlspecialchars($id_escuela); ?></h4>
             <div class="debug-info">
                 <strong>Debug:</strong> Fecha actual: <?php echo date('Y-m-d'); ?> | 
                 Datos encontrados: <?php echo count($InfoProductos); ?> registros
@@ -278,7 +269,7 @@
             const params = new URLSearchParams({ id_escuela });
             if (fechaIni) params.append('fecha_ini', fechaIni);
             if (fechaFin) params.append('fecha_fin', fechaFin);
-            fetch(`../ajax/get_nutricion_data.php?${params.toString()}`)
+            fetch(`../../ajax/get_nutricion_data.php?${params.toString()}`)
                 .then(response => response.json())
                 .then(data => actualizarGrafica(data))
                 .catch(error => console.error('Error al filtrar nutrición:', error));
@@ -339,7 +330,7 @@
             const params = new URLSearchParams({ id_escuela });
             if (fechaIni) params.append('fecha_ini', fechaIni);
             if (fechaFin) params.append('fecha_fin', fechaFin);
-            fetch(`../ajax/get_products_data.php?${params.toString()}`)
+            fetch(`../../ajax/get_products_data.php?${params.toString()}`)
                 .then(response => response.json())
                 .then(data => actualizarGraficaProductos(data))
                 .catch(error => console.error('Error al filtrar productos:', error));

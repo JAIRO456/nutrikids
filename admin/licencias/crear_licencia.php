@@ -21,28 +21,25 @@
         if ($sqlInsert->execute([$id_licencia, $fecha_inicio, $fecha_fin, $id_tipo, $id_escuela])) {
             echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            showModal('Licencia creada exitosamente.');
+                            showModal('Licencia creada exitosamente.', 'success');
                             setTimeout(() => {
                                 window.location = '../licencias.php';
                             }, 3000);
                         });
                     </script>";
-            // echo '<script>alert("Licencia registrada exitosamente")</script>';
-            // echo '<script>window.location = "../licencias.php"</script>';
         } 
         else {
             echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            showModal('Error al crear la licencia.');
+                            showModal('Error al crear la licencia.', 'error');
                         });
                     </script>";
-            // echo '<script>alert("Error al registrar la licencia")</script>';
         }
     }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,316 +54,219 @@
             --border-color: #ddd;
             --shadow: 0 2px 4px rgba(0,0,0,0.1);
             --transition: all 0.3s ease;
+            --background-color: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
-
         body {
             background-color: #f8f9fa;
         }
-
         .container-main {
             max-width: 1200px;
             margin: 0 auto;
-            margin-top: 50px;
-            padding: 20px;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .form-container {
-            background: white;
-            padding: 30px;
+            margin-top: 100px;
+            padding: 1rem;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-speed);
+            overflow: hidden;
+            background-color: #fff;
             border-radius: 10px;
-            box-shadow: var(--shadow);
-            margin-top: 20px;
         }
-
         .form-title {
             text-align: center;
-            color: var(--text-color);
-            margin-bottom: 30px;
-            font-size: 2em;
-            animation: slideDown 0.5s ease-out;
-        }
-
-        .form-group {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 20px;
         }
-
-        .form-field {
-            display: flex;
-            flex-direction: column;
+        .form {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
-
-        label {
-            margin-bottom: 8px;
-            color: var(--text-color);
-            font-weight: 500;
+        .x_grupo {
+            margin-bottom: 20px;
+            text-align: left;
         }
-
-        input, select {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            transition: var(--transition);
+        .x_grupo label {
+            font-weight: 600;
+            color: #77b885;
+            margin-bottom: 6px;
+            display: block;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
         }
-
-        input:focus, select:focus {
+        .x_input {
+            position: relative;
+            width: 100%;
+        }
+        .x_input input, .x_input select {
+            width: 100%;
+            height: 44px;
+            padding: 0 40px 0 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f7fafc;
+            font-size: 1rem;
+            color: #333;
             outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+            transition: border 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
         }
-
-        input[readonly] {
-            background-color: #f8f9fa;
-            cursor: not-allowed;
+        .x_input input:focus, .x_input select:focus {
+            border-color: #77b885;
+            box-shadow: 0 0 0 2px #8dc2bf33;
+            background: #f0fdfb;
         }
-
-        .button-group {
+        .form_estado {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            pointer-events: none;
+        }
+        .x_typerror {
+            display: none;
+        }
+        .x_typerror-block {
+            color: #bb2929;
+            font-size: 0.95rem;
+            margin-top: 4px;
+            display: block;
+        }
+        .x_grupo-incorrecto .x_input input, .x_grupo-incorrecto .x_input select {
+            border: 2px solid #bb2929;
+            background: #fff0f0;
+        }
+        .x_grupo-correcto .x_input input, .x_grupo-correcto .x_input select {
+            border: 2px solid #1ed12d;
+            background: #f0fff0;
+        }
+        .x_grupo-incorrecto .form_estado {
+            color: #bb2929;
+        }
+        .x_grupo-correcto .form_estado {
+            color: #1ed12d;
+        }
+        .form1-buttons {
             display: flex;
+            gap: 12px;
+            margin-top: 10px;
             justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
+            align-items: center;
         }
-
-        .btn {
-            padding: 12px 25px;
+        button {
+            flex: 1;
+            padding: 0.8rem;
             border: none;
             border-radius: 5px;
+            font-size: 1rem;
             cursor: pointer;
-            font-weight: 500;
-            transition: var(--transition);
-            text-decoration: none;
-            display: inline-block;
+            transition: transform 0.2s ease, background-color 0.3s ease;
         }
-
-        .btn-danger {
-            background-color: var(--danger-color);
-            color: white;
+        button:hover {
+            filter: brightness(0.95);
+            transform: translateY(-2px) scale(1.03);
         }
-
-        .btn-secondary {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-
         .btn-success {
-            background-color: var(--primary-color);
+            background-color: #77b885;
             color: white;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        .btn-success:hover {
+            background-color: #5a8b66;
         }
-
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
         .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-.modal.show {
-    opacity: 1;
-}
-.modal-content {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    padding: 30px;
-    border-radius: 15px;
-    text-align: center;
-    width: 350px;
-    max-width: 90vw;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    transform: scale(0.7) translateY(-50px);
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid rgba(119, 184, 133, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-.modal.show .modal-content {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-}
-.modal-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #77b885, #5a9c6b, #77b885);
-    background-size: 200% 100%;
-    animation: gradientShift 3s ease-in-out infinite;
-}
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-.modal-content p {
-    margin: 0 0 20px 0;
-    font-size: 1.1rem;
-    color: #333;
-    line-height: 1.5;
-    font-weight: 500;
-    animation: fadeInUp 0.6s ease-out;
-}
-.modal-content button {
-    margin-top: 15px;
-    padding: 12px 30px;
-    background: linear-gradient(135deg, #77b885 0%, #5a9c6b 100%);
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(119, 184, 133, 0.3);
-    position: relative;
-    overflow: hidden;
-    animation: fadeInUp 0.6s ease-out 0.2s both;
-}
-.modal-content button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s;
-}
-.modal-content button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(119, 184, 133, 0.4);
-    background: linear-gradient(135deg, #5a9c6b 0%, #4a8a5a 100%);
-}
-.modal-content button:hover::before {
-    left: 100%;
-}
-.modal-content button:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 10px rgba(119, 184, 133, 0.3);
-}
-/* Efecto de brillo en el borde superior */
-.modal-content::after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-    animation: shimmer 2s ease-in-out infinite;
-}
-@keyframes shimmer {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
-}
-/* Efecto de pulso para el botón cuando hay éxito */
-.modal-content button.success {
-    animation: pulse 2s infinite;
-}
-@keyframes pulse {
-    0% {
-        box-shadow: 0 4px 15px rgba(119, 184, 133, 0.3);
-    }
-    50% {
-        box-shadow: 0 4px 25px rgba(119, 184, 133, 0.6);
-    }
-    100% {
-        box-shadow: 0 4px 15px rgba(119, 184, 133, 0.3);
-    }
-}
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.x_input {
-    position: relative;
-    width: 100%;
-    height: 40px;
-}
-
-.x_grupo .form_estado {
-    position: absolute;
-    right: 20px;
-    transform: translate(10px, 10px);
-}
-
-.x_grupo-correcto .form_estado {
-    color: #1ed12d;
-}
-
-.x_grupo-incorrecto .form_estado {
-    color: #bb2929;
-}
-
-.x_grupo-correcto .x_input {
-    border: 3px solid #1ed12d;
-}
-
-.x_grupo-incorrecto .x_input {
-    border: 3px solid #bb2929;
-}
-
-.bi-check-circle-fill {
-    color: #1ed12d;
-}
-
-.bi-exclamation-circle-fill {
-    color: #bb2929;
-}
-
-.x_error-block {
-    display: block;
-    color: red;
-    font-size: 14px;
-}
-
-.x_typerror {
-    display: none;
-}
-
-.x_typerror-block {
-    display: block;
-}
-
-        @media (max-width: 768px) {
-            .form-group {
-                grid-template-columns: 1fr;
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .status-icon {
+            margin: 0 auto 20px;
+            display: block;
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+        }
+        .status-icon circle {
+            fill: none;
+        }
+        .status-icon path {
+            fill: none;
+        }
+        #check-svg, #x-svg, #loading-svg {
+            display: none;
+        }
+        #check-svg.show, #x-svg.show, #loading-svg.show {
+            display: block !important;
+        }
+        .modal-content p {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .modal-content button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .modal-content button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 600px) {
+            .container-main {
+                padding: 5%;
+            }     
+            .form {
+                grid-template-columns: repeat(1, 1fr);
             }
-            
-            .button-group {
+            .form1-buttons {
                 flex-direction: column;
-            }
-            
-            .btn {
                 width: 100%;
+            }       
+            .form1-buttons button {
+                width: 100%;
+            }
+            .title2 {
+                font-size: 1.5rem;
+            }       
+            .subtitle {
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -375,20 +275,26 @@
     <main class="container-main">
         <div class="form-container">
             <h2 class="form-title">Crear Licencia</h2>
-            <form action="" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <div class="form-field">
-                        <label for="fecha_inicio">Fecha Inicio</label>
+            <form id="form" class="form" action="" method="POST" enctype="multipart/form-data">
+                <div class="x_grupo" id="x_fecha_inicio">
+                    <label for="fecha_inicio">Fecha Inicio</label>
+                    <div class="x_input">
                         <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+                        <i class="form_estado fa fa-exclamation-circle"></i>
                     </div>
-                    <div class="form-field">
-                        <label for="fecha_fin">Fecha Fin</label>
-                        <input type="date" id="fecha_fin" name="fecha_fin" required>
-                    </div>
+                    <p class="x_typerror">Fecha de inicio inválida.</p>
                 </div>
-                <div class="form-group">
-                    <div class="form-field">
-                        <label for="id_tipo">Tipo de Licencia</label>
+                <div class="x_grupo" id="x_fecha_fin">
+                    <label for="fecha_fin">Fecha Fin</label>
+                    <div class="x_input">
+                        <input type="date" id="fecha_fin" name="fecha_fin" required>
+                        <i class="form_estado fa fa-exclamation-circle"></i>
+                    </div>
+                    <p class="x_typerror">Fecha de fin inválida.</p>
+                </div>
+                <div class="x_grupo" id="x_id_tipo">
+                    <label for="id_tipo">Tipo de Licencia</label>
+                    <div class="x_input">
                         <select id="id_tipo" name="id_tipo" required>
                             <option value="">Seleccione un tipo de licencia</option>
                             <?php
@@ -399,9 +305,13 @@
                                 }
                             ?>
                         </select>
+                        <i class="form_estado fa fa-exclamation-circle"></i>
                     </div>
-                    <div class="form-field">
-                        <label for="id_escuela">Escuela</label>
+                    <p class="x_typerror">Debe seleccionar un tipo de licencia.</p>
+                </div>
+                <div class="x_grupo" id="x_id_escuela">
+                    <label for="id_escuela">Escuela</label>
+                    <div class="x_input">
                         <select id="id_escuela" name="id_escuela" required>
                             <option value="">Seleccione una escuela</option>
                             <?php
@@ -412,32 +322,61 @@
                                 }
                             ?>
                         </select>
+                        <i class="form_estado fa fa-exclamation-circle"></i>
                     </div>
+                    <p class="x_typerror">Debe seleccionar una escuela.</p>
                 </div>
-                <div class="button-group">
-                    <a href="../licencias.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+                <div class="form1-buttons">
+                    <button onclick="window.location.href='../licencias.php'" class="btn btn-secondary" type="button"><i class="fa-solid fa-arrow-left"></i> Volver</button>
                     <button type="submit" class="btn btn-success"><i class="fa-solid fa-save"></i> Guardar</button>
                 </div>
             </form>
         </div>
         <div id="msgModal" class="modal">
             <div class="modal-content">
+                <svg id="check-svg" class="status-icon" viewBox="0 0 52 52"><circle cx="26" cy="26" r="25" fill="none"/><path d="M14 27l7 7 16-16" fill="none" stroke="#28a745" stroke-width="4"/></svg>
+                <svg id="x-svg" class="status-icon" viewBox="0 0 52 52"><circle cx="26" cy="26" r="25" fill="none"/><path d="M16 16l20 20M36 16L16 36" fill="none" stroke="#dc3545" stroke-width="4"/></svg>
+                <svg id="loading-svg" class="status-icon" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#007bff" stroke-width="5" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/></circle></svg>
                 <p id="Message"></p>
                 <button onclick="closeModal()">Cerrar</button>
             </div>
         </div>
     </main>
-</body>
-<script>
+    <script>
     const msgModal = document.getElementById('msgModal');
     const message = document.getElementById('Message');
+    const checkSvg = document.getElementById('check-svg');
+    const xSvg = document.getElementById('x-svg');
+    const loadingSvg = document.getElementById('loading-svg');
 
-    function showModal(msg) {
+    function showModal(msg, type) {
+        checkSvg.classList.remove('show');
+        xSvg.classList.remove('show');
+        loadingSvg.classList.remove('show');
+        if (type === 'success') {
+            checkSvg.classList.add('show');
+        } else if (type === 'error') {
+            xSvg.classList.add('show');
+        } else if (type === 'loading') {
+            loadingSvg.classList.add('show');
+        }
         message.textContent = msg;
         msgModal.style.display = 'flex';
     }
     function closeModal() {
         msgModal.style.display = 'none';
-    }  
-</script>
+    }
+    document.getElementById('form').addEventListener('submit', function(e) {
+        showModal('Procesando creación...', 'loading');
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('#form input, #form select');
+        inputs.forEach((input) => {
+            input.addEventListener('keyup', validateForm);
+            input.addEventListener('blur', validateForm);
+        });
+    });
+    </script>
+    <script src="../../validate/validar.js"></script>
+</body>
 </html>

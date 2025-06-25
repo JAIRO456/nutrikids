@@ -38,19 +38,19 @@
 
                 if ($_SESSION['rol'] == 1) {
                     $response['message'] = 'Login exitoso';
-                    $response['redirect'] = '../nutrikids/admin/inicio.php';
+                    $response['redirect'] = 'admin/inicio.php';
                 } 
                 elseif ($_SESSION['rol'] == 2 && $_SESSION['estate'] == 1) {
                     $response['message'] = 'Login exitoso';
-                    $response['redirect'] = '../nutrikids/director/inicio.php';
+                    $response['redirect'] = 'director/inicio.php';
                 } 
                 elseif ($_SESSION['rol'] == 3 && $_SESSION['estate'] == 1) {
                     $response['message'] = 'Login exitoso';
-                    $response['redirect'] = '../nutrikids/vendedor/inicio.php';
+                    $response['redirect'] = 'vendedor/inicio.php';
                 } 
                 elseif ($_SESSION['rol'] == 4 && $_SESSION['estate'] == 1) {
                     $response['message'] = 'Login exitoso';
-                    $response['redirect'] = '../nutrikids/acudiente/inicio.php';
+                    $response['redirect'] = 'acudiente/inicio.php';
                 }
                 echo json_encode($response);
                 exit();

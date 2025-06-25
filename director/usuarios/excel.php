@@ -6,7 +6,7 @@
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
     session_start();
-    require_once('../../conex/conex.php');
+    require_once('../../../database/conex.php');
     $conex = new Database;
     $con = $conex->conectar();
 

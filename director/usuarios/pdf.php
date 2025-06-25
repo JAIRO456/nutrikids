@@ -29,8 +29,8 @@
 
 // Include the main TCPDF library (search for installation path).
 session_start();
-require_once('../../conex/conex.php');
-require_once('../../libraries/TCPDF/tcpdf.php');
+require_once('../../../database/conex.php');
+require_once('../../../libraries/TCPDF/vendor/autoload.php');
 $conex = new Database;
 $con = $conex->conectar();
 

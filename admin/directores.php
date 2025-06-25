@@ -258,17 +258,18 @@
                     tableBody.innerHTML = '';
 
                     // Llenar la tabla con los datos
-                    data.data.forEach(admin => {
+                    data.data.forEach(director => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td><img src="../img/users/${admin.imagen}" alt="Imagen" width="50"></td>
-                            <td>${admin.documento}</td>
-                            <td>${admin.nombre}<br>${admin.apellido}</br>
-                            <td>${admin.email}</td>
-                            <td>${admin.nombre_escuela}</td>
+                            <td><img src="../img/users/${director.imagen}" alt="Imagen" width="50"></td>
+                            <td>${director.documento}</td>
+                            <td>${director.nombre}<br>${director.apellido}</br>
+                            <td>${director.email}</td>
+                            <td>${director.nombre_escuela}</td>
                             <td>
-                                <a class='btn btn-primary' href="directores/update_director.php?id=${admin.documento}"><i class="fa-solid fa-pencil"></i></a>
-                                <a class='btn btn-danger' href="directores/delete_director.php?id=${admin.documento}"><i class="fa-solid fa-trash"></i></a>
+                                <a class='btn btn-primary' href="directores/info_users.php?id=${director.documento}"><i class="fa-solid fa-chart-line"></i></a>
+                                <a class='btn btn-primary' href="directores/update_director.php?id=${director.documento}"><i class="fa-solid fa-pencil"></i></a>
+                                <a class='btn btn-danger' href="directores/delete_director.php?id=${director.documento}"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         `;
                         tableBody.appendChild(row);

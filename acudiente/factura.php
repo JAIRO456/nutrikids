@@ -43,6 +43,16 @@
     $stmt_detalles->execute([$id_pedido]);
     $detalles = $stmt_detalles->fetchAll(PDO::FETCH_ASSOC);
 
+    // Consulta para obtener los detalles del menu
+    $query_detalles_menu = "SELECT dpm.*, m.nombre_menu, m.precio, DISTINCT dm.dias as dias_menu
+    FROM detalles_pedidos_menu dpm
+    JOIN menus m ON dpm.id_menu = m.id_menu
+    JOIN detalles_menu dm ON dpm.id_menu = dm.id_menu
+    WHERE dpm.id_pedido = ?";
+    $stmt_detalles_menu = $con->prepare($query_detalles_menu);
+    $stmt_detalles_menu->execute([$detalles['id_menu']]);
+    $detalles_menu = $stmt_detalles_menu->fetchAll(PDO::FETCH_ASSOC);
+
     // Crear el PDF
     class MYPDF extends TCPDF {
         // Cabecera de página
@@ -132,7 +142,7 @@
 
     // Información adicional
     $pdf->SetFont('helvetica', '', 9);
-    $pdf->MultiCell(0, 0, 'Días de entrega: ' . str_replace(',', ', ', $pedido['dia']), 0, 'L');
+    $pdf->MultiCell(0, 0, 'Días de entrega: ' . str_replace(',', ', ', $detalles_menu['dias_menu']), 0, 'L');
     $pdf->MultiCell(0, 0, 'Fecha de inicio: ' . date('d/m/Y', strtotime($pedido['fecha_ini'])), 0, 'L');
     $pdf->MultiCell(0, 0, 'Fecha de finalización: ' . date('d/m/Y', strtotime($pedido['fecha_fin'])), 0, 'L');
     $pdf->Ln(10);

@@ -263,6 +263,7 @@
                             <td>${school.nombre_escuela}</td>
                             <td>${school.email_esc}</td>
                             <td> 
+                                <a href="escuelas/info_escuela.php?id=${school.id_escuela}" class="btn btn-primary"><i class="fa-solid fa-info"></i></a>
                                 <a href="escuelas/update_escuela.php?id=${school.id_escuela}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
                                 <a href="escuelas/delete_escuela.php?id=${school.id_escuela}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                             </td>

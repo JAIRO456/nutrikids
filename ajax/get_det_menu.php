@@ -8,11 +8,6 @@
     header('Content-Type: application/json');
 
     $documento = $_SESSION['documento'];
-    $days = [];
-    if (isset($_GET['dias'])) {
-        $selectdays = $_GET['dias'];
-        $days = explode(',', $selectdays);
-    }
 
     $id_menu = $_GET['id_menu'];
     if (!$id_menu || !$documento) {
@@ -28,7 +23,7 @@
         exit;
     }
 
-    $sql = $con->prepare("SELECT producto.id_producto, producto.precio, producto.nombre_prod, detalles_menu.cantidad, detalles_menu.subtotal
+    $sql = $con->prepare("SELECT producto.id_producto, producto.precio, producto.nombre_prod, detalles_menu.cantidad, detalles_menu.subtotal, detalles_menu.dias
     FROM detalles_menu
     INNER JOIN menus ON detalles_menu.id_menu = menus.id_menu
     INNER JOIN producto ON detalles_menu.id_producto = producto.id_producto
@@ -45,16 +40,15 @@
     $total = 0;
     $response = [];
     foreach ($pedidos as $pedido) { 
-        
         $subtotal = $pedido['precio'] * $pedido['cantidad'];
         $total += $subtotal;
         $response[] = [
-            'days' => $days,
             'nombre_prod' => $pedido['nombre_prod'],
             'cantidad' => $pedido['cantidad'],
             'subtotal' => number_format($subtotal, 2),
             'precio' => $pedido['precio'],
-            'id_producto' => $pedido['id_producto']
+            'id_producto' => $pedido['id_producto'],
+            'dias' => $pedido['dias']
         ];
     }
     

@@ -190,7 +190,7 @@
                 <div class="product-grid">
                     <?php if (!empty($producto['imagen_prod'])): ?>
                         <div class="product-image-container">
-                            <img src="../img/products/<?php echo htmlspecialchars($producto['imagen_prod']); ?>" 
+                            <img src="img/products/<?php echo htmlspecialchars($producto['imagen_prod']); ?>" 
                                  class="product-image" 
                                  alt="<?php echo htmlspecialchars($producto['nombre_prod']); ?>">
                         </div>

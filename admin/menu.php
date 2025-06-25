@@ -203,13 +203,13 @@
 <nav class="menu">
     <div class="menu-container">
         <a class="logo" href="#">
-            <img src="/img/logo-nutrikids2.png" width="50" height="50" alt="Logo">
+            <img src="img/logo-nutrikids2.png" width="50" height="50" alt="Logo">
             <span>NUTRIKIDS</span>
         </a>
         
         <button class="menu-toggle" onclick="toggleMenu()">
             <span></span>
-            <span></span> 
+            <span></span>   
             <span></span>
         </button>
 

@@ -197,7 +197,7 @@
                     row.style.width = '250px';
                     row.innerHTML = `
                         <a onclick="window.location.href='informacion_nutricional?id_producto=${product.id_producto}'" style="text-decoration:none; color:inherit;">
-                            <img src="../img/products/${product.imagen_prod}" alt="${product.nombre_prod}">
+                            <img src="img/products/${product.imagen_prod}" alt="${product.nombre_prod}">
                             <h3>${product.nombre_prod}</h3>
                             <p>${product.precio}</p>
                         </a>

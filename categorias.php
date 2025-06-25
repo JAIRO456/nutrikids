@@ -18,11 +18,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categorias</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            padding-top: 7%; 
+        }
         .categoria-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            padding: 20px;
+            padding: 1%;
         }
 
         .categoria-card {
@@ -35,11 +43,12 @@
 
         .categoria-card:hover {
             transform: scale(1.05);
+            cursor: pointer;
         }
 
         .categoria-imagen {
             width: 100%;
-            height: 200px;
+            height: 250px;
             object-fit: cover;
             display: block;
         }
@@ -71,6 +80,10 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 5%;
+                padding-top: 22%;
+            }
             .categoria-container {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -92,7 +105,7 @@
                 <?php foreach ($Categories as $Category) { ?>
                     <div class="categoria-card">
                         <a onclick="window.location.href='productos?id_categoria=<?= $Category['id_categoria']; ?>'">
-                            <img src="../img/categories/<?= $Category['imagen']; ?>" 
+                            <img src="img/categories/<?= $Category['imagen']; ?>" 
                                  class="categoria-imagen" 
                                  alt="<?= $Category['categoria']; ?>">
                             <div class="categoria-overlay">
